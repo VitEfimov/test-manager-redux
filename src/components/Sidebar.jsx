@@ -19,8 +19,8 @@ const user = useSelector(state => state.userReducer.user || []);
 
         <nav className="sidebar">
             <header className='sidebar__header'>
-                <h2>{user.name}</h2>
-                <p>{user.password}</p>
+                <h2>{user[0].name}</h2>
+                <p>{user[0].password}</p>
             </header>
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
                 Dashboard
