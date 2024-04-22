@@ -502,7 +502,7 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none; 
     margin: 0; 
 }
-input[type='text'],textarea,input[type='number'] {
+input[type='text'],textarea,input[type='number'],input[type='email'],input[type='password'] {
   padding: 8px;
   margin-bottom: 10px;
   border: none;

@@ -4,10 +4,10 @@ import { addTask, deleteTask } from '../features/taskSlice';
 import { MdDelete } from "react-icons/md";
 
 const Sidebar = ({ setCurrentPage, setTitle }) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);
-
+const user = useSelector(state => state.userReducer.user || []);
     const handleNavigation = (page) => {
         setCurrentPage(page);
         setTitle(page);
@@ -19,8 +19,8 @@ const Sidebar = ({ setCurrentPage, setTitle }) => {
 
         <nav className="sidebar">
             <header className='sidebar__header'>
-                <h2>Vit Efimov</h2>
-                <p>vitvalef@gmail.com</p>
+                <h2>{user.name}</h2>
+                <p>{user.password}</p>
             </header>
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
                 Dashboard

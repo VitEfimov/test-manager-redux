@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice'; 
 import { setBreakInterval, setIntervalCount, updateTime } from '../features/pomodoroSlice';
+import {updateUserName, updateUserEmail, updateUserPassword} from '../features/userSlice';
 
 
 const Settings = ({setCurrentPage}) => {
   const dispatch = useDispatch();
   const weather = useSelector((state) => state.weatherReducer.weather);
   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
+  const user = useSelector(state => state.userReducer.user);
 
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
@@ -15,11 +17,25 @@ const Settings = ({setCurrentPage}) => {
   const breakInterval = pomodoro[0].breakInterval;
   const intervalCount = pomodoro[0].intervalCount;
 
+  const [userName, setUserName] = useState(user[0].name);
+  const [password, setPassword] = useState(user[0].password);
+  const [email, setEmail] = useState(user[0].email);
+
   const [newCity, setNewCity] = useState(weatherCity);
   const [newApiKey, setNewApiKey] = useState(weatherApi)
   const [newWorkInterval, setNewWorkInterval] = useState(time);
   const [newBreakInterval, setNewBreakInterval] = useState(breakInterval)
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
+
+  const handleUserNameChange = (e) => {
+    setUserName(e.target.value);
+  };
+  const handleUserPasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleUserEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
   const handleCityChange = (e) => {
     setNewCity(e.target.value);
@@ -45,6 +61,9 @@ const Settings = ({setCurrentPage}) => {
     dispatch(updateTime(newWorkInterval*60))
     dispatch(setBreakInterval(newBreakInterval))
     dispatch(setIntervalCount(newIntervalCount))
+    dispatch(updateUserName(userName))
+    dispatch(updateUserEmail(email))
+    dispatch(updateUserPassword(password))
     setCurrentPage('Board');
   };
 
@@ -53,6 +72,21 @@ const Settings = ({setCurrentPage}) => {
       <button className='settings__save-btn' onClick={handleSave}>Save</button>
 
       <div className='settings__conteiner'>
+      <div className='settings__block'>
+          <h3>User Information</h3>
+          <div className='settings__item'>
+            <label className='settings__item-label'>User name:</label>
+            <input type="text" value={userName} onChange={handleUserNameChange} />
+          </div>
+          <div className='settings__item'>
+            <label className='settings__item-label' placeholder={newApiKey}>eMail:</label>
+            <input type="email" value={email} onChange={handleUserEmailChange} />
+          </div>
+          <div className='settings__item'>
+            <label className='settings__item-label' placeholder={newApiKey}>Password:</label>
+            <input type="password" value={password} onChange={handleUserPasswordChange} />
+          </div>
+        </div>
         <div className='settings__block'>
           <h3>Weather</h3>
           <div className='settings__item'>
