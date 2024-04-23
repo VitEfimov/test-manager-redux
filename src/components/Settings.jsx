@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice'; 
 import { setBreakInterval, setIntervalCount, updateTime } from '../features/pomodoroSlice';
 import {updateUserName, updateUserEmail, updateUserPassword} from '../features/userSlice';
+import { FcAbout } from "react-icons/fc";
 
 
 const Settings = ({setCurrentPage}) => {

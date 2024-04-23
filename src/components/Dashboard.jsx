@@ -14,7 +14,8 @@ const Dashboard = () => {
     const completedTasks = tasks.filter(task => task.completed).length;
 
     return (
-        <section className='dashboard'>
+        <section className='section'>
+        <section className='dashboard-component'>
         <section className='dashboard__section'>
             <h2>Today date</h2>
             <div>{dayjs().format('MMMM D, YYYY')}</div>
@@ -45,6 +46,7 @@ const Dashboard = () => {
                 <div>{missedTasks.length}</div>
             )}
         </section>
+    </section>
     </section>
     )
 }

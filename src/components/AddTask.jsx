@@ -126,7 +126,6 @@ const AddTask = ({ date }) => {
                         <p>{getCompletionDate(date)}</p>
                     </div>
 
-                    {/* <PriorotyDropdown/> */}
                     <div className='section__task-priority'>
                         {taskPrioritySelect
                             ?

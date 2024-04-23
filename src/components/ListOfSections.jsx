@@ -41,7 +41,7 @@ const ListOfSections = () => {
 
 
     return (
-        <section>
+        <section className='section'>
             <header className='header__board'>
                 <div className='header__board-view'>
                     <button className="header__board-view-btn"><i className="fa-regular fa-rectangle-list"></i>List</button>
@@ -53,7 +53,7 @@ const ListOfSections = () => {
                     <h2 className='header__board-sections-priority'>Priority</h2>
                 </section>
             </header>
-            <section className='section'>
+            {/* <section className='section'> */}
             {missedTasks && (
                     <ul className='section__field'>
                         <h3 style={{color:'crimson'}}>Missed tasks</h3>
@@ -158,7 +158,7 @@ const ListOfSections = () => {
 
                
             </section>
-        </section>
+        // </section>
     );
 };
 
