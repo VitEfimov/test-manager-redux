@@ -457,7 +457,6 @@ align-self: center;
 .section_task-checkbox {
   height: 12px;
   width: 17px;
-
 }
 
 .section__task-label {
@@ -465,6 +464,9 @@ align-self: center;
   background: transparent;
   border: none;
   width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .section__task-icon,
@@ -477,14 +479,10 @@ input {
   border: none;
   box-sizing: none;
   outline: none;
-  /* max-width: fit-content; */
-
 }
 
 
 .section__task-input {
-  /* min-width: max-content;
-    max-width: 100%; */
   width: 100%;
   margin-left: 5px;
   font-size: calc(7px + 1vmin);
@@ -493,15 +491,10 @@ input {
   color: var(--dark-font-color-white);
   font-family: Arial;
   padding: 0;
-  /* Remove any default padding */
   border-radius: 0;
-  /* Remove any default border radius */
   outline: none;
-  /* Remove the default focus outline */
   box-shadow: none;
-  /* Remove any default box shadow */
   transition: none;
-  /* Remove any transition effect */
 }
 
 
@@ -509,15 +502,13 @@ input {
 /* /////////////task__description///////////// */
 .section__task-name-description {
   /* padding: 5px; */
-  overflow: hidden;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
   white-space: nowrap;
   background: transparent;
   border: none;
   color: var(--dark-font-color-grey);
   cursor: pointer;
-  /* margin-left: 47.5%; 
-    position: absolute; */
   height: 100%;
   width: 1dvw;
 }
@@ -915,10 +906,11 @@ border-radius: 10px;
       font-size: calc(7px + 1vmin);
     }
     .section__task-label {
-      margin: 5px;
-      background: transparent;
-      border: none;
-      width: 150px;
+
+    }
+    .section__task-name-description{
+
+      padding-right: 10px;
     }
     .nav-button-icon{
       display: block;
@@ -946,13 +938,19 @@ width: 100%;
       width: fit-content;
     }
     .section__task-name{
-      width: fit-content;
+      /* width: fit-content; */
 
     }
-    .section__task-label{
-      text-overflow: ellipsis;
-
+    .sidebar__header-userinfo{
+        overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+      font-size: 8px;
     }
+    /* .section__task-label{
+
+
+    } */
     .section__task-date{
       /* font-size: 0.5rem; */
       width: 6rem;

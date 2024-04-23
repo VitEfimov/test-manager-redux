@@ -30,8 +30,8 @@ const Sidebar = ({ setCurrentPage, setTitle }) => {
                     <h2>{user[0].name}</h2>
                 <p>{user[0].email}</p>
                 </section>
-                <span className='sidebar__arrow-btn'><IoIosArrowBack />
-                </span>
+                {/* <span className='sidebar__arrow-btn'><IoIosArrowBack />
+                </span> */}
                 
             </header>
             
@@ -39,9 +39,6 @@ const Sidebar = ({ setCurrentPage, setTitle }) => {
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
             <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
             </button>
-            {/* <button className="nav-button-retractad dashboard" onClick={() => handleNavigation('Dashboard')}>
-                <RxDashboard />
-            </button> */}
             <button className="nav-button board" onClick={() => handleNavigation('Board')}>
                <i className='nav-button-icon'><FaTasks /></i><span className='nav-button-name'>Board</span> 
             </button>
