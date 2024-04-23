@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask, deleteTask } from '../features/taskSlice';
 import { MdDelete } from "react-icons/md";
+import { IoIosArrowBack } from "react-icons/io";
+import { FaTasks } from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
+import { IoTimerOutline } from "react-icons/io5";
+import { IoInformationCircle } from "react-icons/io5";
+import { IoMdSettings } from "react-icons/io";
+import { IoLogOutSharp } from "react-icons/io5";
+
 
 const Sidebar = ({ setCurrentPage, setTitle }) => {
-    // const dispatch = useDispatch();
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);
-const user = useSelector(state => state.userReducer.user || []);
+    const user = useSelector(state => state.userReducer.user || []);
     const handleNavigation = (page) => {
         setCurrentPage(page);
         setTitle(page);
@@ -19,26 +26,36 @@ const user = useSelector(state => state.userReducer.user || []);
 
         <nav className="sidebar">
             <header className='sidebar__header'>
-                <h2>{user[0].name}</h2>
+                <section className='sidebar__header-userinfo'>
+                    <h2>{user[0].name}</h2>
                 <p>{user[0].email}</p>
+                </section>
+                <span className='sidebar__arrow-btn'><IoIosArrowBack />
+                </span>
+                
             </header>
+            
+
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
-                Dashboard
+            <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
             </button>
+            {/* <button className="nav-button-retractad dashboard" onClick={() => handleNavigation('Dashboard')}>
+                <RxDashboard />
+            </button> */}
             <button className="nav-button board" onClick={() => handleNavigation('Board')}>
-                Board
+               <i className='nav-button-icon'><FaTasks /></i><span className='nav-button-name'>Board</span> 
             </button>
             <button className="nav-button pomodoro" onClick={() => handleNavigation('Pomodoro')}>
-                Pomodoro
+            <i className='nav-button-icon'><IoTimerOutline /></i><span className='nav-button-name'>Pomodoro </span>
             </button>
             <button className="nav-button about" onClick={() => handleNavigation('About')}>
-                About
+            <i className='nav-button-icon'><IoInformationCircle /></i><span className='nav-button-name'>About</span> 
             </button>
             <button className="nav-button settings" onClick={() => handleNavigation('Settings')}>
-                Settings
+            <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span> 
             </button>
             <button className="nav-button " onClick={() => handleNavigation('Logout')} disabled>
-                LogOut
+            <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span> 
             </button>
         </nav>
 

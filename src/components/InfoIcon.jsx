@@ -1,10 +1,10 @@
 import React from 'react'
-import { TbInfoSquareFilled } from "react-icons/tb";
+import { FcAbout } from "react-icons/fc";
 
 export const InfoIcon = () => {
   return (
     <button>
-<TbInfoSquareFilled />
+<FcAbout />
 
     </button>
   )
