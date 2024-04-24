@@ -716,6 +716,7 @@ button[type='submit']:hover {
   border: none;
   border-radius: 5px;
   color: var(--dark-font-color-white);
+  background-color: transparent;
 
 }
 
