@@ -214,7 +214,7 @@ checked={checked}/> */}
             onClick={handlePriorityChange}
             disabled={checked}
           >
-            {taskPriority}
+            {taskPriority || 'Task priority'}
           </button>
         )}
       </div>
