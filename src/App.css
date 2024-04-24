@@ -696,10 +696,10 @@ button[type='submit']:hover {
   width: fit-content;
   height: calc(10px + 1vmin);
   font-size: calc(5px + 1vmin);
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  justify-self: center;
+  /* justify-content: center; */
+  /* text-align: center; */
+  /* align-items: center; */
+  /* justify-self: center; */
   padding: 0 3px 0 3px;
   align-self: center;
   margin: 5px;
@@ -929,10 +929,11 @@ padding: 5dvh;
     grid-template-areas:
       "sidebar header"
       "sidebar section";
-    grid-template-columns: 5dvh 1fr;
+    grid-template-columns: 3.5dvh 1fr;
     grid-template-rows: 7dvw 1fr;
     font-size: calc(7px + 1vmin);
     width: 100dvw;
+    min-width: fit-content;
   }
 
   .section__task-label {}
@@ -1000,5 +1001,35 @@ padding: 5dvh;
 
   .section__task-priority {
     width: 3rem;
+  }
+  .date__picker {
+    background-color: black;
+    z-index: 1;
+    color: white;
+    opacity: 1;
+    font-size: 12px;
+    border-radius: 10px;
+    width: min-content;
+    position: inherit;
+    border: none;
+  
+    &:hover {
+  
+      opacity: 1;
+    }
+  }
+  .DayPicker{
+    color: red;
+  }
+  .dashboard__section{
+    width: min-content;
+    min-width: 300px;
+  }
+  .settings__conteiner{
+    flex-direction: column;
+  }
+  .settings__block{
+        border-bottom: 1px solid black;
+
   }
 }
