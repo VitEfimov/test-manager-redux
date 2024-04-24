@@ -11,6 +11,7 @@ const Pomodoro = () => {
     const [isBreak, setIsBreak] = useState(pomodoro[0].isBreak);
     const [timerEnded, setTimerEnded] = useState(false);
     const breakInterval = pomodoro[0].breakInterval;
+    const intervalCount = pomodoro[0].intervalCount;
 
     const intervalRef = useRef(null);
 
@@ -91,6 +92,16 @@ const Pomodoro = () => {
                     )}
                     <button className='pomodoro__container__controls-reset-btn' onClick={resetTimer}><GrPowerReset /></button>
                 </div>
+
+                <div className='pomodoro__container-interval-conteiner'>
+                    
+                    {intervalCount !== 0 ? 
+                    (<div className='pomodoro__container-interval-item'>
+
+                    </div>):(null)
+}
+                </div>
+                <p style={{color:'green', marginTop:'10dvh'}}>TODO: intervals</p>
             </div>
         </section>
     );
