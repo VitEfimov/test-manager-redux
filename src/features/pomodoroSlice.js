@@ -8,7 +8,11 @@ const loadFromLocalStoragePomodoro = () => {
     isBreak: false,
     // workInterval: 25 ,
     breakInterval: 5,
-    intervalCount: 4,
+    intervalCount: {
+      count: 4,
+      progress: 0,
+      passed: 0,
+    },
   }];
 
   const savedData = JSON.parse(localStorage.getItem('pomodoro'));
@@ -16,8 +20,8 @@ const loadFromLocalStoragePomodoro = () => {
     localStorage.setItem('pomodoro', JSON.stringify(defaultPomodoro));
     return defaultPomodoro;
   }
-  console.log('defaultPomodoro',defaultPomodoro);
-  console.log('savedData',savedData);
+  console.log('defaultPomodoro', defaultPomodoro);
+  console.log('savedData', savedData);
   return savedData;
 };
 

@@ -113,6 +113,7 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
     fromYear={2024}
     toYear={2090}
     mode='single'
+    // style={{boxSizing:'150px'}}
     // defaultMonth={selected}
     modifiersClassNames={{
         selected: 'my-selected',
