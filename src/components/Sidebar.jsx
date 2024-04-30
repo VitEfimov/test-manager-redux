@@ -9,9 +9,10 @@ import { IoTimerOutline } from "react-icons/io5";
 import { IoInformationCircle } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import { IoLogOutSharp } from "react-icons/io5";
+import { MdKeyboardArrowLeft,MdKeyboardArrowRight } from "react-icons/md";
 
 
-const Sidebar = ({ setCurrentPage, setTitle, sidebarView }) => {
+const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const user = useSelector(state => state.userReducer.user || []);
@@ -34,8 +35,17 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView }) => {
                 </section>
                 {/* <span className='sidebar__arrow-btn'><IoIosArrowBack />
                 </span> */}
-                
+            <button className='nav-button sidebar-view-btn' onClick={() => setSidebarView(!sidebarView)}>
+            {sidebarView ?
+             <MdKeyboardArrowLeft/>
+             
+              : 
+            // <MdKeyboardArrowRight/>
+            null
+            }
+          </button>    
             </header>
+            
             
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
             <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>

@@ -60,7 +60,10 @@ function App() {
     <main className='container'>
       {sidebarView ? <Sidebar setCurrentPage={setCurrentPage}
         setTitle={setTitle}
-        sidebarView={sidebarView}/>:null}
+        sidebarView={sidebarView}
+        setSidebarView={setSidebarView}/>
+        :
+        null}
         <div className='main-content'>
         <Header 
         setCurrentPage={setCurrentPage}
