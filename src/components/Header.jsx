@@ -1,12 +1,17 @@
 import React from 'react';
 import Weather from './Weather';
 
-const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setCurrentPage}) => {
+const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView}) => {
 
   return (
     <header className='header'>
-      <header className='header__board-title'>
-        <h1>{title}</h1>
+      <header className='header__title'>
+        <div className='header__title-btn'>
+          <h1>{title}</h1>
+          <button onClick={() => setSidebarView(!sidebarView)}>
+            {sidebarView ? 'Hide' : 'Show'}
+          </button>
+        </div>
         <Weather/>
       </header>
       {isPromodoroActive && !isTimeOver && (

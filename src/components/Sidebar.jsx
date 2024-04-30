@@ -11,7 +11,7 @@ import { IoMdSettings } from "react-icons/io";
 import { IoLogOutSharp } from "react-icons/io5";
 
 
-const Sidebar = ({ setCurrentPage, setTitle }) => {
+const Sidebar = ({ setCurrentPage, setTitle, sidebarView }) => {
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const user = useSelector(state => state.userReducer.user || []);
@@ -23,8 +23,10 @@ const Sidebar = ({ setCurrentPage, setTitle }) => {
 
 
     return (
-
         <nav className="sidebar">
+            {sidebarView
+            ?
+            (<div>
             <header className='sidebar__header'>
                 <section className='sidebar__header-userinfo'>
                     <h2>{user[0].name}</h2>
@@ -35,7 +37,6 @@ const Sidebar = ({ setCurrentPage, setTitle }) => {
                 
             </header>
             
-
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
             <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
             </button>
@@ -53,9 +54,11 @@ const Sidebar = ({ setCurrentPage, setTitle }) => {
             </button>
             <button className="nav-button " onClick={() => handleNavigation('Logout')} disabled>
             <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span> 
-            </button>
+            </button></div>)
+            :
+            (null)
+}
         </nav>
-
     )
 }
 

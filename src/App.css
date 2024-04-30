@@ -170,6 +170,7 @@ main {
   display: flex;
   /* justify-content: space-between; */
   gap: 1dvw;
+  padding: 3dvh;
 }
 
 .nav-button-icon {
@@ -284,12 +285,17 @@ margin-bottom: 15dvh;
 
 }
 
-.header__board-title {
+.header__title {
   display: flex;
   justify-content: space-between;
   padding-right: 1dvw;
 }
-
+.header__title-btn{
+  display: flex;
+  flex-direction: column;
+  padding-right: 1dvw;
+  margin-top: 5dvh;
+}
 .header__board {
   border-top-right-radius: 2px solid var(--dark-background-color-sidebar);
   padding-bottom: 10px;
@@ -1038,6 +1044,10 @@ display: flex;
     /* margin-top: 15dvh; */
     /* position: fixed; */
   }
+  .nav-button {
+
+    padding: 0;
+    padding-top: 3dvh;}
   .nav-button-icon {
     display: block;
   }
