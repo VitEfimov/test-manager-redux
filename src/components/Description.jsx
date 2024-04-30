@@ -33,7 +33,7 @@ const Description = ({ task, setModal }) => {
         <span className="close" onClick={() => setModal(false)}>&times;</span>
         <form onSubmit={handleSubmit}>
           <label>Task:</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+          <textarea type="text" name="name" value={formData.name} onChange={handleChange} />
           <label>Priority:</label>
           {/* <input type="text" name="priority" value={formData.priority} onChange={handleChange} /> */}
 

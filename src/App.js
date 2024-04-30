@@ -23,17 +23,17 @@ function App() {
       case 'Pomodoro':
 
         return <Pomodoro isPomodoroActive={isPomodoroActive}
-        setIsPromodoroActive={setIsPromodoroActive}
-        timeRemaining={timeRemaining}
-        setTimeRemaining={setTimeRemaining}/>;
-        
+          setIsPromodoroActive={setIsPromodoroActive}
+          timeRemaining={timeRemaining}
+          setTimeRemaining={setTimeRemaining} />;
+
       case 'Dashboard':
         return <Dashboard />;
       case 'About':
         return <About />;
       case 'Settings':
         return <Settings
-        setCurrentPage={setCurrentPage}/>;
+          setCurrentPage={setCurrentPage} />;
       default:
         return <ListOfSections />;
     }
@@ -57,20 +57,22 @@ function App() {
   return (
 
 
-      <main className='container'>
-        {sidebarView?<Sidebar setCurrentPage={setCurrentPage}
+    <main className='container'>
+      {sidebarView ? <Sidebar setCurrentPage={setCurrentPage}
         setTitle={setTitle}
-        sidebarView={sidebarView}/>:null}
-        <Header 
-        setCurrentPage={setCurrentPage}
-        title={title}
-        sidebarView={sidebarView}
-        setSidebarView={setSidebarView}
-        isPomodoroActive={isPomodoroActive}
-        timeRemaining={timeRemaining}
-        isTimeOver={isTimeOver} />
+        sidebarView={sidebarView} /> : null}
+      <div className='main-content'>
+        <Header
+          setCurrentPage={setCurrentPage}
+          title={title}
+          sidebarView={sidebarView}
+          setSidebarView={setSidebarView}
+          isPomodoroActive={isPomodoroActive}
+          timeRemaining={timeRemaining}
+          isTimeOver={isTimeOver} />
         {renderPage()}
-      </main>
+      </div>
+    </main>
 
   );
 }

@@ -33,15 +33,8 @@
 main {
   height: 100dvh;
   /* width: 100vw; */
-  display: grid;
-  grid-template-areas:
-    "sidebar header"
-    "sidebar section";
-  grid-template-columns: 20dvh 1fr;
-  grid-template-rows: 7dvw 1fr;
-  font-size: calc(7px + 1vmin);
-  /* font-family: Arial ; */
-  /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
+  display: flex;
+
 }
 
 
@@ -57,58 +50,7 @@ main {
   overflow: hidden;
   transition: all .3s ease;
   font-family: Arial;
-
-
-
-
-  /* & button {
-    padding: 3dvh;
-    width: 100%;
-    color: var(--dark-font-color-white);
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    box-sizing: border-box;
-    cursor: pointer;
-    display: inline-block;
-    font-size: calc(10px + 1vmin);
-    font-weight: 500;
-    line-height: normal;
-    min-width: fit-content;
-    outline: none;
-    text-align: center;
-    text-decoration: none;
-    transition: all 100ms cubic-bezier(.23, 1, 0.32, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    will-change: transform;
-    z-index: 0;
-    align-content: center;
-    align-items: center;
-    align-self: center;
-    text-align: center;
-    justify-content: center;
-    justify-items: center;
-    &:hover {
-      background-color: var(--dark-button-hover-color);
-      border-right: var(--dark-font-color-white) solid 3px;
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 0, 255, 0.4);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  } */
+  width: 10dvw;
 }
 
 .nav-button {
@@ -348,7 +290,14 @@ margin-bottom: 15dvh;
   box-shadow: none;
   border: none;
 }
-
+.header__title-hide-btn{
+  margin: 0;
+  width: fit-content;
+  font-size: 25px;
+  background: transparent;
+  border: none;
+  color: var(--dark-font-color-white);
+  }
 /* ///////////////////////////// dashboard /////////////////////////////*/
 
 .dashboard-component {
@@ -603,7 +552,11 @@ input[type='password'] {
   background-color: var(--dark-font-color-grey);
   -moz-appearance: textfield;
 }
-
+textarea{
+  width: 100%;
+  height: 10dvh;
+  resize: none;
+}
 input[type='checkbox'] {
   margin-right: 5px;
 }
@@ -1020,7 +973,7 @@ display: flex;
   .container{
     width: 100%;
   }
-  main {
+  /* main {
     height: 100dvh;
     display: grid;
     grid-template-areas:
@@ -1030,8 +983,7 @@ display: flex;
     grid-template-rows: 7dvw 1fr;
     font-size: calc(7px + 1vmin);
     width: 100%;
-    /* min-width: fit-content; */
-  }
+  } */
 
   .section__task-label {}
 
