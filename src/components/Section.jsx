@@ -198,7 +198,7 @@ checked={checked}/> */}
         {taskPrioritySelect && !task.completed ? (
           <div className='section__task-priority-select'>
             {['Low', 'Medium', 'High'].map((option) => (
-              <div className='select' key={option}>
+              <div key={option}>
                 <button
                   className={`section__task-priority-btn ${option.toLowerCase()}`}
                   onClick={() => handleTaskPriorityChange({ value: option })}

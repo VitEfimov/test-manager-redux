@@ -281,7 +281,7 @@ margin-bottom: 15dvh;
 
 .header__board-sections-priority {
   grid-area: header__board-sections-priority;
-  width: 8dvw;
+  width: 10dvw;
   padding-left: 1dvw;
 }
 
@@ -597,6 +597,7 @@ button[type='submit']:hover {
   align-self: center;
   cursor: pointer;
   user-select: none;
+  font-size: calc(7px + 1vmin);
 }
 
 .date__picker {
@@ -604,21 +605,19 @@ button[type='submit']:hover {
   z-index: 1;
   color: white;
   opacity: 1;
-  font-size: 12px;
+  font-size: calc(7px + 1vmin);
   border-radius: 10px;
   width: min-content;
   position: inherit;
   border: none;
-
+  animation: slideInRight 0.5s ease-in-out forwards;
   &:hover {
 
     opacity: 1;
   }
 }
 
-.date__picker {
-  animation: slideInRight 0.5s ease-in-out forwards;
-}
+
 
 @keyframes slideInRight {
   from {
@@ -666,8 +665,8 @@ button[type='submit']:hover {
   grid-area: section__task-priority;
   align-self: center;
   justify-content: center;
-  padding-left: 0dvw;
-  width: 8dvw;
+  padding-left: 1dvw;
+  width: 10dvw;
   border-right: 1px solid var(--dark-font-color-grey);
   user-select: none;
 }
@@ -676,14 +675,10 @@ button[type='submit']:hover {
   width: fit-content;
   height: calc(10px + 1vmin);
   font-size: calc(5px + 1vmin);
-  /* justify-content: center; */
-  /* text-align: center; */
-  /* align-items: center; */
-  /* justify-self: center; */
+
   padding: 0 3px 0 3px;
   align-self: center;
   margin: 5px;
-  /* margin-top: 5px; */
   cursor: pointer;
   border: none;
   border-radius: 5px;
@@ -986,17 +981,31 @@ display: flex;
   .container{
     width: 100%;
   }
-
+  .section__task {
+    padding: 0.5dvh 0 0.5dvh 0;
+    padding-right: 7dvw;
+    display: grid;
+    grid-template-areas: "section__task-name  section__task-date section__task-priority section__task-delete-btn";
+    grid-template-columns: 50dvw 1fr;
+    grid-template-rows: 3.5dvh 1fr;
+    border-bottom: 1px solid #727171;
+    background-color: var(--dark-background-color-main);
+    justify-content: center;
+    /* Center content horizontally */
+  }
+  /* .section__task-date {
+    width: 3dvw;
+  } */
   .section__task-label {}
 
   .section__task-name-description {
-
+width: 5dvw;
     padding-right: 10px;
   }
 
   .sidebar{
-    /* margin-top: 15dvh; */
-    /* position: fixed; */
+width: auto;
+align-items: center;
   }
   .nav-button {
 
@@ -1018,14 +1027,14 @@ display: flex;
     /* margin-top: 10dvh; */
   }
 
-  .header__board,
+  /* .header__board,
   .section {
     width: 100%;
-  }
+  } */
 
-  .header__board-sections-due-date {
+  /* .header__board-sections-due-date {
     width: 6rem;
-  }
+  } */
 
   .header__board-sections-priority {
     /* width: 5rem; */
@@ -1056,11 +1065,12 @@ display: flex;
     } */
   .section__task-date {
     /* font-size: 0.5rem; */
-    width: 6rem;
+    /* width: 6rem; */
 
   }
 
   .section__task-priority {
+    padding: 0px;
     /* width: 3rem; */
   }
   .date__picker {
