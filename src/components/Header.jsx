@@ -7,9 +7,9 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
   return (
     <header className='header'>
       <header className='header__title'>
-        <div className='header__title-btn'>
+        <div className='header__title-content'>
           <h1>{title}</h1>
-          <button onClick={() => setSidebarView(!sidebarView)}>
+          <button className='header__title-sidebar-view-btn' onClick={() => setSidebarView(!sidebarView)}>
             {sidebarView ? <MdKeyboardArrowLeft/> : <MdKeyboardArrowRight/>}
           </button>
         </div>

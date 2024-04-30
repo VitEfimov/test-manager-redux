@@ -61,6 +61,7 @@ function App() {
       {sidebarView ? <Sidebar setCurrentPage={setCurrentPage}
         setTitle={setTitle}
         sidebarView={sidebarView}/>:null}
+        <div className='main-content'>
         <Header 
         setCurrentPage={setCurrentPage}
         title={title}
@@ -70,6 +71,7 @@ function App() {
         timeRemaining={timeRemaining}
         isTimeOver={isTimeOver} />
         {renderPage()}
+        </div>
       </main>
 
   );
