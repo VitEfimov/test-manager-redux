@@ -1,5 +1,6 @@
 import React from 'react';
 import Weather from './Weather';
+import { MdKeyboardArrowLeft,MdKeyboardArrowRight } from "react-icons/md";
 
 const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView}) => {
 
@@ -8,8 +9,10 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
       <header className='header__title'>
         <div className='header__title-btn'>
           <h1>{title}</h1>
-          <button onClick={() => setSidebarView(!sidebarView)}>
-            {sidebarView ? 'Hide' : 'Show'}
+          <button className='header__title-hide-btn' onClick={() => setSidebarView(!sidebarView)}>
+            {sidebarView ? <MdKeyboardArrowLeft />
+ : <MdKeyboardArrowRight />
+}
           </button>
         </div>
         <Weather/>
