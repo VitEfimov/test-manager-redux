@@ -23,6 +23,7 @@
       var(--background-color-main),
       green 3%);
   background-color: rgb(0, 0, 0);
+  font-size: calc(7px + 1vmin);
   /* width: 100%; */
 }
 .container{
@@ -664,6 +665,7 @@ button[type='submit']:hover {
 .section__task-priority {
   grid-area: section__task-priority;
   align-self: center;
+  justify-content: center;
   padding-left: 0dvw;
   width: 8dvw;
   border-right: 1px solid var(--dark-font-color-grey);
@@ -977,7 +979,7 @@ display: flex;
 /* //////////     Media       ////////////////// */
 @media only screen and (max-width: 600px) {
   :root {
-    --sidebar-width: 100%;
+    /* --sidebar-width: 100%; */
     width: 100%;
 
   }
@@ -1013,7 +1015,7 @@ display: flex;
   }
 
   .section {
-    margin-top: 10dvh;
+    /* margin-top: 10dvh; */
   }
 
   .header__board,
@@ -1059,7 +1061,7 @@ display: flex;
   }
 
   .section__task-priority {
-    width: 3rem;
+    /* width: 3rem; */
   }
   .date__picker {
     position: absolute;
