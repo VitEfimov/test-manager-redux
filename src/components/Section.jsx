@@ -205,17 +205,30 @@ checked={checked}/> */}
                 >
                   {option}
                 </button>
+                <button
+                  className={`section__task-priority-btn-media ${option.toLowerCase()}`}
+                  onClick={() => handleTaskPriorityChange({ value: option })}
+                >
+                  {option}
+                </button>
               </div>
             ))}
           </div>
         ) : (
-          <button
-            className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
-            onClick={handlePriorityChange}
-            disabled={checked}
-          >
-            {taskPriority || 'Task priority'}
-          </button>
+          <div>
+            <button
+              className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
+              onClick={handlePriorityChange}
+              disabled={checked}
+            >{taskPriority || 'Task priority'}
+            </button>
+            <button
+              className={`section__task-priority-btn-media ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
+              onClick={handlePriorityChange}
+              disabled={checked}
+            >{taskPriority.substring(0, 1) || 'Task priority'}
+            </button>
+          </div>
         )}
       </div>
       <div className='section__task-delete-btn'>
