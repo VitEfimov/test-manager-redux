@@ -51,7 +51,7 @@ const Weather = () => {
             </div>
           )}
         </div>
-      ):'Add weather settings to see weather info'}
+      ):null}
     </div>
   )
 }
