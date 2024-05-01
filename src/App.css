@@ -682,7 +682,7 @@ button[type='submit']:hover {
   user-select: none;
 }
 
-.section__task-priority-btn {
+.section__task-priority-btn, .section__task-priority-btn-media {
   width: fit-content;
   height: calc(10px + 1vmin);
   font-size: calc(5px + 1vmin);
@@ -697,16 +697,19 @@ button[type='submit']:hover {
   background-color: transparent;
 
 }
+.section__task-priority-btn-media{
+display: none;
+}
 
-.section__task-priority-btn.high {
+.section__task-priority-btn.high, .section__task-priority-btn-media.high {
   background-color: rgb(241, 81, 81);
 }
 
-.section__task-priority-btn.medium {
+.section__task-priority-btn.medium, .section__task-priority-btn-media.medium {
   background-color: rgb(218, 143, 3);
 }
 
-.section__task-priority-btn.low {
+.section__task-priority-btn.low, .section__task-priority-btn-media.low {
   background-color: rgb(71, 133, 71);
 }
 
@@ -1080,7 +1083,7 @@ cursor: pointer;
   }
 
   .section__task-priority {
-    width: 6rem;
+    width: 3.5rem;
   }
 
   .date__picker {
@@ -1111,4 +1114,11 @@ cursor: pointer;
     border-bottom: 1px solid black;
 
   }
+
+  .section__task-priority-btn-media{
+    display: block;
+    }
+    .section__task-priority-btn{
+      display: none;
+    }
 }
