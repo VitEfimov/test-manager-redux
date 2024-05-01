@@ -411,7 +411,7 @@ input {
 .section__task-input {
   width: 100%;
   margin-left: 5px;
-  font-size: calc(7px + 1vmin);
+  font-size: calc(8px + 1vmin);
   border: none;
   background: transparent;
   color: var(--dark-font-color-white);
@@ -887,31 +887,6 @@ padding: 5dvh;
   font-size: 12px;
   cursor: pointer;
 }
-
-
-/* .info__icon__modal{
-  margin-left: 5px;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  width: 150px;
-  height: fit-content;
-font-size: 12px;
-background-color: #0056b3;
-border: 1px solid red;
-}
-.info__icon__modal-header{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px;
-}
-.info__icon-btn{
-background: transparent;
-border: none;
-margin-left: 5px;
-cursor: pointer;
-} */
 
 
 .settings__block-header {
