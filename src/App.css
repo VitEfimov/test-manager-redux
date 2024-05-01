@@ -1018,7 +1018,7 @@ cursor: pointer;
 
   .section__task-date {
     font-size: calc(7px + 1vmin);
-
+padding-right: 2px;
   }
 
   .section__task-priority {
