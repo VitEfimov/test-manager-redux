@@ -40,7 +40,7 @@ const Weather = () => {
 
   return (
     <div className='weather__container'>
-      {weatherData && (
+      {weatherData ? (
         <div className="header__weather-info">
           {weatherData.name && <div>City: {weatherData.name}</div>}
           {weatherData.main && <div>Temperature: {weatherData.main.temp}&deg;F</div>}
@@ -51,7 +51,7 @@ const Weather = () => {
             </div>
           )}
         </div>
-      )}
+      ):'Add weather settings to see weather info'}
     </div>
   )
 }

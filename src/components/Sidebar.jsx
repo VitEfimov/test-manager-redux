@@ -33,9 +33,8 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
                     <h2>{user[0].name}</h2>
                 <p>{user[0].email}</p>
                 </section>
-                {/* <span className='sidebar__arrow-btn'><IoIosArrowBack />
-                </span> */}
-            <button className='nav-button sidebar-view-btn' onClick={() => setSidebarView(!sidebarView)}>
+
+            {/* <button className='nav-button sidebar-view-btn' onClick={() => setSidebarView(!sidebarView)}>
             {sidebarView ?
              <MdKeyboardArrowLeft/>
              
@@ -43,7 +42,7 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
             // <MdKeyboardArrowRight/>
             null
             }
-          </button>    
+          </button>     */}
             </header>
             
             
