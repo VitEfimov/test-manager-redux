@@ -992,7 +992,7 @@ padding: 5dvh;
 
 
   .section__task-date {
-    font-size: calc(7px + 1vmin);
+    font-size: calc(6px + 1vmin);
 padding-right: 2px;
   }
 
