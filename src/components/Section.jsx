@@ -206,7 +206,7 @@ checked={checked}/> */}
                   {option}
                 </button>
                 <button
-                  className={`section__task-priority-btn-media ${option.toLowerCase()}`}
+                  className={`section__task-priority-btn-media-option ${option.toLowerCase()}`}
                   onClick={() => handleTaskPriorityChange({ value: option })}
                 >
                   {option}
