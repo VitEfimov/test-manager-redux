@@ -33,19 +33,7 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
                     <h2>{user[0].name}</h2>
                 <p>{user[0].email}</p>
                 </section>
-
-            {/* <button className='nav-button sidebar-view-btn' onClick={() => setSidebarView(!sidebarView)}>
-            {sidebarView ?
-             <MdKeyboardArrowLeft/>
-             
-              : 
-            // <MdKeyboardArrowRight/>
-            null
-            }
-          </button>     */}
             </header>
-            
-            
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
             <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
             </button>
