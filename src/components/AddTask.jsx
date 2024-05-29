@@ -97,18 +97,18 @@ const AddTask = ({ date }) => {
 
 
     return (
-        <div className=''>
+        <div className='add-task'>
             {addTaskForm &&
-                <div className='section__task'>
-                    <div className='section__task-name'>
-                        <span className='section__task-icon'>&#8789;</span>
+                <div className='section__task add-task'>
+                    <div className='section__task-name add-task'>
+                        <span className='section__task-icon add-task'>&#8789;</span>
                         <input
-                            className='section_task-checkbox'
+                            className='section_task-checkbox add-task'
                             type="checkbox"
                             disabled
                         />
                         <input
-                            className='section__task-input'
+                            className='section__task-input add-task'
                             id="section__task-name"
                             contentEditable={true}
                             placeholder="Enter task name..."
@@ -122,20 +122,20 @@ const AddTask = ({ date }) => {
                             }}
                         />
                     </div>
-                    <div className='section__task-date'>
+                    <div className='section__task-date add-task'>
                         <p>{getCompletionDate(date)}</p>
                     </div>
 
-                    <div className='section__task-priority'>
+                    <div className='section__task-priority add-task'>
                         {taskPrioritySelect
                             ?
-                            <div className='section__task-priority-select'>
+                            <div className='section__task-priority-select add-task'>
                                 {
                                     ['High', 'Medium', 'Low'].map((option) => (
-                                        <div className='select'>
+                                        <div className='select add-task'>
                                             <button
                                                 key={option}
-                                                className={`section__task-priority-btn ${option.toLowerCase()}`}
+                                                className={`section__task-priority-btn ${option.toLowerCase()} add-task`}
                                                 onClick={() => handleTaskPriorityChange(option)}>
                                                 {option}
                                             </button></div>
@@ -146,10 +146,10 @@ const AddTask = ({ date }) => {
                             <button className='add__task-btn'
                                 onClick={handlePriorityChange}
                             >
-                                <p className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}>{taskPriority || 'Task priority'}</p>
+                                <p className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''} add-task`}>{taskPriority || 'Task priority'}</p>
                             </button>}
                     </div>
-                    <div className='section__task-delete-btn'>
+                    <div className='section__task-delete-btn add-task'>
                         <MdDelete onClick={handleDeleteTask} />
                     </div>
                 </div>
@@ -164,7 +164,7 @@ const AddTask = ({ date }) => {
                         Click to add task
                     </button>}
             </div>
-            <div className='section__line-bottom'></div>
+            <div className='section__line-bottom add-task'></div>
         </div>
     );
 };
