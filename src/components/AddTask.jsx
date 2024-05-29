@@ -97,7 +97,7 @@ const AddTask = ({ date }) => {
 
 
     return (
-        <div>
+        <div className=''>
             {addTaskForm &&
                 <div className='section__task'>
                     <div className='section__task-name'>
@@ -154,7 +154,7 @@ const AddTask = ({ date }) => {
                     </div>
                 </div>
             }
-            <div className='add__task'>
+            <div className={`add__task ${date}`}>
                 {!addTaskForm ?
                     <button className='add__task-btn' onClick={handleAddTaskForm}>
                         Add task...
