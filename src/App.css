@@ -204,12 +204,12 @@ main {
 
 .header__board-sections {
 
-  padding-right: 9dvw;
+  padding-right: 3dvw;
   display: grid;
   grid-template-areas:
     "header__board-sections-task-name header__board-sections-due-date header__board-sections-priority";
   grid-template-columns: 50dvw 1fr;
-  grid-template-rows: 3dvh 1fr;
+  grid-template-rows: 3.5dvh 1fr;
 
 }
 
@@ -227,7 +227,7 @@ main {
 
 .header__board-sections-priority {
   grid-area: header__board-sections-priority;
-  width: 11dvw;
+  width: 17dvw;
   padding-left: 1dvw;
 }
 
@@ -988,12 +988,13 @@ padding: 5dvh;
 
 
   .header__board-sections-priority {
-    /* width: 5rem; */
+    width: 13dvw;
+    /* padding-right: 12dvw; */
 
   }
 
   .add__task-btn {
-    width: fit-content;
+    /* width: fit-content; */
     font-size: calc(7px + 1vmin);
   }
 
@@ -1014,7 +1015,7 @@ padding: 5dvh;
   }
 
   .section__task-priority {
-    width: 5rem;
+    width: 10dvw;
   }
 
   .date__picker {
@@ -1036,9 +1037,14 @@ padding: 5dvh;
     width: 100%;
   }
 
+  .header__board{
+    /* padding-right: 3dvw; */
+
+  }
+
   .header__board-sections {
 
-    padding-right: 7dvw;
+    /* padding-right: 3dvw; */
   }
 
   .settings__conteiner {
