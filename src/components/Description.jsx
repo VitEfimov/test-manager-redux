@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateTask } from '../features/taskSlice';
 
@@ -14,6 +14,18 @@ const Description = ({ task, setModal }) => {
     descriptionUrl: task.description?.url || '',
   });
 
+  useEffect(() => {
+    setFormData({
+      name: task.taskname,
+      priority: task.priority,
+      completed: task.completed,
+      completionDate: task.completionDate,
+      descriptionText: task.description?.text || '',
+      descriptionImg: task.description?.img || '',
+      descriptionUrl: task.description?.url || '',
+    });
+  }, [task]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -21,33 +33,46 @@ const Description = ({ task, setModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateTask({ taskId: task.id, ...formData }));
+    const updatedTask = {
+      taskId: task.id,
+      name: formData.name,
+      priority: formData.priority,
+      completed: formData.completed,
+      completionDate: formData.completionDate,
+      description: {
+        text: formData.descriptionText,
+        img: formData.descriptionImg,
+        url: formData.descriptionUrl,
+      },
+    };
+    dispatch(updateTask(updatedTask));
     setModal(false);
   };
 
   return (
-    <div className="modal">
-      
-      <div className="modal-content">
-        {/* <button onClick={()=>setModal(false)}>close</button> */}
-        <span className="close" onClick={() => setModal(false)}>&times;</span>
+    <div className="desctiption__modal">
+      <div className="desctiption__modal-content">
+        <span className="desctiption__close" onClick={() => setModal(false)}>&times;</span>
         <form onSubmit={handleSubmit}>
           <label>Task:</label>
-          <textarea type="text" name="name" value={formData.name} onChange={handleChange} />
+          <textarea className='desctiption__input' type="text" name="name" value={formData.name} onChange={handleChange} />
+          
           <label>Priority:</label>
-          {/* <input type="text" name="priority" value={formData.priority} onChange={handleChange} /> */}
-
-<select name="priority" value={formData.priority} onChange={handleChange}>
-  <option>Low</option>
-  <option>Medium</option>
-  <option>High</option>
-</select>
+          <select className='desctiption__input' name="priority" value={formData.priority} onChange={handleChange}>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+          
           <label>Completion Date:</label>
-          <input type="text" name="completionDate" value={formData.completionDate} onChange={handleChange} />
+          <input className='desctiption__input' type="text" name="completionDate" value={formData.completionDate} onChange={handleChange} />
+          
           <label>Description:</label>
-          <textarea name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea>
+          <textarea className='desctiption__input' name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea>
+          
           <label>Description URL:</label>
-          <input type="text" name="descriptionUrl" value={formData.descriptionUrl} onChange={handleChange} />
+          <input className='desctiption__input' type="text" name="descriptionUrl" value={formData.descriptionUrl} onChange={handleChange} />
+          
           <button type="submit">Submit</button>
         </form>
       </div>
@@ -56,6 +81,68 @@ const Description = ({ task, setModal }) => {
 };
 
 export default Description;
+
+
+
+
+// import React, { useState } from 'react';
+// import { useDispatch } from 'react-redux';
+// import { updateTask } from '../features/taskSlice';
+
+// const Description = ({ task, setModal }) => {
+//   const dispatch = useDispatch();
+//   const [formData, setFormData] = useState({
+//     name: task.taskname,
+//     priority: task.priority,
+//     completed: task.completed,
+//     completionDate: task.completionDate,
+//     descriptionText: task.description?.text || '',
+//     descriptionImg: task.description?.img || '',
+//     descriptionUrl: task.description?.url || '',
+//   });
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     dispatch(updateTask({ taskId: task.id, ...formData }));
+//     setModal(false);
+//   };
+
+//   return (
+//     <div className="modal">
+      
+//       <div className="modal-content">
+//         {/* <button onClick={()=>setModal(false)}>close</button> */}
+//         <span className="close" onClick={() => setModal(false)}>&times;</span>
+//         <form onSubmit={handleSubmit}>
+//           <label>Task:</label>
+//           <textarea type="text" name="name" value={formData.name} onChange={handleChange} />
+//           <label>Priority:</label>
+//           {/* <input type="text" name="priority" value={formData.priority} onChange={handleChange} /> */}
+
+//           <select name="priority" value={formData.priority} onChange={handleChange}>
+//           <option>Low</option>
+//           <option>Medium</option>
+//           <option>High</option>
+//           </select>
+//           <label>Completion Date:</label>
+//           <input type="text" name="completionDate" value={formData.completionDate} onChange={handleChange} />
+//           <label>Description:</label>
+//           <textarea name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea>
+//           <label>Description URL:</label>
+//           <input type="text" name="descriptionUrl" value={formData.descriptionUrl} onChange={handleChange} />
+//           <button type="submit">Submit</button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Description;
 
 
 
