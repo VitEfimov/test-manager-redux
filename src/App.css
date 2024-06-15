@@ -344,6 +344,7 @@ main {
   border-bottom: 1px solid #727171;
   background-color: var(--dark-background-color-main);
   justify-content: center;
+  /* align-items: center; */
   /* Center content horizontally */
 }
 
@@ -359,7 +360,7 @@ main {
 
 .section__task-name {
   grid-area: section__task-name;
-  padding: 3px;
+  /* padding: 3px; */
   --max-lines: 1;
   --line-height: 1.0;
   height: calc(var(--max-lines) * 2em * var(--line-height));
@@ -382,7 +383,7 @@ main {
 
 .section_task-checkbox {
   height: 12px;
-  width: 17px;
+  width: 15px;
 }
 
 .section__task-label {
@@ -439,7 +440,7 @@ input {
   width: 1dvw;
 }
 
-.modal {
+.desctiption__modal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -461,13 +462,13 @@ input {
   }
 }
 
-.modal-content {
+.desctiption__modal-content {
   background-color: var(--dark-button-hover-color);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0);
   width: 65%;
-  height: 65%;
+  height: fit-content;
   pointer-events: all;
   z-index: 11;
   position: absolute;
@@ -480,7 +481,7 @@ input {
   }
 }
 
-.close {
+.desctiption__close {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -541,6 +542,9 @@ button[type='submit']:hover {
   background-color: #0056b3;
 }
 
+.desctiption__input{
+  background: var(--dark-font-color-white);
+}
 
 /* ///////////////////// section__task-date//////////*/
 
@@ -623,7 +627,7 @@ button[type='submit']:hover {
   justify-content: center;
   padding-left: 1dvw;
   width: 10dvw;
-  border-right: 1px solid var(--dark-font-color-grey);
+  /* border-right: 1px solid var(--dark-font-color-grey); */
   user-select: none;
 }
 
@@ -645,7 +649,8 @@ button[type='submit']:hover {
 
 }
 
-.section__task-priority-btn-media, .section__task-priority-btn-media-option {
+.section__task-priority-btn-media,
+.section__task-priority-btn-media-option {
   display: none;
 }
 
@@ -687,7 +692,7 @@ button[type='submit']:hover {
   margin: 0;
   padding: 0;
   font-style: normal;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 
@@ -706,6 +711,8 @@ button[type='submit']:hover {
   align-self: center;
   width: 3dvw;
   padding-left: 1dvw;
+  border-left: 1px solid var(--dark-font-color-grey);
+
 }
 
 .add__task {
@@ -722,6 +729,7 @@ button[type='submit']:hover {
   font-style: oblique;
   border-right: 1px solid #727171;
   border-left: 1px solid #727171;
+  font-size: calc(8px + 1vmin);
 }
 
 .click-to-add-task {
@@ -921,7 +929,7 @@ padding: 5dvh;
 
 
 /* //////////     Media       ////////////////// */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   :root {
     width: 100%;
     background: var(--dark-background-color-main);
@@ -1044,7 +1052,8 @@ padding: 5dvh;
 
   }
 
-  .section__task-priority-btn-media, .section__task-priority-btn-media-option {
+  .section__task-priority-btn-media,
+  .section__task-priority-btn-media-option {
     display: block;
     /* padding: 5px; */
     width: 20px;
@@ -1066,7 +1075,45 @@ padding: 5dvh;
     display: none;
 
   }
-   .info__icon__modal {
+
+  .info__icon__modal {
     margin-left: -150px;
+  }
+}
+
+@media only screen and (max-height: 700px) {
+  .section__task {
+    /* padding: 0; */
+    /* margin: 0; */
+    align-items: center;
+  }
+
+  .section__task-name {
+    /* margin: 0; */
+    padding: 0;
+  }
+
+  .section_task-checkbox {
+    height: 10px;
+    width: 10px;
+  }
+
+  .section__task-label {
+    /* margin: 0px; */
+  }
+
+  .section__task-icon,
+  .section_task-label {
+    padding: 5px;
+    font-size: 10px;
+  }
+
+  .section__task-input {
+    margin-left: 5px;
+    padding: 0;
+  }
+
+  .section__task-priority-btn {
+    font-size: 10px;
   }
 }
