@@ -136,7 +136,7 @@ const Section = ({ task, checked, destination }) => {
   return (
     <li className={`section__task ${task.completed ? 'completed-task' : ''}`}>
       <div className='section__task-name'>
-        <span className='section__task-icon' draggable><GrDrag />
+        <span className='section__task-icon' draggable><GrDrag className='section__task-icon__grdrag' />
 
         </span>
         <input className='section_task-checkbox'
@@ -220,13 +220,13 @@ checked={checked}/> */}
               className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
               onClick={handlePriorityChange}
               disabled={checked}
-            >{taskPriority || 'Task priority'}
+            >{taskPriority || 'Priority'}
             </button>
             <button
               className={`section__task-priority-btn-media ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
               onClick={handlePriorityChange}
               disabled={checked}
-            >{taskPriority.substring(0, 1) || 'Task priority'}
+            >{taskPriority.substring(0, 1) || 'Priority'}
             </button>
           </div>
         )}

@@ -160,7 +160,7 @@ const AddTask = ({ date }) => {
                         Add task...
                     </button>
                     :
-                    <button className='add__task-btn click-to-add-task' onClick={handleAddTask}>
+                    <button className='add__task-btn click_to_add_task' onClick={handleAddTask}>
                         Click to add task
                     </button>}
             </div>

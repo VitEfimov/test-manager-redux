@@ -69,61 +69,103 @@
 
 
 
+// import React from 'react';
+// import {DayPicker} from 'react-day-picker';
+// import LocalizedFormat from 'dayjs/plugin/localizedFormat';
+// import dayjs from 'dayjs';
+// import 'react-day-picker/dist/style.css';
+// dayjs.extend(LocalizedFormat)
+
+// const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
+
+//     const [selected, setSelected] = React.useState(null)
+
+//     // const handleDayClick = (day) => {
+//     //     setSelected(day);
+//     //     handleDateSelection(day);
+//     //     setShowDatePicker(false);
+//     //     console.log("handleDayClick + day",day);
+//     // };
+//     // const handleMonthChange = (newMonth) => {
+//     //   setSelected(newMonth);
+
+//     // };
+
+//     const handleDayClick = (day) => {
+//       setSelected(day);
+//       handleDateSelection(day);
+//       // setShowDatePicker(false);
+//       console.log("handleDayClick + day", day);
+//     };
+  
+//     const handleMonthChange = (newMonth) => {
+//       setShowDatePicker();
+//       setSelected(newMonth);
+//     };
+
+
+//   return (
+//     <div>
+//     <DayPicker
+//     className='date__picker'
+//     onDayClick={handleDayClick}
+//     onMonthChange={handleMonthChange}
+//     onSelect={setSelected}
+//     fromYear={2024}
+//     toYear={2090}
+//     mode='single'
+//     // style={{boxSizing:'150px'}}
+//     // defaultMonth={selected}
+//     // modifiersClassNames={{
+//     //     selected: 'my-selected',
+//     //     today: 'my-today'
+//     //   }}
+//     //   modifiersStyles={{
+//     //     disabled: { fontSize: '75%' }
+//     //   }}
+// />
+// <button onClick={setShowDatePicker(false)}>Set date</button>
+// </div>
+//   )
+// }
+
+// export default DatePicker
+
 import React from 'react';
-import {DayPicker} from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import dayjs from 'dayjs';
 import 'react-day-picker/dist/style.css';
-dayjs.extend(LocalizedFormat)
+
+dayjs.extend(LocalizedFormat);
 
 const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
+  const [selected, setSelected] = React.useState(null);
 
-    const [selected, setSelected] = React.useState(null)
+  const handleDayClick = (day) => {
+    setSelected(day);
+    handleDateSelection(day);
+    setShowDatePicker(false); 
+  };
 
-    // const handleDayClick = (day) => {
-    //     setSelected(day);
-    //     handleDateSelection(day);
-    //     setShowDatePicker(false);
-    //     console.log("handleDayClick + day",day);
-    // };
-    // const handleMonthChange = (newMonth) => {
-    //   setSelected(newMonth);
-
-    // };
-
-    const handleDayClick = (day) => {
-      setSelected(day);
-      handleDateSelection(day);
-      setShowDatePicker(false);
-      console.log("handleDayClick + day", day);
-    };
-  
-    const handleMonthChange = (newMonth) => {
-      setShowDatePicker();
-      setSelected(newMonth);
-    };
-
+  const handleMonthChange = (newMonth) => {
+    setSelected(newMonth);
+  };
 
   return (
-    <DayPicker
-    className='date__picker'
-    onDayClick={handleDayClick}
-    onMonthChange={handleMonthChange}
-    onSelect={setSelected}
-    fromYear={2024}
-    toYear={2090}
-    mode='single'
-    // style={{boxSizing:'150px'}}
-    // defaultMonth={selected}
-    modifiersClassNames={{
-        selected: 'my-selected',
-        today: 'my-today'
-      }}
-      modifiersStyles={{
-        disabled: { fontSize: '75%' }
-      }}
-/>
-  )
-}
+    <div>
+      <DayPicker
+        className='date__picker'
+        selected={selected}
+        onDayClick={handleDayClick}
+        onMonthChange={handleMonthChange}
+        fromYear={2024}
+        toYear={2090}
+        mode='single'
+      />
+      <button onClick={() => setShowDatePicker(false)}>Set date</button>
+    </div>
+  );
+};
 
-export default DatePicker
+export default DatePicker;
