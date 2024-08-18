@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateTask } from '../features/taskSlice';
+import dayjs from 'dayjs';
 
-const Description = ({ task, setModal }) => {
+const Description = ({ task, setModal, setTaskName, setTaskPriority}) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: task.taskname,
@@ -31,6 +32,7 @@ const Description = ({ task, setModal }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedTask = {
@@ -46,33 +48,55 @@ const Description = ({ task, setModal }) => {
       },
     };
     dispatch(updateTask(updatedTask));
+    setTaskName(formData.name);
+    setTaskPriority(formData.priority);
     setModal(false);
   };
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const updatedTask = {
+  //     taskId: task.id,
+  //     name: formData.name,
+  //     priority: formData.priority,
+  //     completed: formData.completed,
+  //     completionDate: formData.completionDate,
+  //     description: {
+  //       text: formData.descriptionText,
+  //       img: formData.descriptionImg,
+  //       url: formData.descriptionUrl,
+  //     },
+  //   };
+  //   dispatch(updateTask(updatedTask));
+  //   setModal(false);
+  // };
   return (
-    <div className="desctiption__modal">
-      <div className="desctiption__modal-content">
-        <span className="desctiption__close" onClick={() => setModal(false)}>&times;</span>
+    <div className="description__modal">
+      <div className="description__modal-content">
+        <span className="description__close" onClick={() => setModal(false)}>&times;</span>
         <form onSubmit={handleSubmit}>
           <label>Task:</label>
-          <textarea className='desctiption__input' type="text" name="name" value={formData.name} onChange={handleChange} />
-          
+          <textarea className='description__input' type="text" name="name" value={formData.name} onChange={handleChange} />
           <label>Priority:</label>
-          <select className='desctiption__input' name="priority" value={formData.priority} onChange={handleChange}>
+          <select 
+          className='description__input' 
+          name="priority" 
+          value={formData.priority} 
+          onChange={handleChange}>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
           
           <label>Completion Date:</label>
-          <input className='desctiption__input' type="text" name="completionDate" value={formData.completionDate} onChange={handleChange} />
+          <input className='description__input' type="text" name="completionDate" value={dayjs(formData.completionDate).format('MMMM D, YYYY')} onChange={handleChange} disabled/>
           
           <label>Description:</label>
-          <textarea className='desctiption__input' name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea>
+          <textarea className='description__input' name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea>
           
-          <label>Description URL:</label>
+          {/* <label>Description URL:</label>
           <input className='desctiption__input' type="text" name="descriptionUrl" value={formData.descriptionUrl} onChange={handleChange} />
-          
+           */}
           <button type="submit">Submit</button>
         </form>
       </div>

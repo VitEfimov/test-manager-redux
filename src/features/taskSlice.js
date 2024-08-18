@@ -61,6 +61,34 @@ const taskSlice = createSlice({
                 localStorage.setItem('tasks', JSON.stringify(state.tasks));
             }
         },
+        // updateTask(state, action) {
+        //     const { taskId, ...updates } = action.payload;
+        //     const task = state.tasks.find(task => task.id === taskId);
+        //     if (task) {
+        //         Object.assign(task, updates);
+        //         task.lastUpdatedDate = new Date().toLocaleDateString();
+        //         localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        //     }
+        // },
+        // updateTask(state, action) {
+        //     const { taskId, name, priority, completed, description, completionDate } = action.payload;
+        //     const task = state.tasks.find(task => task.id === taskId);
+        //     if (task) {
+        //       task.taskname = name;  // Ensure this updates correctly
+        //       task.priority = priority;  // Ensure this updates correctly
+        //       task.completed = completed;
+        //       task.completionDate = completionDate;
+        //       if (description) {
+        //         task.description = {
+        //           text: description.text,
+        //           img: description.img,
+        //           url: description.url,
+        //         };
+        //       }
+        //       task.lastUpdatedDate = new Date().toLocaleDateString();
+        //       localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        //     }
+        //   },
     },
 });
 
