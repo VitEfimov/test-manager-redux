@@ -7,6 +7,20 @@ pomodoro intervals,
 light Theme,
 board view.
 
+# Deployed application on Vercel
+
+https://test-manager-redux.vercel.app/
+
+# Feautures of Task Manager App:
+- Front-end application for managing the tasks by date and days on the week;
+- used React-Redux for managing store and retriving the data (used local storage, in feature will add h2 db with Docker or MongoDB);
+- Relised dashboard features: retriving analitics information about the tasks like: all open tasks, closed tasks, missed tasks, today tasks, week tasks);
+- Relised board features: adding tasks, editing tasks on main panel, editing tasks with adding description of the task in description part, editing date of complecity, editing priority, deleting task;
+- Relised pomodoro features: timer;
+- Relised weather features: retriving actual weather information of current city, temperature, weather condition, weather icons (for retrive information please use free API from openweathermap.org, which you retrive after registration;
+- Relised setting features: setting weather information, pomodoro setting(not relised all functionality yet);
+- Relised login features: not relised yet.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
