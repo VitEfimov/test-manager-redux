@@ -10,7 +10,7 @@ import About from './components/About';
 
 function App() {
 
-  const [currentPage, setCurrentPage] = useState('Board');
+  const [currentPage, setCurrentPage] = useState('Dashboard');
   const [isPomodoroActive, setIsPromodoroActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(25 * 60);
   const [isTimeOver, setIsTimeOver] = useState(false);
@@ -35,7 +35,7 @@ function App() {
         return <Settings
           setCurrentPage={setCurrentPage} />;
       default:
-        return <ListOfSections />;
+        return <Dashboard />;
     }
   };
   useEffect(() => {

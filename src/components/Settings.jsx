@@ -70,7 +70,18 @@ const Settings = ({ setCurrentPage }) => {
 
   const fields = [
     { title: 'User information', description: 'Add user name, password and email address' },
-    { title: 'Weather', description: 'Add city and API key for weather data, ex: you can use freeAPI: api.openweathermap.org' },
+    // { title: 'Weather', description: 'Add city and API key for weather data, use freeAPI: api.openweathermap.org' },
+    { 
+      title: 'Weather', 
+      description: (
+          <p>
+              Add city and API key for weather data. Use free API: 
+              <a href="https://api.openweathermap.org" target="_blank" rel="noopener noreferrer">
+                  openweathermap
+              </a>
+          </p>
+      ) 
+  },
     { title: 'Promodoro', description: 'Customize pomodoro timer intervals' },
     { title: 'Other', description: 'You can change theme color' }
   ];

@@ -1,31 +1,20 @@
-
-
-
 import React from 'react'
 import { MdDelete } from "react-icons/md";
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GrDrag } from "react-icons/gr";
-import FILTERS from '../list-view/filters';
-
-
 import { updateTask, deleteTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
 import Description from './Description';
-import { PriorotyDropdown } from './ui-components/PriorotyDropdown';
 
 dayjs.extend(isoWeek);
-
 
 const Section = ({ task, checked, destination }) => {
 
   const dispatch = useDispatch();
-  // const tasks = useSelector(state => state.taskSlice.tasks);
-
-
   const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
@@ -34,11 +23,9 @@ const Section = ({ task, checked, destination }) => {
   const [checkboxChecked, setCheckboxChecked] = useState(task.completed);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-
   const handleSaveChanges = () => {
     dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString() }));
   };
-
 
   const handleCheckbox = () => {
     const newCheckboxChecked = !checkboxChecked;
@@ -62,7 +49,6 @@ const Section = ({ task, checked, destination }) => {
     }
   };
 
-
   const handlePriorityChange = () => {
     setTaskPrioritySelect(!taskPrioritySelect)
   }
@@ -85,7 +71,6 @@ const Section = ({ task, checked, destination }) => {
   };
 
   const [editingTaskName, setEditingTaskName] = useState(false);
-
 
   const handleTaskNameChange = () => {
     setEditingTaskName(true);
@@ -128,8 +113,6 @@ const Section = ({ task, checked, destination }) => {
       handleInputBlur();
     }
   };
-
-
   const [modal, setModal] = useState(false)
   const handleModal = () => { setModal(!modal); }
 
@@ -168,9 +151,12 @@ const Section = ({ task, checked, destination }) => {
         {modal
           ?
           <Description
+          className="section__task-name-description-icon"
             key={task.id}
             task={task}
-            setModal={setModal} />
+            setModal={setModal}
+            setTaskName={setTaskName}
+            setTaskPriority={setTaskPriority} />
           :
           null
         }
@@ -187,13 +173,6 @@ const Section = ({ task, checked, destination }) => {
             {dayjs(task.completionDate).format('MMMM D, YYYY')}
           </p>}
       </div>
-
-
-      {/* <PriorotyDropdown
-task={task}
-checked={checked}/> */}
-
-
       <div className='section__task-priority'>
         {taskPrioritySelect && !task.completed ? (
           <div className='section__task-priority-select'>
@@ -241,9 +220,3 @@ checked={checked}/> */}
 export default Section;
 
 
-
-{/* <div className='section__task' onClick={!isActive ? handle : null} >
-{isActive ? (
-  <inpit type='text' autoFocus onKeyPress={handleKeyPress}></inpit>
-):(<div style={{background:'transparent'}}>{task.name || taskName}</div>)} 
-        </div> */}
