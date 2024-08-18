@@ -148,7 +148,7 @@ const Section = ({ task, checked, destination }) => {
         )}
         <button className='section__task-name-description' onClick={handleModal}><BsThreeDotsVertical />
         </button>
-        {modal
+        {modal && !task.completed
           ?
           <Description
           className="section__task-name-description-icon"
@@ -156,7 +156,8 @@ const Section = ({ task, checked, destination }) => {
             task={task}
             setModal={setModal}
             setTaskName={setTaskName}
-            setTaskPriority={setTaskPriority} />
+            setTaskPriority={setTaskPriority}
+            />
           :
           null
         }
