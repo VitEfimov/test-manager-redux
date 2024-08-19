@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Section from './Section';
 import AddTask from './AddTask';
@@ -14,9 +14,25 @@ const ListOfSections = () => {
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const [missedTasks, setMissedTasks] = useState(false);
 
-    // const handleMissedTasks = () => {
-    //     setMissedTasks(!missedTasks);
-    // };
+
+    const [open,setOpen] = useState(false);
+    let openRef = useRef();
+
+    useEffect(() =>{
+        let handler = (e) => {
+            if (!openRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mouthdown', handler);
+        return() => {
+            document.removeEventListener('mouthdown', handler);
+        }
+    });
+
+
+
+
     const handleMissedTasks = () => {
         if (sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed).length > 0) {
             console.log('missed tasks')
