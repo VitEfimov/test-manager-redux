@@ -14,13 +14,13 @@ https://test-manager-redux.vercel.app/
 # Feautures of Task Manager App:
 Front-end application for managing tasks by date and day of the week.
 
-Used React-Redux for managing the store and retrieving data (used local storage; in the future, I will add H2 DB with Docker or MongoDB).
-Implemented dashboard features: retrieving analytics information about tasks, such as all open tasks, closed tasks, missed tasks, today's tasks, and weekly tasks.
-Implemented board features: adding tasks, editing tasks on the main panel, editing tasks with a description, editing the date of completion, editing priority, and deleting tasks.
-Implemented Pomodoro features: timer.
-Implemented weather features: retrieving current weather information, including temperature, weather condition, and weather icons. (To retrieve this information, please use a free API from openweathermap.org, which you can access after registration.)
-Implemented setting features: weather information settings, Pomodoro settings (not all functionality has been implemented yet).
-Login features: not implemented yet.
+* Used React-Redux for managing the store and retrieving data (used local storage; in the future, I will add H2 DB with Docker or MongoDB).
+* Implemented dashboard features: retrieving analytics information about tasks, such as all open tasks, closed tasks, missed tasks, today's tasks, and weekly tasks.
+* Implemented board features: adding tasks, editing tasks on the main panel, editing tasks with a description, editing the date of completion, editing priority, and deleting tasks.
+* Implemented Pomodoro features: timer.
+* Implemented weather features: retrieving current weather information, including temperature, weather condition, and weather icons. (To retrieve this information, please use a free API from openweathermap.org, which you can access after registration.)
+* Implemented setting features: weather information settings, Pomodoro settings (not all functionality has been implemented yet).
+* Login features: not implemented yet.
 
 # Getting Started with Create React App
 
