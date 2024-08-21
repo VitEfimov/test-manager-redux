@@ -12,14 +12,15 @@ board view.
 https://test-manager-redux.vercel.app/
 
 # Feautures of Task Manager App:
-- Front-end application for managing the tasks by date and days on the week;
-- used React-Redux for managing store and retriving the data (used local storage, in feature will add h2 db with Docker or MongoDB);
-- Relised dashboard features: retriving analitics information about the tasks like: all open tasks, closed tasks, missed tasks, today tasks, week tasks);
-- Relised board features: adding tasks, editing tasks on main panel, editing tasks with adding description of the task in description part, editing date of complecity, editing priority, deleting task;
-- Relised pomodoro features: timer;
-- Relised weather features: retriving actual weather information of current city, temperature, weather condition, weather icons (for retrive information please use free API from openweathermap.org, which you retrive after registration;
-- Relised setting features: setting weather information, pomodoro setting(not relised all functionality yet);
-- Relised login features: not relised yet.
+Front-end application for managing tasks by date and day of the week.
+
+Used React-Redux for managing the store and retrieving data (used local storage; in the future, I will add H2 DB with Docker or MongoDB).
+Implemented dashboard features: retrieving analytics information about tasks, such as all open tasks, closed tasks, missed tasks, today's tasks, and weekly tasks.
+Implemented board features: adding tasks, editing tasks on the main panel, editing tasks with a description, editing the date of completion, editing priority, and deleting tasks.
+Implemented Pomodoro features: timer.
+Implemented weather features: retrieving current weather information, including temperature, weather condition, and weather icons. (To retrieve this information, please use a free API from openweathermap.org, which you can access after registration.)
+Implemented setting features: weather information settings, Pomodoro settings (not all functionality has been implemented yet).
+Login features: not implemented yet.
 
 # Getting Started with Create React App
 
