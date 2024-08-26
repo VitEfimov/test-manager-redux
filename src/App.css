@@ -222,11 +222,12 @@ main {
   padding-left: 1dvw;
   border-right: 1px solid var(--dark-font-color-grey);
   border-left: 1px solid var(--dark-font-color-grey);
+  width: 14dvw;
 }
 
 .header__board-sections-priority {
   grid-area: header__board-sections-priority;
-  width: 14dvw;
+  width: 10dvw;
   padding-left: 1dvw;
 }
 
@@ -305,13 +306,8 @@ main {
 /* ///////////////////////////// section /////////////////////////////*/
 .section {
   background-color: var(--dark-background-color-main);
-  /* background-color: var(--background-color-main); */
-
   color: var(--dark-font-color-grey);
-  /* color: black; */
-
   padding: 1dvh;
-  /* height: 100vh; */
   width: 100%;
   height: 100%;
 
@@ -334,7 +330,7 @@ main {
 
 .section__task {
   padding: 0.5dvh 0 0.5dvh 0;
-  padding-right: 7dvw;
+  /* padding-right: 3.5dvw; */
   display: grid;
   grid-template-areas: "section__task-name  section__task-date section__task-priority section__task-delete-btn";
   grid-template-columns: 60dvw 1fr;
@@ -342,23 +338,11 @@ main {
   border-bottom: 1px solid #3a3a3a;
   background-color: var(--dark-background-color-main);
   justify-content: center;
-  /* align-items: center; */
-  /* Center content horizontally */
 }
-
-.section__task:hover {
-   /* background-color: var(--dark-background-color-main-priority);
-  opacity: .9;
-  color: var(--dark-font-color-white);  */
-  /* color:black; */
-
-}
-
 
 
 .section__task-name {
   grid-area: section__task-name;
-  /* padding: 3px; */
   --max-lines: 1;
   --line-height: 1.0;
   height: calc(var(--max-lines) * 2em * var(--line-height));
@@ -369,7 +353,6 @@ main {
   background: transparent;
   display: flex;
   align-items: center;
-
   outline: none;
 
 }
@@ -448,11 +431,11 @@ input {
   bottom: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 75%;
   z-index: 10;
   animation: slideInRight 0.5s forwards;
   pointer-events: none;
-  overflow: hidden;
+  overflow: none;
   &:hover {
     opacity: 1;
   }
@@ -503,8 +486,8 @@ input {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0);
-  width: 75%;
-  height: fit-content;
+  width: 55%;
+  height: 100%;
   pointer-events: all;
   z-index: 11;
   position: absolute;
@@ -530,10 +513,13 @@ input {
 form {
   display: flex;
   flex-direction: column;
+  /* margin: 0.5dvh; */
 }
 
 label {
   margin-bottom: 5px;
+  margin: 0.5dvh;
+
   /* font-weight: bold; */
 }
 
@@ -589,7 +575,7 @@ button[type='submit']:hover {
   grid-area: section__task-date;
   padding-left: 1dvw;
   /* border-right: 1px solid var(--dark-font-color-grey); */
-  border-left: 1px solid var(--dark-font-color-grey);
+  /* border-left: 1px solid var(--dark-font-color-grey); */
   align-self: center;
   cursor: pointer;
   user-select: none;
@@ -659,8 +645,8 @@ button[type='submit']:hover {
 
 .section__task-priority {
   grid-area: section__task-priority;
- padding-left: 1dvw;
- border-left: 1px solid var(--dark-font-color-grey);
+ /* padding-right: 5dvw; */
+ /* border-left: 1px solid var(--dark-font-color-grey); */
   align-self: center;
   user-select: none;
   font-size: calc(7px + 1vmin);
@@ -752,11 +738,19 @@ button[type='submit']:hover {
 .section__task-delete-btn,
 .dropdown-content-row-title-delete-btn {
   cursor: pointer;
-  text-align: center;
-  align-self: center;
+  /* text-align: center; */
+  /* align-self: center;
+   */
+   /* align-items: center; */
+   /* align-content: center; */
+  /* justify-self: center;
+  justify-content:center ; */
   width: 3dvw;
-  padding-left: 1dvw;
-  border-left: 1px solid var(--dark-font-color-grey);
+  padding-right: 3dvw;
+  margin-left: 1dvw;
+  /* padding-right: 0.5dvw; */
+  /* border-left: 1px solid var(--dark-font-color-grey);
+  border-right: 1px solid var(--dark-font-color-grey); */
 
 }
 
@@ -966,7 +960,7 @@ padding: 5dvh;
 .weather__container {
   padding: 1dvh;
   margin: 3dvh;
-  font-size: 2dvh;
+  /* font-size: 2dvh; */
   background-color: var(--dark-background-color-sidebar);
   border-radius: 10px;
 }
@@ -1002,7 +996,8 @@ padding: 5dvh;
   } */
   .section__task {
     padding: 0.5dvh 0 0.5dvh 0;
-    padding-right: 3dvw;
+    /* padding-right: 3dvw; */
+    /* margin-right: 3dvw; */
     grid-template-rows: 3dvh 1fr;
     justify-content: center;
     align-items: center;
