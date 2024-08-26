@@ -51,9 +51,12 @@ const Weather = () => {
             </div>
           )}
         </div>
-      ):null}
-    </div>
-  )
+    ) : (
+      <div className="header__weather-info">
+        <p>Add settings</p><p>to display weather</p>
+      </div>
+    )}
+  </div>
+);
 }
-
-export default Weather
+export default Weather;
