@@ -24,7 +24,7 @@
       green 3%);
   background-color: rgb(0, 0, 0);
   font-size: calc(7px + 1vmin);
-  /* overflow-x:hidden; */
+  overflow-x:hidden;
   /* overflow: hidden; */
 
   /* width: 100%; */
@@ -51,13 +51,18 @@ main {
   flex-direction: column;
   /* padding: 15px; */
   background-color: var(--dark-background-color-sidebar);
+  /* background-color: red; */
+
   color: var(--dark-font-color-white);
   overflow: hidden;
   transition: all .3s ease;
   font-family: Arial;
   width: 15dvw;
 }
+.sidebar-main{
+  /* background-color: green; */
 
+}
 .nav-button {
   display: flex;
   flex-direction: row;
@@ -222,13 +227,13 @@ main {
   padding-left: 1dvw;
   border-right: 1px solid var(--dark-font-color-grey);
   border-left: 1px solid var(--dark-font-color-grey);
-  width: 14dvw;
+  width: 12dvw;
 }
 
 .header__board-sections-priority {
   grid-area: header__board-sections-priority;
-  width: 10dvw;
-  padding-left: 1dvw;
+  width: 8dvw;
+  /* padding-left: 1dvw; */
 }
 
 .header__board-view-btn {
@@ -310,6 +315,7 @@ main {
   padding: 1dvh;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
 
 }
 
@@ -580,7 +586,7 @@ button[type='submit']:hover {
   cursor: pointer;
   user-select: none;
   font-size: calc(7px + 1vmin);
-  width: 12dvw;
+  width: 14dvw;
 }
 
 .date__picker {
@@ -595,6 +601,7 @@ button[type='submit']:hover {
   border: none;
   animation: slideInRight 0.5s ease-in-out forwards;
   padding-left: 0;
+  overflow: hidden;
 
 
 }
@@ -635,7 +642,7 @@ button[type='submit']:hover {
   color: blue;
 }
 
-.my-today {
+.today-date {
   font-weight: bold;
   font-size: 140%;
   color: red;
@@ -748,6 +755,7 @@ button[type='submit']:hover {
   width: 3dvw;
   padding-right: 3dvw;
   margin-left: 1dvw;
+  padding-top: .1dvw;
   /* padding-right: 0.5dvw; */
   /* border-left: 1px solid var(--dark-font-color-grey);
   border-right: 1px solid var(--dark-font-color-grey); */

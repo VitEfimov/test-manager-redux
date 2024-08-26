@@ -27,7 +27,7 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
         <nav className="sidebar">
             {sidebarView
             ?
-            (<div>
+            (<div className='sidebar-main'>
             <header className='sidebar__header'>
                 <section className='sidebar__header-userinfo'>
                     <h2>{user[0].name}</h2>
