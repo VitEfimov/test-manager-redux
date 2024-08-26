@@ -9,6 +9,7 @@ import { GrDrag } from "react-icons/gr";
 import { updateTask, deleteTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
 import Description from './Description';
+import ReactDatePicker from './ReactDatePicker';
 
 dayjs.extend(isoWeek);
 
@@ -95,7 +96,7 @@ const Section = ({ task, checked, destination }) => {
   };
 
   const handleDatePicker = () => {
-    setShowDatePicker(!showDatePicker);
+      setShowDatePicker(true); 
   }
 
   const handleDateSelection = (date) => {
@@ -163,8 +164,13 @@ const Section = ({ task, checked, destination }) => {
         }
       </div>
       <div className='section__task-date' onClick={handleDatePicker} >
-        {showDatePicker && !task.completed
+        {
+        showDatePicker &&
+         !task.completed
           ?
+          // <ReactDatePicker
+          // handleDateSelection={handleDateSelection}
+          // setShowDatePicker={setShowDatePicker}/>
           <DatePicker
             handleDateSelection={handleDateSelection}
             setShowDatePicker={setShowDatePicker}
