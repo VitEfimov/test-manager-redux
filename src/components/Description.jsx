@@ -76,7 +76,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority}) => {
         <span className="description__close" onClick={() => setModal(false)}>&times;</span>
         <form onSubmit={handleSubmit}>
           <label>Task:</label>
-          <textarea className='description__input' type="text" name="name" value={formData.name} onChange={handleChange} />
+          <input className='description__input task-name' type="text" name="name" value={formData.name} onChange={handleChange} />
           <label>Priority:</label>
           <select 
           className='description__input' 

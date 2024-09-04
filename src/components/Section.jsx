@@ -30,10 +30,10 @@ const Section = ({ task, checked, destination }) => {
 
   const handleCheckbox = () => {
     const newCheckboxChecked = !checkboxChecked;
-    console.log("newCheckboxChecked", newCheckboxChecked);
+    // console.log("newCheckboxChecked", newCheckboxChecked);
     setCheckboxChecked(newCheckboxChecked);
     if (task.completed === true) {
-      console.log('task.completed', task.completed);
+      // console.log('task.completed', task.completed);
       dispatch(
         updateTask({
           taskId: task.id,
