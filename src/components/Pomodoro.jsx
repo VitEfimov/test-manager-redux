@@ -66,7 +66,7 @@ const Pomodoro = () => {
     };
 
     const playSound = () => {
-        const audio = new Audio('../assets/audio/563311__davince21__harp-motif2.ogg');
+        const audio = new Audio('./assets/audio/end_sound.ogg');
         audio.play();
     };
 
@@ -101,7 +101,7 @@ const Pomodoro = () => {
                     </div>):(null)
 }
                 </div>
-                <p style={{color:'green', marginTop:'10dvh'}}>TODO: intervals</p>
+                {/* <p style={{color:'green', marginTop:'10dvh'}}>TODO: intervals</p> */}
             </div>
         </section>
     );
