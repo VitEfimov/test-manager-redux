@@ -1,19 +1,31 @@
 import React from 'react';
+import UseSound from './ui-components/UseSound';
 
 const About = () => {
   return (
     <section className='section' style={{paddingLeft:'35px'}}>
       <h1 className='about__header'>About Task Manager App</h1>
+      <UseSound/>
       <p>
         This is a task management app built with React and Redux.
       </p>
       <h2 className='about__header'>Features</h2>
       <ul className='about__list'>
-        <li>Create multiple boards to organize tasks</li>
-        <li>Add, edit, and delete tasks on a board</li>
-        <li>Mark tasks as completed</li>
-        <li>Reorder tasks within a board</li>
-        <li>Persist data in local storage</li>
+        <p>Front-end application for managing tasks by date and day of the week.</p>
+        <li>Used React-Redux for managing the store and retrieving data (used local storage; in the future, I will add H2 DB with Docker or MongoDB).
+        </li>
+        <li>Implemented dashboard features: retrieving analytics information about tasks, such as all open tasks, closed tasks, missed tasks, today's tasks, and weekly tasks.
+        </li>
+        <li>Implemented board features: adding tasks, editing tasks on the main panel, editing tasks with a description, editing the date of completion, editing priority, and deleting tasks.
+        </li>
+        <li>Implemented Pomodoro features: timer.
+        </li>
+        <li>Implemented weather features: retrieving current weather information, including temperature, weather condition, and weather icons. (To retrieve this information, please use a free API from openweathermap.org, which you can access after registration.)
+        </li>
+        <li>Implemented setting features: weather information settings, Pomodoro settings (not all functionality has been implemented yet).
+        </li>
+        <li>Login features: not implemented yet.
+        </li>
       </ul>
       <h2 className='about__header'>Usage</h2>
       <h3 className='about__header'>Install</h3>

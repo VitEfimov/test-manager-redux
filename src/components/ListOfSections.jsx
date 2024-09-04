@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Section from './Section';
 import AddTask from './AddTask';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import FILTERS from '../list-view/filters';
+import HeaderListOfSection from './HeaderListOfSection';
 
 
 dayjs.extend(isSameOrBefore);
@@ -15,17 +16,17 @@ const ListOfSections = () => {
     const [missedTasks, setMissedTasks] = useState(false);
 
 
-    const [open,setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     let openRef = useRef();
 
-    useEffect(() =>{
+    useEffect(() => {
         let handler = (e) => {
             if (!openRef.current.contains(e.target)) {
                 setOpen(false);
             }
         };
         document.addEventListener('mouthdown', handler);
-        return() => {
+        return () => {
             document.removeEventListener('mouthdown', handler);
         }
     });
@@ -37,7 +38,7 @@ const ListOfSections = () => {
         if (sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed).length > 0) {
             console.log('missed tasks')
             setMissedTasks(true);
-        }else{
+        } else {
             setMissedTasks(false);
 
         }
@@ -47,7 +48,7 @@ const ListOfSections = () => {
         handleMissedTasks();
     }, [tasks]);
 
-    
+
 
     const sortedTasks = [...tasks].sort((a, b) => {
         const dateA = dayjs(a.completionDate);
@@ -57,27 +58,40 @@ const ListOfSections = () => {
 
 
     return (
-        <section className='section'>
-            <header className='header__board'>
-                <div className='header__board-view'>
-                    <button className="header__board-view-btn"><i className="fa-regular fa-rectangle-list"></i>List</button>
-                    <button className="header__board-view-btn">Board</button>
-                </div>
-                <section className='header__board-sections'>
-                    <h2 className='header__board-sections-task-name'>Tasks</h2>
-                    <h2 className='header__board-sections-due-date'>Due date</h2>
-                    <h2 className='header__board-sections-priority'>Priority</h2>
-                </section>
-            </header>
-            {/* <section className='section'> */}
-            {missedTasks && (
+        <div>
+            {/* <HeaderListOfSection/> */}
+            <section className='section'>
+                <header className='header__board'>
+                    <div className='header__board-view'>
+                        <button className="header__board-view-btn"><i className="fa-regular fa-rectangle-list"></i>List</button>
+                        <button className="header__board-view-btn">Board</button>
+                    </div>
+                    <section className='header__board-sections'>
+                        <h2 className='header__board-sections-task-name'>Tasks</h2>
+                        <h2 className='header__board-sections-due-date'>Due date</h2>
+                        <h2 className='header__board-sections-priority'>Priority</h2>
+                    </section>
+                </header>
+                {/* <section className='section'> */}
+                {missedTasks && (
                     <ul className='section__field'>
-                        <h3 style={{color:'crimson'}}>Missed tasks</h3>
+                        <div className='section__field-header'>
+                            {/* <input className='section_task-checkbox'
+                                type="checkbox"
+                              checked={task.completed}
+                              onChange={handleCheckbox}
+                            /> */}
+                            <h3 style={{ color: 'crimson' }}>Missed tasks</h3>
+                            
+                        </div>
                         <div className='section__line-top'></div>
                         {sortedTasks
                             .filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed)
                             .map(task => (
-                                <Section key={task.id} task={task}  />
+                                <Section
+                                    key={task.id}
+                                    task={task}
+                                    checked={true} />
                             ))}
                     </ul>
                 )}
@@ -172,9 +186,10 @@ const ListOfSections = () => {
                         ))}
                 </ul>
 
-               
+
             </section>
-        // </section>
+            {/* </section> */}
+        </div>
     );
 };
 
