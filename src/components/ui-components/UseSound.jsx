@@ -3,9 +3,9 @@ import useSound from 'use-sound';
 // import end_sound from '../assets/audio/end_sound.ogg'
 // import end_sound from './assets/audio/end_sound.ogg';
 
-const UseSound = () => {
+const UseSound = (file) => {
     const [time, setTime] = useState(3);
-    const [play] = useSound('./start_sound.mp3', {
+    const [play] = useSound(file, {
         onload: () => console.log("Sound loaded successfully"),
         onerror: (err) => console.error("Sound failed to load", err)
     });

@@ -91,7 +91,8 @@ const ListOfSections = () => {
                                 <Section
                                     key={task.id}
                                     task={task}
-                                    checked={true} />
+                                    checked={false}
+                                    />
                             ))}
                     </ul>
                 )}
