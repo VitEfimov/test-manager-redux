@@ -3,7 +3,7 @@ import UseSound from './ui-components/UseSound';
 
 const About = () => {
   return (
-    <section className='section' style={{paddingLeft:'35px'}}>
+    <section className='section'>
       <h1 className='about__header'>About Task Manager App</h1>
       <UseSound/>
       <p>

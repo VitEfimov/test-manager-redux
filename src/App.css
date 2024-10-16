@@ -33,16 +33,23 @@
 .container {
   height: 100% ;
   width: 100%;
-  overflow: hidden;
-}
+  /* overflow: hidden; */
+  display: flex;
+  flex-direction: column; 
+  background-color: #007bff;
+ }
 
-main {
+.main-content {
   height: 100%;
   width: 100%;
   display: flex;
   overflow: hidden;
+  flex-direction: column;
 
-}
+  /* background-color: #007bff; */
+
+
+ }
 
 
 /* ///////////////////////////// sidebar /////////////////////////////*/
@@ -50,7 +57,7 @@ main {
 .sidebar {
   /* grid-area: sidebar; */
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   /* position: fixed; */
   /* padding: 15px; */
   background-color: var(--dark-background-color-sidebar);
@@ -60,7 +67,11 @@ main {
   overflow: hidden;
   transition: all .3s ease;
   font-family: Arial;
-  width: 15dvw;
+  /* width: auto; */
+  width:calc(12dvw + 1vmin);
+  position: fixed;
+  height: 100%;
+  justify-content: center;
   /* animation: slideInLeft 0.5s ease-in-out forwards; */
 
 }
@@ -128,6 +139,7 @@ main {
   /* justify-content: space-between; */
   gap: 1dvw;
   padding: 3dvh;
+  width: calc(12dvw + 1vmin);
 }
 
 .nav-button-icon {
@@ -172,7 +184,7 @@ main {
   padding-left: 1dvh;
   color: var(--dark-font-color-grey);
   background-color: var(--dark-background-color-main);
-
+  position: inherit;
   & h1 {
     justify-self: center;
     align-self: center;
@@ -269,6 +281,7 @@ main {
   border: none;
   font-size: 25px;
   cursor: pointer;
+  padding-left: 12dvw;
 }
 
 .sidebar-view-btn {
@@ -326,11 +339,19 @@ main {
   padding: 1dvh;
   width: 100%;
   height: 120dvh;
-  overflow-x: hidden;
-  overflow:auto !important;
-
+  overflow: hidden;
+  /* overflow:auto !important; */
+padding-left: 13dvw;
 }
-
+.section-without-sidebar{
+  background-color: var(--dark-background-color-main);
+  color: var(--dark-font-color-grey);
+  padding: 1dvh;
+  width: 100%;
+  height: 120dvh;
+  overflow: hidden;
+  padding-left: 3dvw;
+}
 .section__field {
   display: flex;
   flex-direction: column;
@@ -1021,11 +1042,15 @@ padding: 5dvh;
 @media only screen and (max-width: 1250px) {
 .nav-button-icon {
   display: block;
+  width: calc(10dvw + 1vmin);
 }
-
+/* .nav-button{
+  width: 100%;
+} */
 .nav-button-name {
   display: none;
 }
+
 .settings__conteiner {
   flex-direction: column;
   height: auto;
@@ -1039,6 +1064,9 @@ padding: 5dvh;
 .description__modal{
   width: 65%;
 }
+/* .sidebar{
+  width: calc(15dvw + 1vmin);
+} */
 
 }
 
@@ -1090,15 +1118,19 @@ padding: 5dvh;
   } */
 
   .sidebar {
-    width: auto;
+    width: calc(11dvw + 1vmin);
+    /* width: auto; */
     align-items: center;
     height: 100%;
+    /* justify-content: center; */
   }
 
   .nav-button {
     padding-top: 3dvh;
   }
-
+  /* .nav-button{
+    width: 100%;
+  } */
   .nav-button-icon {
     display: block;
   }

@@ -16,10 +16,10 @@ function App() {
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [title, setTitle] = useState('');
   const [sidebarView, setSidebarView] = useState(true);
-  const renderPage = () => {
+  const renderPage = (sidebarView) => {
     switch (currentPage) {
       case 'Board':
-        return <ListOfSections />;
+        return <ListOfSections sidebarView={sidebarView} />;
       case 'Pomodoro':
 
         return <Pomodoro isPomodoroActive={isPomodoroActive}
@@ -58,7 +58,8 @@ function App() {
 
 
     <main className='container'>
-      {sidebarView ? <Sidebar setCurrentPage={setCurrentPage}
+      {sidebarView ? 
+        <Sidebar setCurrentPage={setCurrentPage}
         setTitle={setTitle}
         sidebarView={sidebarView}
         setSidebarView={setSidebarView}/>
@@ -67,13 +68,14 @@ function App() {
         <div className='main-content'>
         <Header 
         setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
         title={title}
         sidebarView={sidebarView}
         setSidebarView={setSidebarView}
         isPomodoroActive={isPomodoroActive}
         timeRemaining={timeRemaining}
         isTimeOver={isTimeOver} />
-        {renderPage()}
+        {renderPage(sidebarView)}
         </div>
       </main>
 

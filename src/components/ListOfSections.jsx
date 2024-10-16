@@ -10,7 +10,7 @@ import HeaderListOfSection from './HeaderListOfSection';
 
 dayjs.extend(isSameOrBefore);
 
-const ListOfSections = () => {
+const ListOfSections = ({sidebarView}) => {
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const [missedTasks, setMissedTasks] = useState(false);
@@ -60,7 +60,7 @@ const ListOfSections = () => {
     return (
         <div>
             {/* <HeaderListOfSection/> */}
-            <section className='section'>
+            <section className={sidebarView ? 'section' : 'section-without-sidebar'}>
                 <header className='header__board'>
                     <div className='header__board-view'>
                         <button className="header__board-view-btn"><i className="fa-regular fa-rectangle-list"></i>List</button>
