@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdDelete } from "react-icons/md";
 import { useState, useEffect } from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -96,7 +96,7 @@ const Section = ({ task, checked, destination }) => {
   };
 
   const handleDatePicker = () => {
-      setShowDatePicker(true); 
+    setShowDatePicker(true);
   }
 
   const handleDateSelection = (date) => {
@@ -147,38 +147,39 @@ const Section = ({ task, checked, destination }) => {
             {task.name || taskName}
           </label>
         )}
+
         <button className='section__task-name-description' onClick={handleModal}><BsThreeDotsVertical />
         </button>
         {modal && !task.completed
           ?
           <Description
-          className="section__task-name-description-icon"
+            className="section__task-name-description-icon"
             key={task.id}
             task={task}
             setModal={setModal}
             setTaskName={setTaskName}
             setTaskPriority={setTaskPriority}
-            />
+          />
           :
           null
         }
       </div>
       <div className='section__task-date' onClick={handleDatePicker} >
         {
-        showDatePicker &&
-         !task.completed
-          ?
-          // <ReactDatePicker
-          // handleDateSelection={handleDateSelection}
-          // setShowDatePicker={setShowDatePicker}/>
-          <DatePicker
-            handleDateSelection={handleDateSelection}
-            setShowDatePicker={setShowDatePicker}
-          />
-          :
-          <p>
-            {dayjs(task.completionDate).format('MMMM D, YYYY')}
-          </p>}
+          showDatePicker &&
+            !task.completed
+            ?
+            // <ReactDatePicker
+            // handleDateSelection={handleDateSelection}
+            // setShowDatePicker={setShowDatePicker}/>
+            <DatePicker
+              handleDateSelection={handleDateSelection}
+              setShowDatePicker={setShowDatePicker}
+            />
+            :
+            <p>
+              {dayjs(task.completionDate).format('MMMM D, YYYY')}
+            </p>}
       </div>
       <div className='section__task-priority'>
         {taskPrioritySelect && !task.completed ? (
@@ -212,7 +213,7 @@ const Section = ({ task, checked, destination }) => {
               className={`section__task-priority-btn-media ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
               onClick={handlePriorityChange}
               disabled={checked}
-            >{taskPriority.substring(0, 1) || 'Priority'}
+            >{taskPriority.substring(0, 1) || 'Prt'}
             </button>
           </div>
         )}
