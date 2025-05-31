@@ -12,7 +12,6 @@ import Description from './Description';
 import ReactDatePicker from './ReactDatePicker';
 
 dayjs.extend(isoWeek);
-
 const Section = ({ task, checked, destination }) => {
 
   const dispatch = useDispatch();
@@ -20,9 +19,11 @@ const Section = ({ task, checked, destination }) => {
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
   const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(dayjs(task.completionDate));
+  // const [selectedDate, setSelectedDate] = useState(dayjs(task.completionDate));
+  const [selectedDate, setSelectedDate] = useState(task.completionDate ? new Date(task.completionDate) : new Date());
   const [checkboxChecked, setCheckboxChecked] = useState(task.completed);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
 
   const handleSaveChanges = () => {
     dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString() }));
@@ -100,14 +101,23 @@ const Section = ({ task, checked, destination }) => {
   }
 
   const handleDateSelection = (date) => {
-    setSelectedDate(dayjs(date));
-    dispatch(
-      updateTask({
-        taskId: task.id,
-        completionDate: dayjs(date).toISOString(),
-      })
-    );
+    const isoDate = dayjs(date).toISOString();
+    setSelectedDate(date); // Keep it as native Date
+    dispatch(updateTask({
+      taskId: task.id,
+      completionDate: isoDate,
+    }));
   };
+
+  // const handleDateSelection = (date) => {
+  //   setSelectedDate(dayjs(date));
+  //   dispatch(
+  //     updateTask({
+  //       taskId: task.id,
+  //       completionDate: dayjs(date).toISOString(),
+  //     })
+  //   );
+  // };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -164,7 +174,20 @@ const Section = ({ task, checked, destination }) => {
           null
         }
       </div>
-      <div className='section__task-date' onClick={handleDatePicker} >
+
+      <div className='section__task-date' onClick={handleDatePicker}>
+        {
+          showDatePicker && !task.completed ? (
+            <DatePicker
+              handleDateSelection={handleDateSelection}
+              setShowDatePicker={setShowDatePicker}
+            />
+          ) : (
+            <p>{dayjs(selectedDate).format('MMMM D, YYYY')}</p>
+          )
+        }
+      </div>
+      {/* <div className='section__task-date' onClick={handleDatePicker} >
         {
           showDatePicker &&
             !task.completed
@@ -180,7 +203,7 @@ const Section = ({ task, checked, destination }) => {
             <p>
               {dayjs(task.completionDate).format('MMMM D, YYYY')}
             </p>}
-      </div>
+      </div> */}
       <div className='section__task-priority'>
         {taskPrioritySelect && !task.completed ? (
           <div className='section__task-priority-select'>
