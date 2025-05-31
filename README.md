@@ -7,7 +7,7 @@ pomodoro intervals,
 light Theme,
 board view.
 
-# Deployed application on Vercel
+# Application Deployed on Vercel
 
 https://test-manager-redux.vercel.app/
 
