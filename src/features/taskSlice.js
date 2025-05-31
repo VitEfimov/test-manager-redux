@@ -4,9 +4,11 @@ const loadFromLocalStorage = () => {
     const defaultTask = [{
         "id": "1712284250904",
         "taskname": "Add first task...",
-        "creationDate": new Date().toLocaleDateString(),
+        creationDate: new Date().toISOString(),
+        // "creationDate": new Date().toLocaleDateString(),
         "lastUpdatedDate": null,
-        "completionDate": new Date().toLocaleDateString(),
+        // "completionDate": new Date().toLocaleDateString(),
+        completionDate: new Date().toISOString(),
         "priority": "High",
         "completed": false,
         "description": {
@@ -57,7 +59,8 @@ const taskSlice = createSlice({
                         url: description.url || '',
                     };
                 }
-                task.lastUpdatedDate = new Date().toLocaleDateString();
+                task.lastUpdatedDate = new Date().toISOString();
+                // task.lastUpdatedDate = new Date().toLocaleDateString();
                 localStorage.setItem('tasks', JSON.stringify(state.tasks));
             }
         },
