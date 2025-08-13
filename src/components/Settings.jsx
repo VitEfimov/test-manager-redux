@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
-import { setBreakInterval, setIntervalCount, updateTime } from '../features/pomodoroSlice';
+import { setBreakInterval, setIntervalCount, updateTime, setTime } from '../features/pomodoroSlice';
 import { updateUserName, updateUserEmail, updateUserPassword } from '../features/userSlice';
 import InfomationIcon from './InfomationIcon';
 
@@ -14,9 +14,9 @@ const Settings = ({ setCurrentPage }) => {
 
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
-  const time = pomodoro[0].time / 60;
-  const breakInterval = pomodoro[0].breakInterval;
-  const intervalCount = pomodoro[0].intervalCount;
+  const time = pomodoro[0].initialTime / 60; // Use initialTime instead of time
+  const breakInterval = pomodoro[0].breakInterval / 60; // Convert to minutes
+  const intervalCount = pomodoro[0].intervalCount.count; // Get the count value
 
   const [userName, setUserName] = useState(user[0].name);
   const [password, setPassword] = useState(user[0].password);
@@ -25,7 +25,7 @@ const Settings = ({ setCurrentPage }) => {
   const [newCity, setNewCity] = useState(weatherCity);
   const [newApiKey, setNewApiKey] = useState(weatherApi)
   const [newWorkInterval, setNewWorkInterval] = useState(time);
-  const [newBreakInterval, setNewBreakInterval] = useState(breakInterval)
+  const [newBreakInterval, setNewBreakInterval] = useState(breakInterval);
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
 
   const handleUserNameChange = (e) => {
@@ -47,19 +47,20 @@ const Settings = ({ setCurrentPage }) => {
   };
 
   const handleSetWorkInterval = (e) => {
-    setNewWorkInterval(e.target.value);
+    setNewWorkInterval(parseFloat(e.target.value));
   };
   const handleSetBreakInterval = (e) => {
-    setNewBreakInterval(e.target.value);
+    setNewBreakInterval(parseFloat(e.target.value));
   };
   const handleSetIntervalCount = (e) => {
-    setNewIntervalCount(e.target.value);
+    setNewIntervalCount(parseInt(e.target.value));
   };
 
   const handleSave = () => {
     dispatch(updateWeatherCity(newCity));
     dispatch(updateWeatherApi(newApiKey))
-    dispatch(updateTime(newWorkInterval * 60))
+    // Use setTime instead of updateTime to properly save both time and initialTime
+    dispatch(setTime(newWorkInterval))
     dispatch(setBreakInterval(newBreakInterval))
     dispatch(setIntervalCount(newIntervalCount))
     dispatch(updateUserName(userName))
@@ -90,26 +91,24 @@ const Settings = ({ setCurrentPage }) => {
   return (
     <section className='section'>
       <button className='settings__save-btn' onClick={handleSave}>Save</button>
-
       <div className='settings__conteiner'>
         <div className='settings__block'>
-          <h3 className='settings__block-header'>User Information
+          <h3 className='settings__block-header'>
+            User information
             <i>
-              <InfomationIcon
-               field={fields[0]}
-                />
+              <InfomationIcon field={fields[0]} />
             </i>
           </h3>
           <div className='settings__item'>
-            <label className='settings__item-label'>User name:</label>
+            <label className='settings__item-label'>Name:</label>
             <input type="text" value={userName} onChange={handleUserNameChange} />
           </div>
           <div className='settings__item'>
-            <label className='settings__item-label' placeholder={newApiKey}>eMail:</label>
+            <label className='settings__item-label'>Email:</label>
             <input type="email" value={email} onChange={handleUserEmailChange} />
           </div>
           <div className='settings__item'>
-            <label className='settings__item-label' placeholder={newApiKey}>Password:</label>
+            <label className='settings__item-label'>Password:</label>
             <input type="password" value={password} onChange={handleUserPasswordChange} />
           </div>
         </div>
@@ -121,11 +120,11 @@ const Settings = ({ setCurrentPage }) => {
             </i>
           </h3>
           <div className='settings__item'>
-            <label className='settings__item-label'>Weather City:</label>
+            <label className='settings__item-label'>City:</label>
             <input type="text" value={newCity} onChange={handleCityChange} />
           </div>
           <div className='settings__item'>
-            <label className='settings__item-label' placeholder={newApiKey}>Weather Api:</label>
+            <label className='settings__item-label'>API Key:</label>
             <input type="text" value={newApiKey} onChange={handleCityApi} />
           </div>
         </div>
@@ -137,12 +136,12 @@ const Settings = ({ setCurrentPage }) => {
             </i>
           </h3>
           <div className='settings__item'>
-            <label className='settings__item-label'>Work interval (minutes):</label>
-            <input type="number" value={newWorkInterval} onChange={handleSetWorkInterval} />
+            <label className='settings__item-label'>Work Interval time (minutes):</label>
+            <input type="number" step="0.1" min="0.1" value={newWorkInterval} onChange={handleSetWorkInterval} />
           </div>
           <div className='settings__item'>
-            <label className='settings__item-label'>Break interval (minutes):</label>
-            <input type="number" value={newBreakInterval} onChange={handleSetBreakInterval} />
+            <label className='settings__item-label'>Break Interval time (minutes):</label>
+            <input type="number" step="0.1" min="0.1" value={newBreakInterval} onChange={handleSetBreakInterval} />
           </div>
           <div className='settings__item'>
             <label className='settings__item-label'>Interval count:</label>
@@ -170,77 +169,3 @@ const Settings = ({ setCurrentPage }) => {
 };
 
 export default Settings
-
-
-{/* <div className='settings__conteiner'>
-<div className='settings__block'>
-  <h3 className='settings__block-header'>User Information
-    <i>
-      <InfomationIcon field={field.userinformation} />
-    </i>
-  </h3>
-  <div className='settings__item'>
-    <label className='settings__item-label'>User name:</label>
-    <input type="text" value={userName} onChange={handleUserNameChange} />
-  </div>
-  <div className='settings__item'>
-    <label className='settings__item-label' placeholder={newApiKey}>eMail:</label>
-    <input type="email" value={email} onChange={handleUserEmailChange} />
-  </div>
-  <div className='settings__item'>
-    <label className='settings__item-label' placeholder={newApiKey}>Password:</label>
-    <input type="password" value={password} onChange={handleUserPasswordChange} />
-  </div>
-</div>
-<div className='settings__block'>
-  <h3 className='settings__block-header'>
-    Weather
-    <i>
-      <InfomationIcon field={'Weather'} />
-    </i>
-  </h3>
-  <div className='settings__item'>
-    <label className='settings__item-label'>Weather City:</label>
-    <input type="text" value={newCity} onChange={handleCityChange} />
-  </div>
-  <div className='settings__item'>
-    <label className='settings__item-label' placeholder={newApiKey}>Weather Api:</label>
-    <input type="text" value={newApiKey} onChange={handleCityApi} />
-  </div>
-</div>
-<div className='settings__block'>
-  <h3 className='settings__block-header'>
-    Promodoro
-    <i>
-      <InfomationIcon field={'Promodoro'} />
-    </i>
-  </h3>
-  <div className='settings__item'>
-    <label className='settings__item-label'>Work interval (minutes):</label>
-    <input type="number" value={newWorkInterval} onChange={handleSetWorkInterval} />
-  </div>
-  <div className='settings__item'>
-    <label className='settings__item-label'>Break interval (minutes):</label>
-    <input type="number" value={newBreakInterval} onChange={handleSetBreakInterval} />
-  </div>
-  <div className='settings__item'>
-    <label className='settings__item-label'>Interval count:</label>
-    <input type="number" value={newIntervalCount} onChange={handleSetIntervalCount} />
-  </div>
-
-</div>
-<div className='settings__block' >
-  <h3 className='settings__block-header'>
-    Other
-    <i>
-      <InfomationIcon field={'Other'} />
-    </i>
-  </h3>
-  <div className='settings__item' >
-    <label className='settings__item-label' disabled>Theme:</label>
-    <input type="text" style={{ backgroundColor: 'green', userSelect: 'none' }} value="TODO"
-    />
-  </div>
-</div>
-
-</div> */}

@@ -5,10 +5,15 @@ import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FcAcceptDatabase, FcDataRecovery, FcDatabase  } from "react-icons/fc";
+import { ImMenu } from "react-icons/im";
+
+
 import { GrDrag } from "react-icons/gr";
 import { updateTask, deleteTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
 import Description from './Description';
+import { TfiLayoutMenuV } from "react-icons/tfi";
 import ReactDatePicker from './ReactDatePicker';
 
 dayjs.extend(isoWeek);
@@ -97,6 +102,9 @@ const Section = ({ task, checked, destination }) => {
   };
 
   const handleDatePicker = () => {
+    // if (showDatePicker === false) {
+    //   setShowDatePicker(true);
+    // }else{setShowDatePicker(false);}
     setShowDatePicker(true);
   }
 
@@ -158,8 +166,17 @@ const Section = ({ task, checked, destination }) => {
           </label>
         )}
 
-        <button className='section__task-name-description' onClick={handleModal}><BsThreeDotsVertical />
-        </button>
+        {task.description.text?(
+          <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
+          </button>
+        ):(
+          <button className='section__task-name-description' onClick={handleModal}><FcDatabase />
+
+          </button>
+        )}
+
+        {/* <button className='section__task-name-description' onClick={handleModal}><TfiLayoutMenuV />
+        </button> */}
         {modal && !task.completed
           ?
           <Description
@@ -181,6 +198,7 @@ const Section = ({ task, checked, destination }) => {
             <DatePicker
               handleDateSelection={handleDateSelection}
               setShowDatePicker={setShowDatePicker}
+              currentDate={selectedDate}
             />
           ) : (
             <p>{dayjs(selectedDate).format('MMMM D, YYYY')}</p>

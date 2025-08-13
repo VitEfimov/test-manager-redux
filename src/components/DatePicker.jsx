@@ -3,210 +3,52 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import dayjs from 'dayjs';
 
-const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
-  const [selected, setSelected] = useState(new Date());
+const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => {
+  const [previewDate, setPreviewDate] = useState(currentDate ? new Date(currentDate) : new Date());
 
   const handleDayClick = (day) => {
-    setSelected(day);
-    handleDateSelection(day); // native Date object
+    // Set preview date without applying it yet
+    setPreviewDate(day);
+  };
+
+  const handleSetDate = () => {
+    // Apply the preview date when Set button is clicked
+    handleDateSelection(previewDate);
+    setShowDatePicker(false);
+  };
+
+  const handleCancel = () => {
+    // Cancel and close without applying changes
     setShowDatePicker(false);
   };
 
   return (
-    <div>
+    <div className="date-picker-container">
       <DayPicker
         className='date__picker'
-        selected={selected}
+        selected={previewDate}
         onDayClick={handleDayClick}
         fromYear={2024}
         toYear={2090}
         mode='single'
         showOutsideDays
       />
+      <div className="date-picker-controls">
+        <button 
+          className="date-picker-set-btn" 
+          onClick={handleSetDate}
+        >
+          Set
+        </button>
+        <button 
+          className="date-picker-cancel-btn" 
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };
 
 export default DatePicker;
-
-
-
-// import React, {useState} from 'react';
-// import { DayPicker } from 'react-day-picker';
-// import LocalizedFormat from 'dayjs/plugin/localizedFormat';
-// import dayjs from 'dayjs';
-// import 'react-day-picker/dist/style.css';
-
-// dayjs.extend(LocalizedFormat);
-
-// const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
-//   const [selected, setSelected] = useState(null);
-
-//   const handleDayClick = (day) => {
-//     setSelected(day);
-//     handleDateSelection(day);
-//     setShowDatePicker(false); 
-//   };
-
-//   const handleMonthChange = (newMonth) => {
-//     setSelected(newMonth);
-//     setShowDatePicker(true); 
-//   };
-
-//   return (
-//     <div>
-//       <DayPicker
-//         className='date__picker'
-//         selected={selected}
-//         onDayClick={handleDayClick}
-//         onMonthChange={handleMonthChange}
-//         fromYear={2024}
-//         toYear={2090}
-//         mode='single'
-//       />
-//     </div>
-//   );
-// };
-
-// export default DatePicker;
-
-// import React, {useState} from 'react';
-// import { DayPicker } from 'react-day-picker';
-// import LocalizedFormat from 'dayjs/plugin/localizedFormat';
-// import dayjs from 'dayjs';
-// import 'react-day-picker/dist/style.css';
-
-// dayjs.extend(LocalizedFormat);
-
-// const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
-
-  
-//   const [selected, setSelected] = useState(null);
-
-//   const handleDayClick = (day) => {
-//     setSelected(day);
-//     handleDateSelection(day);
-//     setShowDatePicker(false); 
-//   };
-
-//   const handleMonthChange = (newMonth) => {
-//     setSelected(newMonth);
-//     setShowDatePicker(true); 
-//   };
-
-//   return (
-//     <div>
-//       <DayPicker
-//         className='date__picker'
-//         selected={selected}
-//         onDayClick={handleDayClick}
-//         onMonthChange={handleMonthChange}
-//         fromYear={2024}
-//         toYear={2090}
-//         mode='single'
-//       />
-//     </div>
-//   );
-// };
-
-// export default DatePicker;
-
-// /////////////////////////////////////////////////////////////////
-// modifued
-
-// import React, {useState} from 'react';
-// import { DayPicker } from 'react-day-picker';
-// import LocalizedFormat from 'dayjs/plugin/localizedFormat';
-// import dayjs from 'dayjs';
-// import 'react-day-picker/dist/style.css';
-
-
-
-// dayjs.extend(LocalizedFormat);
-
-// const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
-
-  
-//   const [selected, setSelected] = useState(dayjs().startOf('day'));
-
-//   const handleDayClick = (day) => {
-//     setSelected(day);
-//     handleDateSelection(day);
-//     setShowDatePicker(false); 
-//   };
-
-//   const handleMonthChange = (newMonth) => {
-//     setSelected(newMonth);
-//     // setShowDatePicker(true); 
-//   };
-
-//   return (
-//     <div>
-//       <DayPicker
-//         className='date__picker'
-//         selected={selected}
-//         onDayClick={handleDayClick}
-//         onMonthChange={handleMonthChange}
-//         fromYear={2024}
-//         toYear={2090}
-//         mode='single'
-//         showOutsideDays={true}
-//         // modifiers={
-//         //   {selected: 'my-selected-date',
-//         //     today: 'today-date'
-//         //   }
-//         // }
-//       />
-//     </div>
-//   );
-// };
-
-// export default DatePicker;
-
-// ///////////////////////////
-
-
-
-// import React, { useState } from 'react';
-// import { DayPicker } from 'react-day-picker';
-// import LocalizedFormat from 'dayjs/plugin/localizedFormat';
-// import dayjs from 'dayjs';
-// import 'react-day-picker/dist/style.css';
-
-// dayjs.extend(LocalizedFormat);
-
-// const DatePicker = ({ handleDateSelection, setShowDatePicker }) => {
-//   const [selected, setSelected] = useState(dayjs().startOf('day'));
-
-//   const handleDayClick = (day) => {
-//     // Convert the selected day and clicked day to comparable formats
-//     const newSelectedDay = dayjs(day).startOf('day');
-//     const currentSelectedDay = dayjs(selected).startOf('day');
-
-//     // Only change selection if the clicked day is different
-//     if (!newSelectedDay.isSame(currentSelectedDay)) {
-//       setSelected(newSelectedDay);
-//       handleDateSelection(newSelectedDay.toDate()); 
-//       setShowDatePicker(false); // Pass the selected day to parent
-//     }
-
-//     // Close the modal whether the day changes or not
-//     setShowDatePicker(false); 
-//   };
-
-//   return (
-//     <div>
-//       <DayPicker
-//         className='date__picker'
-//         selected={selected.toDate()} // Pass the selected date as a JS Date object
-//         onDayClick={handleDayClick}
-//         fromYear={2024}
-//         toYear={2090}
-//         mode='single'
-//         showOutsideDays={true}
-//       />
-//     </div>
-//   );
-// };
-
-// export default DatePicker;
