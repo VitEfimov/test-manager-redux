@@ -5,6 +5,10 @@ import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FcAcceptDatabase, FcDataRecovery, FcDatabase  } from "react-icons/fc";
+import { ImMenu } from "react-icons/im";
+
+
 import { GrDrag } from "react-icons/gr";
 import { updateTask, deleteTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
@@ -162,9 +166,17 @@ const Section = ({ task, checked, destination }) => {
           </label>
         )}
 
-        <button className='section__task-name-description' onClick={handleModal}><TfiLayoutMenuV />
-          {/* <BsThreeDotsVertical /> */}
-        </button>
+        {task.description.text?(
+          <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
+          </button>
+        ):(
+          <button className='section__task-name-description' onClick={handleModal}><FcDatabase />
+
+          </button>
+        )}
+
+        {/* <button className='section__task-name-description' onClick={handleModal}><TfiLayoutMenuV />
+        </button> */}
         {modal && !task.completed
           ?
           <Description
