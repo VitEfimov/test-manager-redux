@@ -3,13 +3,16 @@
   margin: 0;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
-
 }
 
 html,
 body {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  /* Prevent mobile viewport issues */
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 
 :root {
@@ -31,55 +34,43 @@ body {
   background-color: var(--dark-background-color-sidebar);
   font-size: calc(7px + 1vmin);
   overflow-x: hidden;
-  /* overflow: hidden; */
-
-  /* width: 100%; */
 }
 
 .container {
-  height: 100%;
+  height: 100vh;
   width: 100%;
-  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
   background-color: #007bff;
+  position: relative;
 }
 
 .main-content {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
   flex-direction: column;
-
-  /* background-color: #007bff; */
-
-
+  position: relative;
 }
 
 
 /* ///////////////////////////// sidebar /////////////////////////////*/
 
 .sidebar {
-  /* grid-area: sidebar; */
   display: flex;
-  /* flex-direction: column; */
-  /* position: fixed; */
-  /* padding: 15px; */
   background-color: var(--dark-background-color-sidebar);
-  /* background-color: red; */
-
   color: var(--dark-font-color-white);
   overflow: hidden;
   transition: all .3s ease;
   font-family: Arial;
-  /* width: auto; */
-  width: calc(12dvw + 1vmin);
+  width: calc(12vw + 1vmin);
   position: fixed;
-  height: 100%;
+  height: 100vh;
   justify-content: center;
-  /* animation: slideInLeft 0.5s ease-in-out forwards; */
-
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .sidebar-main {
@@ -348,7 +339,7 @@ body {
   padding: 1dvh;
   width: 100%;
   height: 120dvh;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* overflow:auto !important; */
   padding-left: 13dvw;
 }
@@ -658,23 +649,76 @@ button[type='submit']:hover {
 }
 
 .date__picker {
-  background-color: black;
   z-index: 1;
   color: white;
   opacity: 1;
   font-size: calc(7px + 1vmin);
   border-radius: 10px;
   width: min-content;
-  position: absolute;
+  position: relative;
   border: none;
   animation: slideInRight 0.5s ease-in-out forwards;
   padding-left: 0;
   overflow: hidden;
-  /* bottom: 0; */
-
-
+  background: transparent;
 }
 
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  background-color: black;
+  border-radius: 10px;
+  padding: 10px;
+  width: min-content;
+}
+
+.date-picker-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.date-picker-set-btn,
+.date-picker-cancel-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-height: 20px;
+  min-width: 50px;
+}
+
+.date-picker-set-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.date-picker-set-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.date-picker-cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.date-picker-cancel-btn:hover {
+  background-color: #545b62;
+  transform: translateY(-1px);
+}
 
 
 @keyframes slideInRight {
@@ -952,6 +996,70 @@ padding: 5dvh;
   background-color: #0056b3;
 }
 
+.pomodoro__container-interval-item.completed {
+  background-color: purple; 
+}
+.pomodoro__container-interval-item {
+  width: 5dvw;
+  height: 2dvh;
+  border-radius: 10px;
+  background-color: var(--dark-font-color-grey);
+  overflow: hidden;
+  position: relative;
+}
+
+.pomodoro__container-interval-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: purple;
+  transition: width 1s linear;
+}
+
+.pomodoro__container-interval-item {
+  height: 20px;
+  width: 100px;
+  background-color: gray;
+  margin: 5px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.pomodoro__container-interval-fill {
+  height: 100%;
+  background-color: green;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 1s linear;
+}
+
+.fill-full {
+  width: 100%;
+  height: 100%;
+  background-color: green;
+}
+
+.pomodoro__container-status {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pomodoro__container-status p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: var(--dark-font-color);
+}
+
+.pomodoro__container-interval-container {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 /* //////////    Settings        ////////////////// */
 
@@ -1059,12 +1167,9 @@ padding: 5dvh;
 @media only screen and (max-width: 1250px) {
   .nav-button-icon {
     display: block;
-    width: calc(10dvw + 1vmin);
+    width: calc(10vw + 1vmin);
   }
 
-  /* .nav-button{
-  width: 100%;
-} */
   .nav-button-name {
     display: none;
   }
@@ -1084,51 +1189,50 @@ padding: 5dvh;
   .description__modal {
     width: 65%;
   }
-
-  /* .sidebar{
-  width: calc(15dvw + 1vmin);
-} */
-
 }
 
 @media only screen and (max-width: 800px) {
-  /* :root {
-    width: 100%;
-    background: var(--dark-background-color-main);
-
-  } */
-
-  :root {
-    /* overflow: hidden; */
+  /* Mobile viewport fixes */
+  html, body {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   }
 
   .container {
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  /* .description__modal{
-    width: 85%;
-  } */
+  .main-content {
+    height: 100vh;
+    overflow: hidden;
+  }
 
-  /* .section__task-label {
-    width: 92%;
-  } */
+  .section {
+    height: calc(100vh - 15vh); /* Account for header */
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    padding-bottom: 20px; /* Space for bottom content */
+  }
+
   .section__task {
-    padding: 0.5dvh 0 0.5dvh 0;
-    /* padding-right: 3dvw; */
-    /* margin-right: 3dvw; */
-    grid-template-rows: 3dvh 1fr;
+    padding: 0.5vh 0 0.5vh 0;
+    grid-template-rows: 3vh 1fr;
     justify-content: center;
     align-items: center;
     font-size: calc(8px + 1vmin);
+    min-height: 40px; /* Prevent layout shifts */
   }
 
   .section__task-name-description {
     padding-top: 3px;
-    width: 2dvw;
+    width: 2vw;
     padding-right: 1vw;
   }
-
 
   .section__task-icon {
     padding-top: 7px;
@@ -1136,27 +1240,25 @@ padding: 5dvh;
     display: none;
   }
 
-  /* .section__task-icon__grdrag{
-    display: none;
-  } */
-
   .sidebar {
-    width: calc(11dvw + 1vmin);
-    /* width: auto; */
+    width: calc(11vw + 1vmin);
     align-items: center;
-    height: 100%;
-    /* justify-content: center; */
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   .nav-button {
-    padding-top: 3dvh;
+    padding-top: 3vh;
+    width: 100%;
+    min-height: 44px; /* Touch target size */
   }
 
-  /* .nav-button{
-    width: 100%;
-  } */
   .nav-button-icon {
     display: block;
+    width: 20px;
+    height: 20px;
   }
 
   .nav-button-name {
@@ -1164,28 +1266,22 @@ padding: 5dvh;
   }
 
   .header {
-    height: 15dvh;
+    height: 15vh;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--dark-background-color-main);
   }
-
-  .section {
-    height: auto;
-    overflow: visible;
-  }
-
-
 
   .header__board-sections-priority {
-    width: 13dvw;
-    /* padding-right: 12dvw; */
-
+    width: 13vw;
   }
 
   .add__task-btn {
-    /* width: fit-content; */
     font-size: calc(7px + 1vmin);
+    min-height: 44px; /* Touch target size */
+    padding: 8px 12px;
   }
-
-
 
   .sidebar__header-userinfo {
     overflow: hidden;
@@ -1195,20 +1291,47 @@ padding: 5dvh;
     display: none;
   }
 
-
   .section__task-date {
     font-size: calc(6px + 1vmin);
     padding-right: 2px;
   }
 
   .section__task-priority {
-    width: 10dvw;
+    width: 10vw;
   }
 
   .date__picker {
     position: absolute;
     right: 0;
     animation: slideInLeft 0.5s ease-in-out forwards;
+    z-index: 1000;
+  }
+
+  .date-picker-container {
+    max-width: 90vw;
+    position: relative;
+    background-color: black;
+    border-radius: 10px;
+    padding: 8px;
+  }
+
+  .date-picker-controls {
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 8px;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .date-picker-set-btn,
+  .date-picker-cancel-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+    min-height: 36px;
+    min-width: 45px;
   }
 
   .dashboard__section {
@@ -1222,44 +1345,46 @@ padding: 5dvh;
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .header__board {
-    /* padding-right: 3dvw; */
-
+    padding-right: 3vw;
   }
 
-  .header__board-sections {
-
-    & h2 {
-      font-size: calc(10px + 1vmin);
-    }
+  .header__board-sections h2 {
+    font-size: calc(10px + 1vmin);
   }
 
   .settings__conteiner {
     flex-direction: column;
     height: auto;
     background: var(--dark-background-color-main);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 20px;
   }
 
   .settings__block {
     border-bottom: 1px solid black;
-
+    padding: 15px 0;
   }
 
   .section__task-priority-btn-media,
   .section__task-priority-btn-media-option {
     display: block;
-    /* padding: 5px; */
     width: 20px;
     height: 17px;
+    min-height: 44px; /* Touch target size */
   }
 
   .section__task-priority-btn-media-option {
     display: block;
-    /* padding: 5px; */
     width: fit-content;
     height: 17px;
+    min-height: 44px; /* Touch target size */
   }
 
   .section__task-priority-select {
@@ -1268,27 +1393,131 @@ padding: 5dvh;
 
   .section__task-priority-btn {
     display: none;
-
   }
 
   .info__icon__modal {
     margin-left: -150px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
   }
 
-  /* *{
-    overflow-x:hidden;
-  } */
+  /* Pomodoro mobile optimizations */
+  .pomodoro__container {
+    padding: 10px;
+    height: calc(100vh - 15vh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pomodoro__container-timer {
+    font-size: calc(20px + 2vmin);
+    margin: 20px 0;
+  }
+
+  .pomodoro__container__controls button {
+    min-height: 44px;
+    min-width: 44px;
+    margin: 5px;
+  }
+
+  .pomodoro__container-interval-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+  }
+
+  .pomodoro__container-interval-item {
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 12px;
+  }
+
+  .pomodoro__container-status {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+  }
+
+  .pomodoro__container-status p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+}
+
+/* Small mobile devices */
+@media only screen and (max-width: 480px) {
+  .sidebar {
+    width: 60px;
+  }
+
+  .nav-button {
+    padding: 10px 5px;
+  }
+
+  .nav-button-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header {
+    height: 12vh;
+    padding: 5px;
+  }
+
+  .section {
+    height: calc(100vh - 12vh);
+    padding: 10px;
+  }
+
+  .section__task {
+    font-size: 14px;
+    padding: 8px 0;
+  }
+
+  .add__task-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .pomodoro__container-timer {
+    font-size: calc(16px + 1.5vmin);
+  }
+
+  .pomodoro__container__controls button {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* Landscape mobile */
+@media only screen and (max-width: 800px) and (orientation: landscape) {
+  .header {
+    height: 10vh;
+  }
+
+  .section {
+    height: calc(100vh - 10vh);
+  }
+
+  .sidebar {
+    width: 50px;
+  }
+
+  .nav-button {
+    padding: 8px 3px;
+  }
 }
 
 @media only screen and (max-height: 700px) {
   .section__task {
-    /* padding: 0; */
-    /* margin: 0; */
     align-items: center;
+    padding: 5px 0;
   }
 
   .section__task-name {
-    /* margin: 0; */
     padding: 0;
   }
 
@@ -1311,5 +1540,14 @@ padding: 5dvh;
 
   .section__task-priority-btn {
     font-size: 10px;
+  }
+
+  .pomodoro__container {
+    padding: 5px;
+  }
+
+  .pomodoro__container-timer {
+    font-size: calc(18px + 1.5vmin);
+    margin: 10px 0;
   }
 }
