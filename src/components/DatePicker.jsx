@@ -7,19 +7,17 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
   const [previewDate, setPreviewDate] = useState(currentDate ? new Date(currentDate) : new Date());
 
   const handleDayClick = (day) => {
-    // Set preview date without applying it yet
     setPreviewDate(day);
   };
 
   const handleSetDate = () => {
-    // Apply the preview date when Set button is clicked
     handleDateSelection(previewDate);
     setShowDatePicker(false);
   };
 
   const handleCancel = () => {
-    // Cancel and close without applying changes
     setShowDatePicker(false);
+    // setShowDatePicker(!setShowDatePicker);
   };
 
   return (

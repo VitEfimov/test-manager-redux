@@ -105,12 +105,13 @@ const Section = ({ task, checked, destination }) => {
     // if (showDatePicker === false) {
     //   setShowDatePicker(true);
     // }else{setShowDatePicker(false);}
-    setShowDatePicker(true);
+    // setShowDatePicker(!showDatePicker);
+    setShowDatePicker(true)
   }
 
   const handleDateSelection = (date) => {
     const isoDate = dayjs(date).toISOString();
-    setSelectedDate(date); // Keep it as native Date
+    setSelectedDate(date); 
     dispatch(updateTask({
       taskId: task.id,
       completionDate: isoDate,
@@ -132,8 +133,24 @@ const Section = ({ task, checked, destination }) => {
       handleInputBlur();
     }
   };
+
+
+  const [openModalTaskId, setOpenModalTaskId] = useState(null);
+  const [openPopup, setOpenPopup] = useState(null)
   const [modal, setModal] = useState(false)
-  const handleModal = () => { setModal(!modal); }
+  const handleModal = () => { 
+    if (modal === true) {
+      setModal(false)
+      setModal(true)
+    }
+    setModal(!modal); }
+
+  const handleModalOpt = () => {
+    setOpenModalTaskId(openPopup === 'description' ? null : 'description')
+
+  }
+
+
 
   return (
     <li className={`section__task ${task.completed ? 'completed-task' : ''}`}>

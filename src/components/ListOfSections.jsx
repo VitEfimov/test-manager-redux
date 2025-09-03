@@ -81,7 +81,7 @@ const ListOfSections = ({sidebarView}) => {
                               checked={task.completed}
                               onChange={handleCheckbox}
                             /> */}
-                            <h3 style={{ color: 'crimson' }}>Missed tasks</h3>
+                            <h3 style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</h3>
                             
                         </div>
                         <div className='section__line-top'></div>
