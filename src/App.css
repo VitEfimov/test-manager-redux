@@ -667,7 +667,7 @@ button[type='submit']:hover {
   animation: slideInRight 0.5s ease-in-out forwards;
   padding-left: 0;
   overflow: hidden;
-  background: transparent;
+  /* background: transparent; */
 }
 
 .date-picker-container {
@@ -1243,8 +1243,16 @@ padding: 5dvh;
   .section__task-name-description {
     padding-top: 3px;
     width: 2vw;
-    padding-right: 1vw;
+    padding-right: 7vw;
+    font-size: calc(15px + 1vmin);
   }
+
+  .section__task-delete-btn{
+    padding-right: 5vw;
+    font-size: calc(15px + 1vmin);
+  }
+
+
 
   .section__task-icon {
     padding-top: 7px;
@@ -1321,6 +1329,7 @@ padding: 5dvh;
     right: 0;
     animation: slideInLeft 0.5s ease-in-out forwards;
     z-index: 1000;
+    background-color: black;
   }
 
   .date-picker-container {
@@ -1345,7 +1354,7 @@ padding: 5dvh;
   .date-picker-set-btn,
   .date-picker-cancel-btn {
     padding: 8px 10px;
-    font-size: 11px;
+    font-size: 15px;
     min-height: 36px;
     min-width: 45px;
   }
@@ -1403,6 +1412,7 @@ padding: 5dvh;
     width: 20px;
     height: 17px;
     min-height: calc(10px + 1vmin); 
+    /* font-size: calc(7px + 1vmin); */
   }
 
   .section__task-priority-btn-media-option {
@@ -1410,10 +1420,12 @@ padding: 5dvh;
     width: fit-content;
     height: 17px;
     min-height: calc(10px + 1vmin); 
+    /* font-size: 100px; */
   }
 
   .section__task-priority-select {
     width: min-content;
+    /* font-size: 100px; */
   }
 
   .section__task-priority-btn {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 
 const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => {
@@ -20,8 +21,12 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
     // setShowDatePicker(!setShowDatePicker);
   };
 
+  const dayPickerRef = useRef(null)
+
+  useClickOutside(dayPickerRef, () => setShowDatePicker(false))
+
   return (
-    <div className="date-picker-container">
+    <div ref={dayPickerRef} className="date-picker-container">
       <DayPicker
         className='date__picker'
         selected={previewDate}

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { useDispatch } from 'react-redux';
 import { updateTask } from '../features/taskSlice';
+import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 
 const Description = ({ task, setModal, setTaskName, setTaskPriority}) => {
@@ -53,6 +54,10 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority}) => {
     setModal(false);
   };
 
+    const descriptionRef = useRef(null)
+  
+    useClickOutside(descriptionRef, () => setModal(false))
+
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   const updatedTask = {
@@ -71,7 +76,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority}) => {
   //   setModal(false);
   // };
   return (
-    <div className="description__modal">
+    <div ref={descriptionRef} className="description__modal">
       <div className="description__modal-content">
         <span className="description__close" onClick={() => setModal(false)}>&times;</span>
         <form onSubmit={handleSubmit}>
