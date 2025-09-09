@@ -1,6 +1,7 @@
 import React from 'react';
 import Weather from './Weather';
 import { MdKeyboardArrowLeft,MdKeyboardArrowRight } from "react-icons/md";
+import { ImMenu4, ImMenu3 } from "react-icons/im";
 
 const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView, currentPage}) => {
 
@@ -9,9 +10,11 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
       <header className='header__title'>
         <div className='header__title-content'>
           <h1>{title}</h1>
-          {currentPage=='Board'?
-          <button className='header__title-sidebar-view-btn' onClick={() => setSidebarView(!sidebarView)}>
-            {sidebarView ?
+          {/* {currentPage=='Board'? */}
+          {!sidebarView ?
+          <button className='header__title-sidebar-view-btn-close' onClick={() => setSidebarView(!sidebarView)}>
+            <ImMenu3 />
+            {/* {sidebarView ?
              <MdKeyboardArrowLeft/>
             //  null
               : 
@@ -19,7 +22,7 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
              style={{ paddingLeft: '50px' }}
              />
             
-            }
+            } */}
           </button>:null}
         </div>
         <Weather/>

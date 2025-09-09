@@ -10,6 +10,8 @@ import { IoInformationCircle } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import { IoLogOutSharp } from "react-icons/io5";
 import { MdKeyboardArrowLeft,MdKeyboardArrowRight } from "react-icons/md";
+import { ImMenu4, ImMenu3 } from "react-icons/im";
+
 
 
 const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
@@ -29,11 +31,35 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView,setSidebarView }) => {
             ?
             (<div className='sidebar-main'>
             <header className='sidebar__header'>
+
+                <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
+                        {sidebarView ?
+                            <ImMenu4 />
+                                //  null
+                                  : 
+                            // <ImMenu3 className='header__title-sidebar-view-btn' />
+                            null
+                                
+                                }
+                </button>
                 <section className='sidebar__header-userinfo'>
                     <h2>{user[0].name}</h2>
-                <p>{user[0].email}</p>
+                    <p>{user[0].email}</p>
+                    {/* {currentPage=='Board'? */}
+                    {/* <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
+                        {sidebarView ?
+                            <ImMenu4 />
+                                //  null
+                                  : 
+                            // <ImMenu3 className='header__title-sidebar-view-btn' />
+                            null
+                                
+                                }
+                    </button> */}
+                              {/* :null} */}
                 </section>
             </header>
+            
             <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
             <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
             </button>
