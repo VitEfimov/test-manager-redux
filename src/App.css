@@ -15,6 +15,16 @@ body {
 }
 
 :root {
+  color-scheme: light;
+  --dark-button-hover-color: light-dark(rgb(255, 255, 255),rgb(32, 32, 32));
+  --dark-background-color-sidebar:light-dark(rgb(255, 255, 255), rgb(0, 0, 0));
+  --dark-font-color-white: light-dark(rgb(255, 255, 255), rgb(0, 0, 0));
+  --dark-font-color-grey: light-dark(rgb(205, 205, 205), rgb(0, 0, 0));
+  --dark-btn-color: #727171;
+  --dark-background-color-main: light-dark(rgb(205, 205, 205),rgb(28, 28, 28));
+}
+
+:root {
   --dark-button-hover-color: rgb(32, 32, 32);
   --dark-background-color-sidebar: rgb(0, 0, 0);
   --dark-font-color-white: rgb(255, 255, 255);

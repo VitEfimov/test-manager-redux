@@ -29,6 +29,8 @@ const Section = ({ task, checked, destination }) => {
   const [checkboxChecked, setCheckboxChecked] = useState(task.completed);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  console.log(showDatePicker);
+
 
   const handleSaveChanges = () => {
     dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString() }));
@@ -106,7 +108,11 @@ const Section = ({ task, checked, destination }) => {
     //   setShowDatePicker(true);
     // }else{setShowDatePicker(false);}
     // setShowDatePicker(!showDatePicker);
-    setShowDatePicker(true)
+    // if (showDatePicker == true){
+    //   setShowDatePicker(false)
+    // }
+    // setShowDatePicker(true)
+    setShowDatePicker(prev => !prev);
   }
 
   const handleDateSelection = (date) => {
@@ -149,6 +155,8 @@ const Section = ({ task, checked, destination }) => {
     setOpenModalTaskId(openPopup === 'description' ? null : 'description')
 
   }
+
+  // console.log("rendering Section:", task.id, task.completionDate);
 
 
 
@@ -209,7 +217,9 @@ const Section = ({ task, checked, destination }) => {
         }
       </div>
 
-      <div className='section__task-date' onClick={handleDatePicker}>
+      {/* <div className='section__task-date' onClick={handleDatePicker}> */}
+      <div className='section__task-date'>
+
         {
           showDatePicker && !task.completed ? (
             <DatePicker
@@ -218,7 +228,9 @@ const Section = ({ task, checked, destination }) => {
               currentDate={selectedDate}
             />
           ) : (
-            <p>{dayjs(selectedDate).format('MMMM D, YYYY')}</p>
+            <p  onClick={handleDatePicker}>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
+            // <p>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
+
           )
         }
       </div>

@@ -13,12 +13,14 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
 
   const handleSetDate = () => {
     handleDateSelection(previewDate);
+    
     setShowDatePicker(false);
   };
 
   const handleCancel = () => {
     setShowDatePicker(false);
     // setShowDatePicker(!setShowDatePicker);
+    console.log("Cancel clicked!");
   };
 
   const dayPickerRef = useRef(null)
@@ -55,3 +57,4 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
 };
 
 export default DatePicker;
+

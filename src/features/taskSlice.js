@@ -47,6 +47,7 @@ const taskSlice = createSlice({
         updateTask(state, action) {
             const { taskId, name, priority, completed, description, completionDate } = action.payload;
             const task = state.tasks.find(task => task.id === taskId);
+            console.log("Before:", task.completionDate);
             if (task) {
                 task.taskname = name || task.taskname;
                 task.priority = priority || task.priority;
@@ -59,11 +60,20 @@ const taskSlice = createSlice({
                         url: description.url || '',
                     };
                 }
+                console.log("After:", completionDate);
+
                 task.lastUpdatedDate = new Date().toISOString();
                 // task.lastUpdatedDate = new Date().toLocaleDateString();
                 localStorage.setItem('tasks', JSON.stringify(state.tasks));
             }
         },
+        // updateTask(state, action) {
+        //     const { taskId, ...updates } = action.payload;
+        //     state.tasks = state.tasks.map(task =>
+        //         task.id === taskId ? { ...task, ...updates } : task
+        //     );
+        //     localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        // }
         // updateTask(state, action) {
         //     const { taskId, ...updates } = action.payload;
         //     const task = state.tasks.find(task => task.id === taskId);
