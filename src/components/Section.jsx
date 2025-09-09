@@ -1,12 +1,14 @@
 import React from 'react'
 import { MdDelete } from "react-icons/md";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FcAcceptDatabase, FcDataRecovery, FcDatabase  } from "react-icons/fc";
 import { ImMenu } from "react-icons/im";
+import { useClickOutside } from '../custom-hooks/ClickOut';
+
 
 
 import { GrDrag } from "react-icons/gr";
@@ -158,6 +160,10 @@ const Section = ({ task, checked, destination }) => {
 
   // console.log("rendering Section:", task.id, task.completionDate);
 
+  const priorityRef = useRef(null)
+  
+  useClickOutside(priorityRef, () => setTaskPrioritySelect(false))
+
 
 
   return (
@@ -234,24 +240,8 @@ const Section = ({ task, checked, destination }) => {
           )
         }
       </div>
-      {/* <div className='section__task-date' onClick={handleDatePicker} >
-        {
-          showDatePicker &&
-            !task.completed
-            ?
-            // <ReactDatePicker
-            // handleDateSelection={handleDateSelection}
-            // setShowDatePicker={setShowDatePicker}/>
-            <DatePicker
-              handleDateSelection={handleDateSelection}
-              setShowDatePicker={setShowDatePicker}
-            />
-            :
-            <p>
-              {dayjs(task.completionDate).format('MMMM D, YYYY')}
-            </p>}
-      </div> */}
-      <div className='section__task-priority'>
+
+      <div ref={priorityRef} className='section__task-priority'>
         {taskPrioritySelect && !task.completed ? (
           <div className='section__task-priority-select'>
             {['Low', 'Medium', 'High'].map((option) => (
