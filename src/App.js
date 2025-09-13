@@ -58,15 +58,14 @@ function App() {
 
 
     <main className='container'>
-      {sidebarView ? 
+      {sidebarView ?
         <Sidebar setCurrentPage={setCurrentPage}
-        setTitle={setTitle}
-        sidebarView={sidebarView}
-        setSidebarView={setSidebarView}/>
+          setTitle={setTitle}
+          sidebarView={sidebarView}
+          setSidebarView={setSidebarView} />
         :
         null}
-        <div className='main-content'>
-        <Header 
+      <Header
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
         title={title}
@@ -75,9 +74,11 @@ function App() {
         isPomodoroActive={isPomodoroActive}
         timeRemaining={timeRemaining}
         isTimeOver={isTimeOver} />
+      <div className='main-content'>
+
         {renderPage(sidebarView)}
-        </div>
-      </main>
+      </div>
+    </main>
 
   );
 }

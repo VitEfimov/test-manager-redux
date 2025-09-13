@@ -5,7 +5,7 @@ const About = () => {
   return (
     <section className='section'>
       <h1 className='about__header'>About Task Manager App</h1>
-      <UseSound/>
+      {/* <UseSound/> */}
       <p>
         This is a task management app built with React and Redux.
       </p>

@@ -60,7 +60,9 @@ const ListOfSections = ({sidebarView}) => {
     return (
         <div>
             {/* <HeaderListOfSection/> */}
-            <section className={sidebarView ? 'section' : 'section-without-sidebar'}>
+            {/* <section className={sidebarView ? 'section' : 'section-without-sidebar'}> */}
+            <section className={sidebarView ? 'section open' : 'section-without-sidebar close'}>
+            
                 <header className='header__board'>
                     <div className='header__board-view'>
                         <button className="header__board-view-btn"><i className="fa-regular fa-rectangle-list"></i>List</button>
