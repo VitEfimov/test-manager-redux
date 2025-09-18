@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import FILTERS from '../list-view/filters';
 import HeaderListOfSection from './HeaderListOfSection';
+import Sidebar from './Sidebar';
 
 
 dayjs.extend(isSameOrBefore);
@@ -61,7 +62,10 @@ const ListOfSections = ({sidebarView}) => {
         <div>
             {/* <HeaderListOfSection/> */}
             {/* <section className={sidebarView ? 'section' : 'section-without-sidebar'}> */}
-            <section className={sidebarView ? 'section open' : 'section-without-sidebar close'}>
+
+            {/* <Sidebar
+            /> */}
+            <section className={sidebarView ? 'section open' : 'section close'}>
             
                 <header className='header__board'>
                     <div className='header__board-view'>

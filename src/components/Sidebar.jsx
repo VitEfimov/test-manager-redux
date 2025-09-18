@@ -27,7 +27,7 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
 
     return (
         // <nav className="sidebar">
-        <nav className={`sidebar ${sidebarView ? 'open' : 'closed'}`}>
+        <nav className={`sidebar ${sidebarView ? 'opened' : 'closed'}`}>
             {/* <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
                 {sidebarView ?
                     <ImMenu4 />
