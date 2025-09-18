@@ -1669,13 +1669,20 @@ transform: translateX(0px);
     margin: 5px 0;
     font-size: 14px;
   }
+  .description__modal {
+    width: 85%;
+    height: 75%;
+  }
 }
 
 @media only screen and (max-width: 480px) {
     .header__board{
     display: none
   }
-  
+  .description__modal {
+    width: 95%;
+    height: 85%;
+  }
   /* .sidebar {
     width: 60px;
   }
