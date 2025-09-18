@@ -38,7 +38,7 @@ html, body {
   --dark-background-color-sidebar:light-dark(rgb(105, 155, 105), rgb(0, 0, 0));
   --dark-font-color-white: light-dark(rgb(0, 0, 0),rgb(241, 231, 231));
   --dark-font-color-grey: light-dark(rgb(0, 0, 0),rgb(205, 205, 205));
-  --dark-font-color-black:light-dark(rgb(0, 0, 0),rgb(205, 205, 205),);
+  --dark-font-color-black:light-dark(rgb(0, 0, 0),rgb(0, 0, 0),);
   --dark-btn-color: #727171;
   --dark-background-color-main: light-dark(rgba(231, 226, 226, 0.951),rgb(28, 28, 28));
     --dark-background-color-main-priority: color-mix(in srgb,
@@ -370,7 +370,7 @@ border-radius: 10px;}
   grid-gap: 35px;
   padding: 5dvh;
   background: var(--dark-background-color-main);
-  color: var(--dark-font-color-grey);
+  color: var(--dark-font-color-black);
   user-select: none;
   /* height: 100dvh; */
 }
@@ -629,7 +629,7 @@ input {
   /* background-color: var(--dark-background-color-sidebar); */
   background: transparent;
   border: none;
-  color: var(--dark-font-color-grey);
+  color: var(--dark-font-color-black);
   cursor: pointer;
   height: 100%;
   width: 3dvw;
@@ -650,11 +650,14 @@ input {
   animation: slideInRight 0.5s forwards;
   pointer-events: none;
   overflow: none;
-  /* color: black; */
+  color: black;
 
   &:hover {
     opacity: 1;
   }
+  & label{
+  color: var(--dark-font-color-grey)
+}
 }
 
 /* .section__task-name-description {
@@ -767,6 +770,7 @@ textarea {
   background-color: var(--background-color-main);
   /* color: var(--background-color-main); */
   z-index: 1000;
+  color: var(--dark-font-color-black);
 
 }
 
@@ -1476,7 +1480,7 @@ transform: translateX(0px);
   }
 
   .header__title-sidebar-view-btn-open{
-    margin: 0dvh 0 1dvh 3dvh;
+    /* margin: 0dvh 0 1dvh 3dvh; */
     /* position: absolute;
 
     background: transparent;
