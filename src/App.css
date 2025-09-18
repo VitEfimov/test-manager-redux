@@ -1670,8 +1670,9 @@ transform: translateX(0px);
     font-size: 14px;
   }
   .description__modal {
+    /* background-color: red; */
     width: 85%;
-    height: 75%;
+    height: 85%;
   }
 }
 
@@ -1680,8 +1681,15 @@ transform: translateX(0px);
     display: none
   }
   .description__modal {
-    width: 95%;
+    
+    width: 85%;
     height: 85%;
+    /* & .description__close{
+      margin-top: 150px;
+    } */
+  }
+  .description__modal-content{
+    padding-top: 5dvh;
   }
   /* .sidebar {
     width: 60px;
