@@ -6,12 +6,27 @@ const Dashboard = () => {
     const tasks = useSelector(state => state.taskReducer.tasks || []);
 
     const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day'));
-    const weekTasks = tasks.filter(task => dayjs(task.completionDate).isSameOrBefore(dayjs().endOf('week')));
+    const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
+                                        dayjs(task.completionDate).isSameOrBefore(dayjs().endOf('week')));
+    const laterTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')))
     const missedTasks = tasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
 
 
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(task => task.completed).length;
+
+    console.log(todayTasks);
+        console.log(weekTasks);
+
+            console.log(laterTasks);
+
+                console.log(missedTasks);
+
+                    console.log(totalTasks);
+
+                        console.log(completedTasks);
+
+    
 
     return (
         <section className='section'>
@@ -31,12 +46,14 @@ const Dashboard = () => {
                 <section className='dashboard__section'>
                     <h2>Today tasks</h2>
                     <div>{todayTasks.length}</div>
-
                 </section>
                 <section className='dashboard__section'>
                     <h2>Week tasks</h2>
                     <div>{weekTasks.length}</div>
-
+                </section>
+                <section className='dashboard__section'>
+                    <h2>Later tasks</h2>
+                    <div>{laterTasks.length}</div>
                 </section>
                 <section className='dashboard__section'>
                     <h2>Missed tasks</h2>

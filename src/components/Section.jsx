@@ -174,13 +174,13 @@ const Section = ({ task, checked, destination }) => {
         </span>
         <input className='section_task-checkbox'
           type="checkbox"
-          checked={task.completed}
+          checked={!!task.completed}
           onChange={handleCheckbox}
         />
         {editingTaskName && !task.completed ? (
           <input
             className='section__task-input'
-            value={taskName}
+            value={taskName ?? ""}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             onKeyPress={handleKeyPress}
