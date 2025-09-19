@@ -15,16 +15,6 @@ const Dashboard = () => {
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(task => task.completed).length;
 
-    console.log(todayTasks);
-        console.log(weekTasks);
-
-            console.log(laterTasks);
-
-                console.log(missedTasks);
-
-                    console.log(totalTasks);
-
-                        console.log(completedTasks);
 
     
 
