@@ -1657,11 +1657,11 @@ transform: translateX(0px);
     border-radius: 8px;
   }
 
-    .section-without-sidebar {
-    /* overflow-y: auto;
+    .section {
+    overflow-y: auto;
     /* overflow: auto; */
-    /* -webkit-overflow-scrolling: touch;
-      height: 120dvh; */ 
+    -webkit-overflow-scrolling: touch;
+      /* height: 120dvh;  */
 
   }
 
@@ -1691,6 +1691,12 @@ transform: translateX(0px);
   .description__modal-content{
     padding-top: 5dvh;
   }
+
+  .section {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* .sidebar {
     width: 60px;
   }
