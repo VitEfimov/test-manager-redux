@@ -924,6 +924,7 @@ button[type='submit']:hover {
   border-radius: 10px;
   padding: 10px;
   width: min-content;
+  /* color: var(--dark-background-color-sidebar); */
 }
 
 .date-picker-controls {
@@ -1002,8 +1003,8 @@ button[type='submit']:hover {
 }
 
 .my-selected:hover:not([disabled]) {
-  border-color: blue;
-  color: blue;
+  border-color: var(--dark-background-color-sidebar);
+  color: var(--dark-background-color-sidebar);
 }
 
 .today-date {
@@ -1608,6 +1609,7 @@ transform: translateX(0px);
     background-color: var(--dark-background-color-main);
     border-radius: 10px;
     padding: 8px;
+    /* color: var(--dark-background-color-sidebar); */
   }
 
   .date-picker-controls {
@@ -1696,7 +1698,9 @@ transform: translateX(0px);
 
   .section__task-priority-select {
     width: min-content;
+    animation: slideInLeft 0.5s ease-in-out forwards;
     /* font-size: 100px; */
+    margin-right: 150px;
   }
 
   .section__task-priority-btn {
@@ -1781,6 +1785,9 @@ transform: translateX(0px);
     /* & .description__close{
       margin-top: 150px;
     } */
+    & textarea {
+      height: 35dvh;
+    }
   }
   .description__modal-content{
     padding-top: 5dvh;
