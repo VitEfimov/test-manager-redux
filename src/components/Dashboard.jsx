@@ -1,16 +1,39 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import FILTERS from '../list-view/filters';
 const Dashboard = () => {
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);
 
-    const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day'));
-    const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
-                                        dayjs(task.completionDate).isSameOrBefore(dayjs().endOf('week')));
-    const laterTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')))
-    const missedTasks = tasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
+    // const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
+    // // const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
+    // const thisWeekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs(), 'day') &&
+    //                                     dayjs(task.completionDate).isSameOrBefore(dayjs().endOf('week')) && !task.completed);
+    // const nextWeekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) && !task.completed)
+    // const laterTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) && !task.completed)
+    // const missedTasks = tasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
 
+
+    const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
+    // const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
+    const tomorrowTasks = tasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day')
+                            && !task.completed)
+
+    const thisWeekTasks = tasks.filter(task =>
+                            !dayjs(task.completionDate).isSameOrBefore(FILTERS.today) &&
+                            !dayjs(task.completionDate).isSame(FILTERS.tomorrow) &&
+                            dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'])
+                            && !task.completed
+                        )
+    const nextWeekTasks = tasks.filter(task =>
+                            !dayjs(task.completionDate).isSame(FILTERS.tomorrow) &&
+                            dayjs(task.completionDate).isAfter(FILTERS['on-this-week'])
+                            && dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'])
+                            && !task.completed)
+    const laterTasks = tasks.filter(task =>
+                            dayjs(task.completionDate).isAfter(FILTERS['on-next-week']) && !task.completed)
+    const missedTasks = tasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
 
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(task => task.completed).length;
@@ -38,8 +61,16 @@ const Dashboard = () => {
                     <div>{todayTasks.length}</div>
                 </section>
                 <section className='dashboard__section'>
-                    <h2>Week tasks</h2>
-                    <div>{weekTasks.length}</div>
+                    <h2>Tommorrow tasks</h2>
+                    <div>{tomorrowTasks.length}</div>
+                </section>
+                <section className='dashboard__section'>
+                    <h2>This week tasks</h2>
+                    <div>{thisWeekTasks.length}</div>
+                </section>
+                <section className='dashboard__section'>
+                    <h2>Next week tasks</h2>
+                    <div>{nextWeekTasks.length}</div>
                 </section>
                 <section className='dashboard__section'>
                     <h2>Later tasks</h2>
