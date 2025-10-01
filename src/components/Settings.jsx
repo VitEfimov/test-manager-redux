@@ -90,7 +90,7 @@ const Settings = ({ setCurrentPage }) => {
 
   return (
     <section className='section'>
-      <button className='settings__save-btn' onClick={handleSave}>Save</button>
+      <button className='settings__save-btn' type='submit' onClick={handleSave}>Save</button>
       <div className='settings__conteiner'>
         <div className='settings__block'>
           <h3 className='settings__block-header'>

@@ -565,7 +565,6 @@ transform: translateX(1px);
   /* padding-left: 5dvw; */
 }
 
-/* Optional: Remove focus outline for all elements */
 *:focus {
   outline: none;
 }
@@ -607,7 +606,7 @@ input {
 .section__task-input {
   width: 100%;
   margin-left: 5px;
-  font-size: calc(7px + 1vmin);
+  font-size:unset;
   border: none;
   background: transparent;
   color: var(--dark-font-color-white);
@@ -652,6 +651,7 @@ input {
   pointer-events: none;
   overflow: none;
   color: black;
+  /* opacity: 0; */
 
   &:hover {
     opacity: 1;
@@ -814,7 +814,7 @@ input {
   top: 10px;
   right: 10px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: calc(20px + 1vmin);
   color: var(--dark-font-color-grey);
 }
 
@@ -854,7 +854,7 @@ input[type='password'] {
 
 textarea {
   width: 100%;
-  height: 25dvh;
+  height: 35dvh;
   resize: none;
   background-color: var(--background-color-main);
   /* color: var(--background-color-main); */
@@ -895,15 +895,15 @@ button[type='submit']:hover {
   align-self: center;
   cursor: pointer;
   user-select: none;
-  font-size: calc(7px + 1vmin);
-  width: 14dvw;
+  /* font-size: calc(7px + 1vmin); */
+  width: 15dvw;
 }
 
 .date__picker {
   z-index: 1;
   color: var(--dark-font-color-white);
   opacity: 1;
-  font-size: calc(7px + 1vmin);
+  /* font-size: calc(7px + 1vmin); */
   border-radius: 10px;
   width: min-content;
   position: relative;
@@ -922,7 +922,7 @@ button[type='submit']:hover {
   position: absolute;
   background-color: var(--dark-background-color-sidebar);
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
   width: min-content;
   /* color: var(--dark-background-color-sidebar); */
 }
@@ -941,15 +941,16 @@ button[type='submit']:hover {
 
 .date-picker-set-btn,
 .date-picker-cancel-btn {
-  padding: 5px 10px;
+  padding: 3px 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 12px;
+  /* font-size: calc(7px + 1vmin); */
   font-weight: 500;
   transition: all 0.2s ease;
   min-height: 20px;
   min-width: 50px;
+  margin: -3px;
 }
 
 .date-picker-set-btn {
@@ -1021,7 +1022,7 @@ button[type='submit']:hover {
   /* border-left: 1px solid var(--dark-font-color-grey); */
   align-self: center;
   user-select: none;
-  font-size: calc(7px + 1vmin);
+  /* font-size: calc(7px + 1vmin); */
   width: 8dvw;
   padding-left: 1dvw;
 
@@ -1041,7 +1042,7 @@ button[type='submit']:hover {
 .section__task-priority-btn-media-option {
   width: fit-content;
   height: calc(10px + 1vmin);
-  font-size: calc(7px + 1vmin);
+  /* font-size: calc(7px + 1vmin); */
 
   padding: 0 3px 0 3px;
   align-self: center;
@@ -1097,7 +1098,7 @@ button[type='submit']:hover {
   margin: 0;
   padding: 0;
   font-style: normal;
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 
 
@@ -1147,7 +1148,7 @@ button[type='submit']:hover {
   font-style: oblique;
   border-right: 1px solid #727171;
   border-left: 1px solid #727171;
-  font-size: calc(8px + 1vmin);
+  /* font-size: calc(8px + 1vmin); */
 }
 
 .click_to_add_task {
@@ -1162,8 +1163,8 @@ button[type='submit']:hover {
 .settings__save-btn {
   margin-top: 25px;
   width: fit-content;
-  height: calc(10px + 1vmin);
-  font-size: calc(5px + 1vmin);
+  height: calc(25px + 1vmin);
+  /* font-size: calc(5px + 1vmin); */
   justify-content: center;
   text-align: center;
   align-items: center;
@@ -1175,7 +1176,7 @@ button[type='submit']:hover {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  color: var(--dark-button-hover-color);
+  color: var(--dark-font-color-grey);
   transition: all 0.15s ease-in-out;
   /* transition: top 0.5s ease; */
 
@@ -1383,6 +1384,7 @@ padding: 5dvh;
 
 .info__icon__modal-close {
   background: transparent;
+  color: var(--dark-font-color-black);
   border: none;
   font-size: 12px;
   cursor: pointer;
@@ -1489,7 +1491,7 @@ transform: translateX(0px);
     grid-template-rows: 3vh 1fr;
     justify-content: center;
     align-items: center;
-    font-size: calc(8px + 1vmin);
+    /* font-size: calc(8px + 1vmin); */
     min-height: 40px;
   }
   .section-without-sidebar {
@@ -1558,7 +1560,7 @@ transform: translateX(0px);
   }
 
   .add__task-btn {
-    font-size: calc(7px + 1vmin);
+    /* font-size: calc(7px + 1vmin); */
     min-height: 44px; /* Touch target size */
     padding: 8px 12px;
   }
@@ -1567,7 +1569,7 @@ transform: translateX(0px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: calc(5px + 1vmin);
+    /* font-size: calc(5px + 1vmin); */
     display: none;
   }
 
@@ -1586,9 +1588,9 @@ transform: translateX(0px);
   }
 
   .section__task-date {
-    font-size: calc(6px + 1vmin);
+    /* font-size: calc(7px + 1vmin); */
     padding-right: 2px;
-    width: calc(100px + 1vmin);
+    width: calc(125px + 1vmin);
   }
 
   .section__task-priority {
@@ -1795,7 +1797,8 @@ transform: translateX(0px);
       margin-top: 150px;
     } */
     & textarea {
-      height: 35dvh;
+      /* height:calc(45vh + 1vmin ); */
+      height: 45dvh; 
     }
   }
   .description__modal-content{
@@ -1908,7 +1911,7 @@ transform: translateX(0px);
   .section__task-icon,
   .section_task-label {
     padding: 5px;
-    font-size: 10px;
+    /* font-size: 10px; */
     display: none;
   }
 
