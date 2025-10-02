@@ -125,7 +125,7 @@ const Settings = ({ setCurrentPage }) => {
           </div>
           <div className='settings__item'>
             <label className='settings__item-label'>API Key:</label>
-            <input type="text" value={newApiKey} onChange={handleCityApi} />
+            <input type="password" value={newApiKey} onChange={handleCityApi} />
           </div>
         </div>
         <div className='settings__block'>
