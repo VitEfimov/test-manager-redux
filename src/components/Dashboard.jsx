@@ -48,9 +48,18 @@ const Dashboard = () => {
                     <h2>Today date</h2>
                     <div>{dayjs().format('MMMM D, YYYY')}</div>
                 </section>
+                {/* <section className='dashboard__section'>
+                    <h2>Total tasks</h2>
+                    <div>{totalTasks - completedTasks}</div>
+                </section> */}
                 <section className='dashboard__section'>
                     <h2>Total tasks</h2>
-                    <div>{totalTasks}</div>
+                     {missedTasks.length !== 0 ? (
+                        
+                        <div style={{ color: 'crimson' }}>{totalTasks - completedTasks}</div>
+                    ) : (
+                        <div>{missedTasks.length}</div>
+                    )}
                 </section>
                 <section className='dashboard__section'>
                     <h2>Completed tasks</h2>
