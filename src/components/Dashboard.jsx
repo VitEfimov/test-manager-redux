@@ -58,7 +58,7 @@ const Dashboard = () => {
                         
                         <div style={{ color: 'crimson' }}>{totalTasks - completedTasks}</div>
                     ) : (
-                        <div>{missedTasks.length}</div>
+                        <div>{totalTasks - completedTasks}</div>
                     )}
                 </section>
                 <section className='dashboard__section'>

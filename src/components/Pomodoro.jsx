@@ -1,222 +1,227 @@
-// import React, { useEffect, useRef, useState } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { FaPlay, FaPause } from "react-icons/fa";
-// import { GrPowerReset } from "react-icons/gr";
-// import useSound from 'use-sound';
+// import React, { useState, useEffect, useRef } from "react";
+// import useSound from "use-sound";
+// // import startSound from "../assets/audio/start_sound.ogg";
+// // import endSound from "../assets/audio/end_sound.mp3";
+
 // import endSound from '../assets/audio/end_sound.ogg';
 // import startSound from '../assets/audio/start_sound.mp3';
-// import {
-//   startTimer,
-//   pauseTimer,
-//   resetTimer,
-//   updateTime,
-//   completeWorkInterval,
-//   completeBreakInterval
-// } from '../features/pomodoroSlice';
 
 // const Pomodoro = () => {
-//   const dispatch = useDispatch();
-//   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro[0]);
+//   const intervalCount = 5;
+//   const workDuration = 25 * 60; // seconds
+//   const breakDuration = 5 * 60;
 
-//   const [localTime, setLocalTime] = useState(pomodoro.time);
+//   const [localTime, setLocalTime] = useState(workDuration);
+//   const [localIsBreak, setLocalIsBreak] = useState(false);
 //   const [localIsActive, setLocalIsActive] = useState(false);
-//   const [localIsBreak, setLocalIsBreak] = useState(pomodoro.isBreak);
-//   const [localCompletedIntervals, setLocalCompletedIntervals] = useState(
-//     typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.passed : 0
-//   );
+//   const [localCompletedIntervals, setLocalCompletedIntervals] = useState(0);
+//   const [fillPercentage, setFillPercentage] = useState(0);
 
 //   const intervalRef = useRef(null);
-//   const staticIntervalCountRef = useRef(null);
+//   const audioContextRef = useRef(null);
+//   const wakeLockRef = useRef(null);
 
-//   // Store total intervals statically
+//   const [playStart] = useSound(startSound);
+//   const [playEnd] = useSound(endSound);
+
+//   // 🔊 Unlock Audio Context on first interaction
 //   useEffect(() => {
-//     if (staticIntervalCountRef.current === null) {
-//       staticIntervalCountRef.current = typeof pomodoro.intervalCount === 'object'
-//         ? pomodoro.intervalCount.count
-//         : 5;
-//     }
+//     const unlockAudio = () => {
+//       if (!audioContextRef.current) {
+//         const AudioContext = window.AudioContext || window.webkitAudioContext;
+//         const ctx = new AudioContext();
+//         const buffer = ctx.createBuffer(1, 1, 22050);
+//         const source = ctx.createBufferSource();
+//         source.buffer = buffer;
+//         source.connect(ctx.destination);
+//         source.start(0);
+//         ctx.resume();
+//         audioContextRef.current = ctx;
+//       }
+//     };
+
+//     document.body.addEventListener("touchstart", unlockAudio, { once: true });
+//     document.body.addEventListener("click", unlockAudio, { once: true });
 //   }, []);
 
-//   const [playEnd] = useSound(endSound);
-//   const [playStart] = useSound(startSound);
-
-//   // Sync with Redux
+//   // 💤 Prevent screen sleep
 //   useEffect(() => {
-//     setLocalTime(pomodoro.time);
-//     setLocalIsBreak(pomodoro.isBreak);
-//     setLocalCompletedIntervals(
-//       typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.passed : 0
-//     );
-//   }, [pomodoro]);
-
-//   // Start timer logic
-//   const handleStartTimer = () => {
-//     if (localIsActive) return;
-//     setLocalIsActive(true);
-//     dispatch(startTimer());
-
-//     intervalRef.current = setInterval(() => {
-//       setLocalTime(prevTime => {
-//         const newTime = prevTime - 1;
-//         if (newTime <= 0) {
-//           clearInterval(intervalRef.current);
-//           setLocalIsActive(false);
-//           dispatch(pauseTimer());
-//           handlePeriodEnd();
-//           return 0;
+//     const requestWakeLock = async () => {
+//       try {
+//         if ("wakeLock" in navigator) {
+//           wakeLockRef.current = await navigator.wakeLock.request("screen");
 //         }
-//         dispatch(updateTime(newTime));
-//         return newTime;
-//       });
-//     }, 1000);
+//       } catch (err) {
+//         console.warn("Wake lock failed:", err);
+//       }
+//     };
+
+//     const releaseWakeLock = () => {
+//       if (wakeLockRef.current) {
+//         wakeLockRef.current.release();
+//         wakeLockRef.current = null;
+//       }
+//     };
+
+//     document.addEventListener("visibilitychange", () => {
+//       if (document.visibilityState === "visible") requestWakeLock();
+//       else releaseWakeLock();
+//     });
+
+//     requestWakeLock();
+//     return () => releaseWakeLock();
+//   }, []);
+
+//   // ⏰ Timer logic
+//   useEffect(() => {
+//     if (localIsActive) {
+//       intervalRef.current = setInterval(() => {
+//         setLocalTime((prev) => {
+//           if (prev <= 1) {
+//             handleIntervalEnd();
+//             return 0;
+//           }
+//           return prev - 1;
+//         });
+//       }, 1000);
+//     } else {
+//       clearInterval(intervalRef.current);
+//     }
+
+//     return () => clearInterval(intervalRef.current);
+//   }, [localIsActive]);
+
+//   // 📱 Handle page visibility
+//   useEffect(() => {
+//     let hiddenStart = null;
+
+//     const handleVisibilityChange = () => {
+//       if (document.hidden) {
+//         hiddenStart = Date.now();
+//       } else if (hiddenStart && localIsActive) {
+//         const diff = Math.floor((Date.now() - hiddenStart) / 1000);
+//         setLocalTime((prev) => Math.max(prev - diff, 0));
+//         hiddenStart = null;
+//       }
+//     };
+
+//     document.addEventListener("visibilitychange", handleVisibilityChange);
+//     return () =>
+//       document.removeEventListener("visibilitychange", handleVisibilityChange);
+//   }, [localIsActive]);
+
+//   // 📊 Progress bar
+//   useEffect(() => {
+//     const total = localIsBreak ? breakDuration : workDuration;
+//     const percent = ((total - localTime) / total) * 100;
+//     setFillPercentage(percent);
+//   }, [localTime, localIsBreak]);
+
+//   // 🧠 Handle end of each interval
+//   const handleIntervalEnd = () => {
+//     if (audioContextRef.current?.state === "suspended") {
+//       audioContextRef.current.resume();
+//     }
+
+//     playEnd(); // end of work or break sound
+
+//     if (!localIsBreak) {
+//       const next = localCompletedIntervals + 1;
+//       setLocalCompletedIntervals(next);
+
+//       if (next < intervalCount) {
+//         setLocalIsBreak(true);
+//         setLocalTime(breakDuration);
+//       } else {
+//         // All intervals done
+//         setLocalIsActive(false);
+//         setLocalTime(workDuration);
+//         setLocalCompletedIntervals(0);
+//       }
+//     } else {
+//       // End of break → start next work session automatically
+//       setLocalIsBreak(false);
+//       setLocalTime(workDuration);
+//       playStart();
+//     }
 //   };
 
-//   const handlePauseTimer = () => {
-//     clearInterval(intervalRef.current);
-//     setLocalIsActive(false);
-//     dispatch(pauseTimer());
+//   const handleStartPause = () => {
+//     if (!localIsActive && audioContextRef.current?.state === "suspended") {
+//       audioContextRef.current.resume();
+//     }
+//     setLocalIsActive((prev) => !prev);
 //   };
 
-//   const handleResetTimer = () => {
-//     clearInterval(intervalRef.current);
+//   const handleReset = () => {
 //     setLocalIsActive(false);
 //     setLocalIsBreak(false);
+//     setLocalTime(workDuration);
 //     setLocalCompletedIntervals(0);
-//     staticIntervalCountRef.current = typeof pomodoro.intervalCount === 'object'
-//       ? pomodoro.intervalCount.count
-//       : 5;
-//     dispatch(resetTimer());
+//     setFillPercentage(0);
 //   };
 
-//   // Handle when a work/break period ends
-//   const handlePeriodEnd = () => {
-//     const intervalCount = staticIntervalCountRef.current || 5;
+//   const minutes = Math.floor(localTime / 60)
+//     .toString()
+//     .padStart(2, "0");
+//   const seconds = (localTime % 60).toString().padStart(2, "0");
 
-//     if (localIsBreak) {
-//       // Break finished → next work starts automatically
-//       dispatch(completeBreakInterval());
-//       playStart();
-//       showNotification("Break over! Let's work!");
-//       handleStartTimer(); // auto-start next work session
-//     } else {
-//       // Work finished
-//       dispatch(completeWorkInterval());
-//       playEnd();
-//       showNotification("Work session finished! Take a break.");
-
-//       // If all work sessions completed → reset
-//       if (localCompletedIntervals + 1 >= intervalCount) {
-//         alert("All intervals completed!");
-//         dispatch(resetTimer());
-//         return;
-//       }
-
-//       // Auto-start break after a short delay
-//       setTimeout(() => {
-//         setLocalIsBreak(true);
-//         dispatch(startTimer());
-//         setLocalIsActive(true);
-
-//         intervalRef.current = setInterval(() => {
-//           setLocalTime(prevTime => {
-//             const newTime = prevTime - 1;
-//             if (newTime <= 0) {
-//               clearInterval(intervalRef.current);
-//               setLocalIsActive(false);
-//               dispatch(pauseTimer());
-//               handlePeriodEnd();
-//               return 0;
-//             }
-//             dispatch(updateTime(newTime));
-//             return newTime;
-//           });
-//         }, 1000);
-//       }, 1000);
-//     }
-//   };
-
-//   const showNotification = (message) => {
-//     if (Notification.permission === 'granted') {
-//       new Notification('Pomodoro Timer', {
-//         body: message,
-//         icon: '/task_manager_icon.png'
-//       });
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (Notification.permission !== 'granted') {
-//       Notification.requestPermission();
-//     }
-//   }, []);
-
-//   const intervalCount = staticIntervalCountRef.current || 5;
-//   const currentFill = 100 - (localTime / pomodoro.initialTime) * 100;
-
-//   const formatTime = (timeInSeconds) => {
-//     const minutes = Math.floor(timeInSeconds / 60);
-//     const seconds = timeInSeconds % 60;
-//     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-//   };
+//   const percent =
+//     ((localCompletedIntervals +
+//       (1 - localTime / (localIsBreak ? breakDuration : workDuration))) /
+//       intervalCount) *
+//     100;
 
 //   return (
 //     <section className="section">
 //       <div className="pomodoro__container">
-//         <h2>{localIsBreak ? 'Break Time' : 'Work Time'}</h2>
+//         <h2>{localIsBreak ? "Break Time" : "Work Time"}</h2>
 
-//         <div className="pomodoro__container-timer">
-//           <div className="pomodoro__container-timer-time">{formatTime(localTime)}</div>
+//         <div className="pomodoro__time">
+//           {minutes}:{seconds}
 //         </div>
 
-//         <div className="pomodoro__container__controls">
-//           {!localIsActive ? (
-//             <button onClick={handleStartTimer}>
-//               <FaPlay />
-//             </button>
-//           ) : (
-//             <button onClick={handlePauseTimer}>
-//               <FaPause />
-//             </button>
-//           )}
-//           <button onClick={handleResetTimer}>
-//             <GrPowerReset />
+//         <div className="pomodoro__container-element-container">
+//           <div className="pomodoro__container-interval-item-fill">
+//             <div
+//               className="pomodoro__container-interval-fill"
+//               style={{
+//                 width: `${percent}%`,
+//                 backgroundColor: localIsBreak ? "#FF9800" : "#2196F3",
+//               }}
+//             />
+//             <span className="progress-text">{percent.toFixed(0)}%</span>
+//           </div>
+//         </div>
+
+//         <div className="pomodoro__buttons">
+//           <button onClick={handleStartPause}>
+//             {localIsActive ? "Pause" : "Start"}
 //           </button>
+//           <button onClick={handleReset}>Reset</button>
 //         </div>
 
-//         {/* Intervals visualization */}
-//         <div className="pomodoro__intervals">
-//           {[...Array(intervalCount)].map((_, index) => {
-//             let fillWidth = 0;
-
-//             if (index < localCompletedIntervals) fillWidth = 100;
-//             else if (index === localCompletedIntervals && !localIsBreak)
-//               fillWidth = currentFill;
-
-//             return (
-//               <div key={index} className="interval-bar">
-//                 <div
-//                   className="interval-fill"
-//                   style={{
-//                     width: `${fillWidth}%`,
-//                     backgroundColor: localIsBreak ? '#FF9800' : '#2196F3'
-//                   }}
-//                 />
-//                 <span className="interval-text">{Math.round(fillWidth)}%</span>
-//               </div>
-//             );
-//           })}
-//         </div>
-
-//         <div className="pomodoro__container-status">
-//           <p>Completed: {localCompletedIntervals}/{intervalCount}</p>
-//           <p>Mode: {localIsBreak ? 'Break' : 'Work'}</p>
-//         </div>
+//         <p>
+//           Completed: {localCompletedIntervals}/{intervalCount}
+//         </p>
 //       </div>
 //     </section>
 //   );
 // };
 
 // export default Pomodoro;
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////
 
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -307,12 +312,17 @@ const Pomodoro = () => {
       : 5;
     dispatch(resetTimer());
   };
-
+      console.log("localIsBreak",localIsBreak);
+      console.log("localCompletedIntervals",localCompletedIntervals);
+      console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
   const handlePeriodEnd = () => {
     if (localIsBreak) {
       dispatch(completeBreakInterval());
       playStart();
-      if (localCompletedIntervals + 1 >= staticIntervalCountRef.current) {
+      // console.log("localIsBreak",localIsBreak);
+      // console.log("localCompletedIntervals",localCompletedIntervals);
+      // console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
+      if (localCompletedIntervals >= staticIntervalCountRef.current) {
         alert("All intervals completed!");
         dispatch(resetTimer());
       }
@@ -321,6 +331,39 @@ const Pomodoro = () => {
       playEnd();
     }
   };
+
+//   const handlePeriodEnd = () => {
+//   if (localIsBreak) {
+//     // Break just ended → start new work session
+//     dispatch(completeBreakInterval());
+//     playStart();
+//     // Automatically start next work session
+//     setLocalIsActive(true);
+//     setLocalIsBreak(false);
+//     dispatch(startTimer());
+//     setLocalTime(pomodoro.initialTime);
+//   } else {
+//     // Work just ended
+//     dispatch(completeWorkInterval());
+//     playEnd();
+
+//     if (localCompletedIntervals + 1 >= staticIntervalCountRef.current) {
+//       // ✅ All work intervals completed
+//       setLocalIsActive(false);
+//       alert("🎉 All intervals completed!");
+//       dispatch(resetTimer());
+//       setLocalIsBreak(false);
+//       setLocalCompletedIntervals(0);
+//     } else {
+//       // Switch to break automatically
+//       setLocalIsBreak(true);
+//       setLocalTime(pomodoro.breakInterval);
+//       setLocalIsActive(true);
+//       dispatch(startTimer());
+//     }
+//   }
+// };
+
 
   const showNotification = () => {
     if (Notification.permission === 'granted') {
@@ -412,7 +455,7 @@ const Pomodoro = () => {
 
 export default Pomodoro;
 
-
+////////////////////////////////////////////////////////////////////////////////////////
 
 // import React, { useEffect, useRef, useState } from 'react';
 // import { useSelector, useDispatch } from 'react-redux';
