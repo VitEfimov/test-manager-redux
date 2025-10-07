@@ -1209,6 +1209,10 @@ padding: 5dvh;
 .pomodoro__container {
   display: flex;
   flex-direction: column;
+    /* display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 35px; */
+  
 
   align-items: center;
   justify-content: center;
@@ -1222,6 +1226,7 @@ padding: 5dvh;
 .pomodoro__container-timer {
   display: flex;
   flex-direction: column;
+
   font-size: 15dvh;
   /* margin-bottom: 35px; */
   padding: 25px;
@@ -1242,6 +1247,7 @@ padding: 5dvh;
   display: flex;
   gap: 2dvw;
     flex-direction: row;
+    
 
 
 }
@@ -1252,6 +1258,7 @@ padding: 5dvh;
   height: 2dvh;
   border-radius: 10px;
   background-color: var(--dark-font-color-grey);
+  
 }
 
 .controls button:hover {
@@ -1271,12 +1278,14 @@ padding: 5dvh;
 }
 
 .pomodoro__container-interval-fill {
-  position: absolute;
+  /* display:block; */
+  position:absolute;
   left: 0;
   top: 0;
   height: 100%;
   background-color: purple;
   transition: width 1s linear;
+  z-index: -1000;
 }
 
 .pomodoro__container-interval-item {
@@ -1290,12 +1299,12 @@ padding: 5dvh;
 }
 
 .pomodoro__container-interval-fill {
-  height: 100%;
+  /* height: 100%;
   background-color: green;
   position: absolute;
   top: 0;
   left: 0;
-  transition: width 1s linear;
+  transition: width 1s linear; */
 }
 
 .fill-full {
@@ -1319,8 +1328,97 @@ padding: 5dvh;
   display: flex;
   gap: 10px;
   margin: 20px 0;
+  width: 50%;
+  max-width: 50dvw;
   flex-wrap: wrap;
   justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 15px;
+}
+
+.progress-text {
+  /* color: var(--dark-background-color-sidebar);
+  z-index: 100;
+  font-weight: 700; */
+    position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--dark-background-color-sidebar);
+  font-weight: 600;
+  z-index: 2; /* ensures text stays above the fill */
+  pointer-events: none;
+
+}
+
+/* ////////////////////////////// */
+
+.pomodoro__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10vh;
+}
+
+.pomodoro__container-timer {
+  font-size: 8vh;
+  padding: 20px;
+}
+
+.pomodoro__container__controls button {
+  background-color: var(--dark-btn-color);
+  color: var(--dark-font-color-white);
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.pomodoro__intervals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 30px 0;
+  width: 300px;
+}
+
+.interval-bar {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.interval-fill {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 1s linear;
+  /* border-radius: 6px; */
+}
+
+.interval-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #222;
+  font-weight: 600;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pomodoro__container-status {
+  margin-top: 15px;
+  color: var(--dark-font-color);
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 /* //////////    Settings        ////////////////// */
@@ -1431,7 +1529,7 @@ padding: 5dvh;
 /* ////////////////////////////////////////////////////////////////////////////////////////// */
 
 
-
+/*
 .pomodoro__progress-bar {
   width: 100%;
   height: 20px;
@@ -1468,7 +1566,7 @@ padding: 5dvh;
 .pomodoro__container-element-container {
   width: 100%;
   flex-direction: row;
-  /* gap: 15dvh; */
+  /* gap: 15dvh; *//*
   margin: 10px 0;
 }
 
@@ -1484,13 +1582,13 @@ padding: 5dvh;
   /* justify-self: center; */
   /* justify-items: center; */
 
-
+/*
 }
 .pomodoro__container-interval-item-fill {
   width: 500px;
   height: 20px;
   background-color: #e0e0e0;
-  margin-left: 30dvw;
+  /* margin-left: 30dvw; *//*
   border-radius: 5px;
   overflow: hidden;
   position:relative;
@@ -1506,10 +1604,10 @@ padding: 5dvh;
 }
 
 .pomodoro__container-interval-fill {
-  height: 100%;
-  transition: width 0.5s linear;
+  /* height: 100%;
+  transition: width 0.5s linear; *//*
 }
-
+*/
 
 /* ////////////////////////////////////////////////////////////////////////////////////////// */
 
