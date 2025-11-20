@@ -119,7 +119,9 @@ const AddTask = ({ date }) => {
                                 if (e.key === 'Enter') {
                                     handleAddTask();
                                 }
-                            }}
+                            }
+                            }
+                            autoFocus
                         />
                     </div>
                     <div className='section__task-date add-task'>
