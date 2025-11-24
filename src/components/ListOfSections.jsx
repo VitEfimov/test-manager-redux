@@ -39,6 +39,17 @@ const ListOfSections = ({ sidebarView }) => {
     const sortedTasks = [...tasks].sort((a, b) => {
         const dateA = dayjs(a.completionDate);
         const dateB = dayjs(b.completionDate);
+
+        if (dateA.isSame(dateB, 'day')) {
+            const timeA = a.time || '';
+            const timeB = b.time || '';
+            if (timeA === timeB) return 0;
+            // Tasks with time come after tasks without time (or before? let's stick to string compare: '' < 'HH:mm')
+            // Actually, let's make tasks with time come AFTER tasks without time?
+            // '' < '10:00' is true. So no-time tasks come first.
+            return timeA.localeCompare(timeB);
+        }
+
         return dateA - dateB;
     });
 
@@ -59,28 +70,13 @@ const ListOfSections = ({ sidebarView }) => {
         let newDate = dayjs().toISOString();
         let isCompleted = false;
 
-        switch (destination.droppableId) {
-            case 'today':
-                newDate = dayjs().toISOString();
-                break;
-            case 'tomorrow':
-                newDate = dayjs().add(1, 'day').toISOString();
-                break;
-            case 'on-this-week':
-                newDate = dayjs().endOf('week').isoWeekday(7).toISOString();
-                break;
-            case 'on-next-week':
-                newDate = dayjs().add(1, 'week').isoWeekday(7).toISOString();
-                break;
-            case 'later':
-                newDate = dayjs().add(3, 'week').startOf('week').toISOString();
-                break;
-            case 'completed':
-                isCompleted = true;
-                newDate = dayjs().toISOString(); // Or keep existing date?
-                break;
-            default:
-                newDate = dayjs().toISOString();
+        if (destination.droppableId === 'completed') {
+            isCompleted = true;
+            newDate = dayjs().toISOString();
+        } else if (FILTERS[destination.droppableId]) {
+            newDate = FILTERS[destination.droppableId].toISOString();
+        } else {
+            newDate = dayjs().toISOString();
         }
 
         dispatch(updateTask({
@@ -176,7 +172,7 @@ const ListOfSections = ({ sidebarView }) => {
                             </ul>
                         )}
                     </Droppable>
-                    <Droppable droppableId="on-this-week">
+                    <Droppable droppableId="on-this-week" isDropDisabled={dayjs().isoWeekday() === 7}>
                         {(provided) => (
                             <ul
                                 className='section__field'
