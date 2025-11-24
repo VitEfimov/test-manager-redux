@@ -9,14 +9,15 @@ const loadFromLocalStorage = () => {
         "lastUpdatedDate": null,
         // "completionDate": new Date().toLocaleDateString(),
         completionDate: new Date().toISOString(),
+        "time": "",
         "priority": "High",
         "completed": false,
         "description": {
-          "text": "",
-          "img": "",
-          "url": ""
+            "text": "",
+            "img": "",
+            "url": ""
         }
-      }];
+    }];
     const savedData = JSON.parse(localStorage.getItem('tasks')) || defaultTask;
     if (!localStorage.getItem('tasks')) {
         localStorage.setItem('tasks', JSON.stringify(defaultTask));
@@ -45,13 +46,14 @@ const taskSlice = createSlice({
             localStorage.setItem('tasks', JSON.stringify(state.tasks));
         },
         updateTask(state, action) {
-            const { taskId, name, priority, completed, description, completionDate } = action.payload;
+            const { taskId, name, priority, completed, description, completionDate, time } = action.payload;
             const task = state.tasks.find(task => task.id === taskId);
             if (task) {
                 task.taskname = name || task.taskname;
                 task.priority = priority || task.priority;
-                task.completed = completed;
+                task.completed = completed !== undefined ? completed : task.completed;
                 task.completionDate = completionDate || task.completionDate;
+                task.time = time !== undefined ? time : task.time;
                 if (description) {
                     task.description = {
                         text: description.text || '',

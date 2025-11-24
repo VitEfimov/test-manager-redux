@@ -51,6 +51,13 @@ const AddTask = ({ date }) => {
 
 
     const [completionDate, setCompletionDate] = useState(getCompletionDate(date))
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
+    const handleDateSelection = (date) => {
+        const isoDate = dayjs(date).toISOString();
+        setCompletionDate(isoDate);
+        setShowDatePicker(false);
+    };
 
     const handleAddTask = () => {
         if (!taskName.trim()) {
@@ -61,9 +68,9 @@ const AddTask = ({ date }) => {
         const newTask = {
             id: new Date().getTime().toString(),
             taskname: taskName,
-            creationDate: new Date().toLocaleDateString(),
+            creationDate: new Date().toISOString(),
             lastUpdatedDate: null,
-            completionDate: completionDate,
+            completionDate: completionDate || dayjs().toISOString(),
             priority: taskPriority,
             completed: false,
             description: {
@@ -80,6 +87,7 @@ const AddTask = ({ date }) => {
         setTaskName('');
         setTaskPriority('');
         setAddTaskForm(false);
+        setCompletionDate(getCompletionDate(date));
     };
 
     const handleDeleteTask = () => {
@@ -123,7 +131,16 @@ const AddTask = ({ date }) => {
                         />
                     </div>
                     <div className='section__task-date add-task'>
-                        <p>{getCompletionDate(date)}</p>
+                        {showDatePicker ? (
+                            <DatePicker
+                                handleDateSelection={handleDateSelection}
+                                setShowDatePicker={setShowDatePicker}
+                            />
+                        ) : (
+                            <div onClick={() => setShowDatePicker(true)} style={{ cursor: 'pointer' }}>
+                                <p>{completionDate ? dayjs(completionDate).format('MMMM D, YYYY') : getCompletionDate(date) || 'Select date'}</p>
+                            </div>
+                        )}
                     </div>
 
                     <div className='section__task-priority add-task'>
@@ -150,7 +167,7 @@ const AddTask = ({ date }) => {
                             </button>}
                     </div>
                     <div className='section__task-delete-btn add-task'>
-                        <MdDelete onClick={handleDeleteTask} />
+                        <button onClick={handleAddTask}>Add</button>
                     </div>
                 </div>
             }
