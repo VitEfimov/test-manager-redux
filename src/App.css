@@ -655,7 +655,7 @@ input {
   width: 55%;
   height: 65%;
   z-index: 10;
-  animation: slideInRight 0.5s forwards;
+  animation: slideInRight 0.2s forwards;
   pointer-events: none;
   overflow: none;
   color: black;
@@ -737,11 +737,11 @@ input {
   width: 55%;
   height: 65%;
   z-index: 10;
-  animation: slideInRight 0.5s forwards;
+  animation: slideInRight 0.2s forwards;
   pointer-events: none;
   display: flex;
-  justify-content: flex-end; /* keep modal on right side */
-  align-items: flex-end;     /* stick content to bottom */
+  justify-content: flex-end; 
+  align-items: flex-end;     
   color: black;
 
   & label {
@@ -758,8 +758,8 @@ input {
   height: 100%;
   pointer-events: all;
   z-index: 11;
-  position: relative;    /* no need for absolute */
-  overflow-y: auto;      /* scroll inside modal if content overflows */
+  position: relative;    
+  overflow-y: auto;      
   opacity: 1;
 }
 
@@ -777,6 +777,8 @@ input {
   justify-content: flex-end;
   align-items: flex-end;
   color: black;
+    opacity: 1;
+
 }
 
 .description__modal-content {
@@ -984,7 +986,7 @@ button[type='submit']:hover {
 
 @keyframes slideInRight {
   from {
-    transform: translateX(15%);
+    transform: translateX(5%);
     opacity: 0;
   }
 
@@ -996,7 +998,7 @@ button[type='submit']:hover {
 
 @keyframes slideInLeft {
   from {
-    transform: translateX(-15%);
+    transform: translateX(-5%);
     opacity: 0;
   }
 

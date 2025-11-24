@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { BiUnderline } from 'react-icons/bi';
 
 const loadFromLocalStorage = () => {
     const defaultTask = [{
@@ -9,6 +10,7 @@ const loadFromLocalStorage = () => {
         "lastUpdatedDate": null,
         // "completionDate": new Date().toLocaleDateString(),
         completionDate: new Date().toISOString(),
+        "time": "",
         "priority": "High",
         "completed": false,
         "description": {
@@ -45,7 +47,7 @@ const taskSlice = createSlice({
             localStorage.setItem('tasks', JSON.stringify(state.tasks));
         },
         updateTask(state, action) {
-            const { taskId, name, priority, completed, description, completionDate } = action.payload;
+            const { taskId, name, priority, completed, description, completionDate, time } = action.payload;
             const task = state.tasks.find(task => task.id === taskId);
             console.log("Before:", task.completionDate);
             if (task) {
@@ -53,6 +55,7 @@ const taskSlice = createSlice({
                 task.priority = priority || task.priority;
                 task.completed = completed;
                 task.completionDate = completionDate || task.completionDate;
+                task.time = time !== undefined ? time : task.time;
                 if (description) {
                     task.description = {
                         text: description.text || '',
