@@ -9,6 +9,7 @@ import { FcAcceptDatabase, FcDataRecovery, FcDatabase } from "react-icons/fc";
 import { ImMenu } from "react-icons/im";
 import { useClickOutside } from '../custom-hooks/ClickOut';
 
+import { Draggable } from '@hello-pangea/dnd';
 
 
 import { GrDrag } from "react-icons/gr";
@@ -26,6 +27,7 @@ const Section = ({ task, checked, destination, index }) => {
   const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
+  const [taskTime, setTaskTime] = useState(task.time || '')
   const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
   // const [selectedDate, setSelectedDate] = useState(dayjs(task.completionDate));
   const [selectedDate, setSelectedDate] = useState(task.completionDate ? new Date(task.completionDate) : new Date());
@@ -36,7 +38,7 @@ const Section = ({ task, checked, destination, index }) => {
 
 
   const handleSaveChanges = () => {
-    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString() }));
+    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString(), time: taskTime }));
   };
 
   const handleCheckbox = () => {
@@ -126,6 +128,12 @@ const Section = ({ task, checked, destination, index }) => {
       completionDate: isoDate,
     }));
   };
+
+  const handleTimeChange = (e) => {
+    setTaskTime(e.target.value);
+    dispatch(updateTask({ taskId: task.id, time: e.target.value }))
+
+  }
 
   // const handleDateSelection = (date) => {
   //   setSelectedDate(dayjs(date));

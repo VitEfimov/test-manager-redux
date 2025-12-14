@@ -662,7 +662,7 @@ input {
   width: 55%;
   height: 65%;
   z-index: 10;
-  animation: slideInRight 0.5s forwards;
+  animation: slideInRight 0.2s forwards;
   pointer-events: none;
   overflow: none;
   color: black;
@@ -745,7 +745,7 @@ input {
   width: 55%;
   height: 65%;
   z-index: 10;
-  animation: slideInRight 0.5s forwards;
+  animation: slideInRight 0.2s forwards;
   pointer-events: none;
   display: flex;
   justify-content: flex-end;
@@ -792,6 +792,8 @@ input {
   justify-content: flex-end;
   align-items: flex-end;
   color: black;
+  opacity: 1;
+
 }
 
 .description__modal-content {
@@ -1002,7 +1004,7 @@ button[type='submit']:hover {
 
 @keyframes slideInRight {
   from {
-    transform: translateX(15%);
+    transform: translateX(5%);
     opacity: 0;
   }
 
@@ -1014,7 +1016,7 @@ button[type='submit']:hover {
 
 @keyframes slideInLeft {
   from {
-    transform: translateX(-15%);
+    transform: translateX(-5%);
     opacity: 0;
   }
 

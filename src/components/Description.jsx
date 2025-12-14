@@ -12,6 +12,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     priority: task.priority,
     completed: task.completed,
     completionDate: task.completionDate,
+    time: task.time || "",
     descriptionText: task.description?.text || '',
     descriptionImg: task.description?.img || '',
     descriptionUrl: task.description?.url || '',
@@ -23,6 +24,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       priority: task.priority,
       completed: task.completed,
       completionDate: task.completionDate,
+      time: task.time || "",
       descriptionText: task.description?.text || '',
       descriptionImg: task.description?.img || '',
       descriptionUrl: task.description?.url || '',
@@ -42,6 +44,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       priority: formData.priority,
       completed: formData.completed,
       completionDate: formData.completionDate,
+      time: formData.time,
       description: {
         text: formData.descriptionText,
         img: formData.descriptionImg,
@@ -92,6 +95,12 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
             value={dayjs(formData.completionDate).format('MMMM D, YYYY')}
             disabled
           />
+
+          <label>Time:</label>
+          <input className='description__input'
+            type="time" name="time" 
+            value={formData.time} 
+            onChange={handleChange} />
 
           <label>Description:</label>
           <textarea

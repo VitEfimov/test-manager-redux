@@ -22,19 +22,28 @@ const ListOfSections = ({ sidebarView }) => {
     const [open, setOpen] = useState(false);
     let openRef = useRef();
 
-    useEffect(() => {
-        let handler = (e) => {
-            if (!openRef.current.contains(e.target)) {
-                setOpen(false);
-            }
-        };
-        document.addEventListener('mouthdown', handler);
-        return () => {
-            document.removeEventListener('mouthdown', handler);
-        }
-    });
+    // useEffect(() => {
+    //     const handler = (e) => {
+    //         if (openRef.current && !openRef.current.contains(e.target)) {
+    //             setOpen(false);
+    //         }
+    //     };
+    //     document.addEventListener('mousedown', handler);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handler);
+    //     }
+    // },[]);
 
+    // useEffect(() => {
+    //     const handler = (e) => {
+    //         if (openRef.current && !openRef.current.contains(e.target)) {
+    //             setOpen(false);
+    //         }
+    //     };
 
+    //     document.addEventListener('mousedown', handler);
+    //     return () => document.removeEventListener('mousedown', handler);
+    // }, []);
 
 
     const handleMissedTasks = () => {
@@ -56,6 +65,12 @@ const ListOfSections = ({ sidebarView }) => {
     const sortedTasks = [...tasks].sort((a, b) => {
         const dateA = dayjs(a.completionDate);
         const dateB = dayjs(b.completionDate);
+        if (dateA.isSame(dateB, 'day')) {
+            const timeA = a.time || '';
+            const timeB = b.time || '';
+            if (timeA === timeB) return 0;
+            return timeA.localeCompare(timeB)
+        }
         return dateA - dateB;
     });
 
