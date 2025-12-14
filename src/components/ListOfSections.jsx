@@ -212,9 +212,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 <div className='section__line-top'></div>
                                 {sortedTasks
                                     .filter(task =>
-                                        !dayjs(task.completionDate).isSameOrBefore(FILTERS.today) &&
-                                        !dayjs(task.completionDate).isSame(FILTERS.tomorrow) &&
-                                        dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'])
+                                        !dayjs(task.completionDate).isSame(dayjs(), 'day') &&
+                                        !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
+                                        dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day')
                                         && !task.completed
                                     )
                                     .map((task, index) => (
@@ -242,9 +242,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 <div className='section__line-top'></div>
                                 {sortedTasks
                                     .filter(task =>
-                                        !dayjs(task.completionDate).isSame(FILTERS.tomorrow) &&
-                                        dayjs(task.completionDate).isAfter(FILTERS['on-this-week'])
-                                        && dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'])
+                                        !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
+                                        dayjs(task.completionDate).isAfter(FILTERS['on-this-week'], 'day')
+                                        && dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day')
                                         && !task.completed)
                                     .map((task, index) => (
                                         <Section
@@ -271,7 +271,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 <div className='section__line-top'></div>
                                 {sortedTasks
                                     .filter(task =>
-                                        dayjs(task.completionDate).isAfter(FILTERS['on-next-week']) && !task.completed)
+                                        dayjs(task.completionDate).isAfter(FILTERS['on-next-week'], 'day') && !task.completed)
                                     .map((task, index) => (
                                         <Section
                                             key={task.id}

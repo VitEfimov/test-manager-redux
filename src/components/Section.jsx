@@ -175,11 +175,11 @@ const Section = ({ task, checked, destination, index }) => {
           className={`section__task ${task.completed ? 'completed-task' : ''}`}
           ref={provided.innerRef}
           {...provided.draggableProps}
+          {...provided.dragHandleProps}
         >
           <div className='section__task-name'>
             <span
               className='section__task-icon'
-              {...provided.dragHandleProps}
             >
               <GrDrag className='section__task-icon__grdrag' />
             </span>

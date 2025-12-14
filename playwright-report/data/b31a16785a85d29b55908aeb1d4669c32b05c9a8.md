@@ -1,0 +1,77 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: Test for header visability
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - generic [ref=e8]:
+            - heading [level=2]
+            - paragraph
+          - button [ref=e9] [cursor=pointer]:
+            - img [ref=e10]
+        - generic [ref=e14]:
+          - paragraph [ref=e15]: Add settings
+          - paragraph [ref=e16]: to display weather
+    - generic [ref=e17]:
+      - navigation [ref=e18]:
+        - generic [ref=e20]:
+          - button "Dashboard" [ref=e21] [cursor=pointer]:
+            - generic [ref=e22]: Dashboard
+          - button "Board" [active] [ref=e23] [cursor=pointer]:
+            - generic [ref=e24]: Board
+          - button "Pomodoro" [ref=e25] [cursor=pointer]:
+            - generic [ref=e26]: Pomodoro
+          - button "About" [ref=e27] [cursor=pointer]:
+            - generic [ref=e28]: About
+          - button "Settings" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]: Settings
+          - button "LogOut" [disabled] [ref=e31]:
+            - generic [ref=e32]: LogOut
+      - generic [ref=e34]:
+        - generic [ref=e36]:
+          - heading "Tasks" [level=2] [ref=e37]
+          - heading "Due date" [level=2] [ref=e38]
+          - heading "Priority" [level=2] [ref=e39]
+        - list [ref=e40]:
+          - heading "Today" [level=3] [ref=e41]
+          - button "Add task..." [ref=e44] [cursor=pointer]
+        - list [ref=e45]:
+          - heading "Tomorrow" [level=3] [ref=e46]
+          - button "Add task..." [ref=e49] [cursor=pointer]
+        - list [ref=e50]:
+          - heading "On this week" [level=3] [ref=e51]
+          - button "Add task..." [ref=e54] [cursor=pointer]
+        - list [ref=e55]:
+          - heading "On next week" [level=3] [ref=e56]
+          - button "Add first task... December 15, 2025 High" [ref=e57]:
+            - generic [ref=e58]:
+              - img [ref=e60]
+              - checkbox [ref=e62]
+              - generic [ref=e63]: Add first task...
+              - button [ref=e64] [cursor=pointer]:
+                - img [ref=e65]
+            - paragraph [ref=e71] [cursor=pointer]: December 15, 2025
+            - button "High" [ref=e74] [cursor=pointer]
+            - img [ref=e76] [cursor=pointer]
+          - button "Add task..." [ref=e81] [cursor=pointer]
+        - list [ref=e82]:
+          - heading "Later" [level=3] [ref=e83]
+          - button "Add task..." [ref=e86] [cursor=pointer]
+        - list [ref=e87]:
+          - heading "Completed" [level=3] [ref=e88]
+  - generic [ref=e89]: You have dropped the item. You have moved the item from position 1 in list on-this-week to list on-next-week in position 1
+  - iframe [ref=e90]:
+    - generic [ref=f1e2]:
+      - generic [ref=f1e3]: "Uncaught runtime errors:"
+      - button "Dismiss" [ref=f1e4] [cursor=pointer]: ×
+      - generic [ref=f1e5]:
+        - generic [ref=f1e6]:
+          - generic [ref=f1e7]: ERROR
+          - generic [ref=f1e8]: "Invariant failed: Cannot finish a drop animating when no drop is occurring at handleError (http://localhost:3000/static/js/bundle.js:77969:58) at http://localhost:3000/static/js/bundle.js:77988:7 at Object.invokeGuardedCallbackDev (http://localhost:3000/static/js/bundle.js:44815:20) at invokeGuardedCallback (http://localhost:3000/static/js/bundle.js:44872:35) at invokeGuardedCallbackAndCatchFirstError (http://localhost:3000/static/js/bundle.js:44886:29) at executeDispatch (http://localhost:3000/static/js/bundle.js:49029:7) at processDispatchQueueItemsInOrder (http://localhost:3000/static/js/bundle.js:49055:11) at processDispatchQueue (http://localhost:3000/static/js/bundle.js:49066:9) at dispatchEventsForPlugins (http://localhost:3000/static/js/bundle.js:49075:7) at http://localhost:3000/static/js/bundle.js:49235:16"
+        - generic [ref=f1e9]:
+          - generic [ref=f1e10]: ERROR
+          - generic [ref=f1e11]: "Invariant failed: Cannot finish a drop animating when no drop is occurring at handleError (http://localhost:3000/static/js/bundle.js:77969:58) at http://localhost:3000/static/js/bundle.js:77988:7"
+```
