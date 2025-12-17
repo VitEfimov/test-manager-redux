@@ -7,7 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import FILTERS from '../list-view/filters';
 import HeaderListOfSection from './HeaderListOfSection';
 import Sidebar from './Sidebar';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { updateTask } from '../features/taskSlice';
 
 

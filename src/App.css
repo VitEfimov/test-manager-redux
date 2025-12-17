@@ -464,7 +464,7 @@ border-radius: 10px;}
   padding-bottom: 20px;
   padding-bottom: 10dvh;
   /* transform: all 0.15s ease-in-out; */
-  transition: transform 0.9s ease;
+  /* transition: transform 0.9s ease; */
   /* animation: slideInRight 0.1s forwards; */
 
 }
@@ -473,7 +473,7 @@ border-radius: 10px;}
 .section.close {
   overflow-y: auto;
   padding-left: 0;
-  transform: translateX(0px);
+  /* transform: translateX(0px); */
   padding-left: 5dvw;
   padding-right: 5dvw;
   /* justify-items: center; */
@@ -483,7 +483,7 @@ border-radius: 10px;}
 
 .section.open {
   overflow-y: auto;
-  transform: translateX(0px);
+  /* transform: translateX(0px); */
 
 }
 

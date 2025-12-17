@@ -18,7 +18,8 @@ import DatePicker from './DatePicker';
 import Description from './Description';
 import { TfiLayoutMenuV } from "react-icons/tfi";
 import ReactDatePicker from './ReactDatePicker';
-import { Draggable } from 'react-beautiful-dnd';
+
+
 
 dayjs.extend(isoWeek);
 const Section = ({ task, checked, destination, index }) => {
