@@ -92,8 +92,16 @@ const ListOfSections = ({ sidebarView }) => {
         if (!task) return;
 
         let newCompletionDate = task.completionDate;
+        let newCompleted = task.completed; // Default to current completion status
 
         const today = dayjs(); // Use consistent reference time
+
+        // Handle dragging into or out of "Completed"
+        if (destination.droppableId === 'completed') {
+            newCompleted = true;
+        } else {
+            newCompleted = false;
+        }
 
         switch (destination.droppableId) {
             case 'today':
@@ -118,13 +126,20 @@ const ListOfSections = ({ sidebarView }) => {
                 // Filter: > endOfNextWeek
                 newCompletionDate = today.add(2, 'week').startOf('isoWeek').toISOString();
                 break;
+            case 'missed':
+                newCompletionDate = today.subtract(1, 'day').toISOString();
+                break;
+            case 'completed':
+                // Keep original date or update? Start with keeping original date, just mark completed.
+                break;
             default:
                 break;
         }
 
         dispatch(updateTask({
             taskId: task.id,
-            completionDate: newCompletionDate
+            completionDate: newCompletionDate,
+            completed: newCompleted
         }));
     };
 
@@ -152,29 +167,37 @@ const ListOfSections = ({ sidebarView }) => {
                     </header>
                     {/* <section className='section'> */}
                     {missedTasks && (
-                        <ul className='section__field'>
-                            <div className='section__field-header'>
-                                {/* <input className='section_task-checkbox'
+                        <Droppable droppableId="missed">
+                            {(provided) => (
+                                <ul
+                                    className='section__field'
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    <div className='section__field-header'>
+                                        {/* <input className='section_task-checkbox'
                                 type="checkbox"
-                              checked={task.completed}
-                              onChange={handleCheckbox}
+                                checked={task.completed}
+                                onChange={handleCheckbox}
                             /> */}
-                                <h3 style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</h3>
+                                        <h3 style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</h3>
 
-                            </div>
-                            <div className='section__line-top'></div>
-                            {sortedTasks
-                                .filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed)
-                                .map((task, index) => (
-                                    <Section
-                                        key={task.id}
-                                        task={task}
-                                        checked={false}
-                                        index={index}
-                                        isDraggable={false}
-                                    />
-                                ))}
-                        </ul>
+                                    </div>
+                                    <div className='section__line-top'></div>
+                                    {sortedTasks
+                                        .filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed)
+                                        .map((task, index) => (
+                                            <Section
+                                                key={task.id}
+                                                task={task}
+                                                checked={false}
+                                                index={index}
+                                            />
+                                        ))}
+                                    {provided.placeholder}
+                                </ul>
+                            )}
+                        </Droppable>
                     )}
                     <Droppable droppableId="today">
                         {(provided) => (
@@ -228,8 +251,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 <div className='section__line-top'></div>
                                 {sortedTasks
                                     .filter(task =>
-                                        !dayjs(task.completionDate).isSame(dayjs(), 'day') &&
-                                        !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
+                                        dayjs(task.completionDate).isAfter(dayjs().add(1, 'day'), 'day') &&
                                         dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day')
                                         && !task.completed
                                     )
@@ -302,19 +324,28 @@ const ListOfSections = ({ sidebarView }) => {
                             </ul>
                         )}
                     </Droppable>
-                    <ul className='section__field completed'>
-                        <h3>Completed</h3>
-                        <div className='section__line-top'></div>
-                        {sortedTasks
-                            .filter(task => task.completed).map(task => (
-                                <Section
-                                    key={task.id}
-                                    task={task}
-                                    checked={true}
-                                    isDraggable={false}
-                                />
-                            ))}
-                    </ul>
+                    <Droppable droppableId="completed">
+                        {(provided) => (
+                            <ul
+                                className='section__field completed'
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                            >
+                                <h3>Completed</h3>
+                                <div className='section__line-top'></div>
+                                {sortedTasks
+                                    .filter(task => task.completed).map((task, index) => (
+                                        <Section
+                                            key={task.id}
+                                            task={task}
+                                            checked={true}
+                                            index={index}
+                                        />
+                                    ))}
+                                {provided.placeholder}
+                            </ul>
+                        )}
+                    </Droppable>
 
 
 
