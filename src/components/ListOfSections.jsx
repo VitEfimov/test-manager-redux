@@ -171,6 +171,7 @@ const ListOfSections = ({ sidebarView }) => {
                                         task={task}
                                         checked={false}
                                         index={index}
+                                        isDraggable={false}
                                     />
                                 ))}
                         </ul>
@@ -310,6 +311,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     key={task.id}
                                     task={task}
                                     checked={true}
+                                    isDraggable={false}
                                 />
                             ))}
                     </ul>
