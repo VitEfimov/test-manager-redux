@@ -20,8 +20,10 @@ import Description from './Description';
 import { TfiLayoutMenuV } from "react-icons/tfi";
 import ReactDatePicker from './ReactDatePicker';
 
+
+
 dayjs.extend(isoWeek);
-const Section = ({ task, checked, destination, index }) => {
+const Section = ({ task, checked, destination, index, isDraggable = true }) => {
 
   const dispatch = useDispatch();
   const taskId = task.id;
@@ -38,7 +40,7 @@ const Section = ({ task, checked, destination, index }) => {
 
 
   const handleSaveChanges = () => {
-    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString(),time: taskTime }));
+    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString(), time: taskTime }));
   };
 
   const handleCheckbox = () => {
@@ -131,7 +133,7 @@ const Section = ({ task, checked, destination, index }) => {
 
   const handleTimeChange = (e) => {
     setTaskTime(e.target.value);
-    dispatch(updateTask({ taskId: task.id, time: e.target.value}))
+    dispatch(updateTask({ taskId: task.id, time: e.target.value }))
 
   }
 
@@ -176,137 +178,163 @@ const Section = ({ task, checked, destination, index }) => {
 
 
 
-  return (
-    <Draggable draggableId={task.id} index={index}>
-      {(provided) => (
-        <li className={`section__task ${task.completed ? 'completed-task' : ''}`}
-          ref={provided.innerRef}
-          {...provided.draggableProps}>
-          <div className='section__task-name' {...provided.dragHandleProps}>
-            <span className='section__task-icon' draggable><GrDrag className='section__task-icon__grdrag' />
+  const renderContent = (provided) => (
+    <li
+      className={`section__task ${task.completed ? 'completed-task' : ''}`}
+      ref={provided?.innerRef}
+      {...provided?.draggableProps}
+      {...provided?.dragHandleProps}
+    >
+      <div className='section__task-name'>
+        <span
+          className='section__task-icon'
+        >
+          <GrDrag className='section__task-icon__grdrag' />
+        </span>
+        <input className='section_task-checkbox'
+          type="checkbox"
+          checked={!!task.completed}
+          onChange={handleCheckbox}
+        />
+        {editingTaskName && !task.completed ? (
+          <input
+            className='section__task-input'
+            value={taskName ?? ""}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyPress={handleKeyPress}
+            autoFocus
+            style={{ verticalAlign: 'middle' }} />
+        ) : (
+          <label
+            className='section__task-label'
+            htmlFor="section__task-name"
+            onClick={handleTaskNameChange}
+            style={{ lineHeight: 'normal' }}
+          >
+            {task.name || taskName}
+          </label>
+        )}
 
-            </span>
-            <span><MdDragIndicator /></span>
-            <input className='section_task-checkbox'
-              type="checkbox"
-              checked={!!task.completed}
-              onChange={handleCheckbox}
-            />
-            {editingTaskName && !task.completed ? (
-              <input
-                className='section__task-input'
-                value={taskName ?? ""}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                onKeyPress={handleKeyPress}
-                autoFocus
-                style={{ verticalAlign: 'middle' }} />
-            ) : (
-              <label draggable
-                className='section__task-label'
-                htmlFor="section__task-name"
-                onClick={handleTaskNameChange}
-                style={{ lineHeight: 'normal' }}
-              >
-                {task.name || taskName}
-              </label>
-            )}
+        <span><MdDragIndicator /></span>
+        <input className='section_task-checkbox'
+          type="checkbox"
+          checked={!!task.completed}
+          onChange={handleCheckbox}
+        />
+        {editingTaskName && !task.completed ? (
+          <input
+            className='section__task-input'
+            value={taskName ?? ""}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyPress={handleKeyPress}
+            autoFocus
+            style={{ verticalAlign: 'middle' }} />
+        ) : (
+          <label draggable
+            className='section__task-label'
+            htmlFor="section__task-name"
+            onClick={handleTaskNameChange}
+            style={{ lineHeight: 'normal' }}
+          >
+            {task.name || taskName}
+          </label>
+        )}
+        {task.description.text ? (
+          <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
+          </button>
+        ) : (
+          <button className='section__task-name-description' onClick={handleModal}><FcDatabase />
 
-            {task.description.text ? (
-              <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
-              </button>
-            ) : (
-              <button className='section__task-name-description' onClick={handleModal}><FcDatabase />
+          </button>
+        )}
 
-              </button>
-            )}
-
-            {/* <button className='section__task-name-description' onClick={handleModal}><TfiLayoutMenuV />
+        {/* <button className='section__task-name-description' onClick={handleModal}><TfiLayoutMenuV />
         </button> */}
-            {modal && !task.completed
-              ?
-              <Description
-                className="section__task-name-description-icon"
-                key={task.id}
-                task={task}
-                setModal={setModal}
-                setTaskName={setTaskName}
-                setTaskPriority={setTaskPriority}
-              />
-              :
-              null
-            }
-          </div>
+        {modal && !task.completed
+          ?
+          <Description
+            className="section__task-name-description-icon"
+            key={task.id}
+            task={task}
+            setModal={setModal}
+            setTaskName={setTaskName}
+            setTaskPriority={setTaskPriority}
+          />
+          :
+          null
+        }
+      </div>
 
-          {/* <div className='section__task-date' onClick={handleDatePicker}> */}
-          <div className='section__task-date'>
+      {/* <div className='section__task-date' onClick={handleDatePicker}> */}
+      <div className='section__task-date'>
 
-            {
-              showDatePicker && !task.completed ? (
-                <DatePicker
-                  handleDateSelection={handleDateSelection}
-                  setShowDatePicker={setShowDatePicker}
-                  currentDate={selectedDate}
-                />
-              ) : (
-                <div>
-                <p onClick={handleDatePicker}>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
-                {!task.completed && taskTime && (
-                  <input
-                    type="time"
-                    value={taskTime}
-                    onClick={(e) => e.stopPropagation()}
-                    onChange={handleTimeChange}
-                    className='section__task-time-'/>
+        {
+          showDatePicker && !task.completed ? (
+            <DatePicker
+              handleDateSelection={handleDateSelection}
+              setShowDatePicker={setShowDatePicker}
+              currentDate={selectedDate}
+            />
+          ) : (
+            <p onClick={handleDatePicker}>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
+            // <p>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
 
-                )}
-                </div>
-              )
-            }
-          </div>
+          )
+        }
+      </div>
 
-          <div ref={priorityRef} className='section__task-priority'>
-            {taskPrioritySelect && !task.completed ? (
-              <div className='section__task-priority-select'>
-                {['Low', 'Medium', 'High'].map((option) => (
-                  <div key={option}>
-                    <button
-                      className={`section__task-priority-btn ${option.toLowerCase()}`}
-                      onClick={() => handleTaskPriorityChange({ value: option })}
-                    >
-                      {option}
-                    </button>
-                    <button
-                      className={`section__task-priority-btn-media-option ${option.toLowerCase()}`}
-                      onClick={() => handleTaskPriorityChange({ value: option })}
-                    >
-                      {option}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div>
+      <div ref={priorityRef} className='section__task-priority'>
+        {taskPrioritySelect && !task.completed ? (
+          <div className='section__task-priority-select'>
+            {['Low', 'Medium', 'High'].map((option) => (
+              <div key={option}>
                 <button
-                  className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
-                  onClick={handlePriorityChange}
-                  disabled={checked}
-                >{taskPriority || 'Priority'}
+                  className={`section__task-priority-btn ${option.toLowerCase()}`}
+                  onClick={() => handleTaskPriorityChange({ value: option })}
+                >
+                  {option}
                 </button>
                 <button
-                  className={`section__task-priority-btn-media ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
-                  onClick={handlePriorityChange}
-                  disabled={checked}
-                >{taskPriority.substring(0, 1) || 'Prt'}
+                  className={`section__task-priority-btn-media-option ${option.toLowerCase()}`}
+                  onClick={() => handleTaskPriorityChange({ value: option })}
+                >
+                  {option}
                 </button>
               </div>
-            )}
+            ))}
           </div>
-          <div className='section__task-delete-btn'>
-            <MdDelete onClick={handleDeleteTask} />
+        ) : (
+          <div>
+            <button
+              className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
+              onClick={handlePriorityChange}
+              disabled={checked}
+            >{taskPriority || 'Priority'}
+            </button>
+            <button
+              className={`section__task-priority-btn-media ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
+              onClick={handlePriorityChange}
+              disabled={checked}
+            >{taskPriority.substring(0, 1) || 'Prt'}
+            </button>
           </div>
-        </li>
-      )}
+        )}
+      </div>
+      <div className='section__task-delete-btn'>
+        <MdDelete onClick={handleDeleteTask} />
+      </div>
+    </li>
+  );
+
+  if (!isDraggable) {
+    return renderContent();
+  }
+
+  return (
+    <Draggable draggableId={task.id.toString()} index={typeof index === 'number' ? index : 0}>
+      {(provided) => renderContent(provided)}
     </Draggable>
   )
 }
