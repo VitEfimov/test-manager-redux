@@ -183,11 +183,13 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
       className={`section__task ${task.completed ? 'completed-task' : ''}`}
       ref={provided?.innerRef}
       {...provided?.draggableProps}
-      {...provided?.dragHandleProps}
+      // {...provided?.dragHandleProps}
     >
       <div className='section__task-name'>
         <span
           className='section__task-icon'
+          {...provided?.dragHandleProps}
+
         >
           <GrDrag className='section__task-icon__grdrag' />
         </span>
@@ -216,7 +218,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
           </label>
         )}
 
-        <span><MdDragIndicator /></span>
+        {/* <span><MdDragIndicator /></span>
         <input className='section_task-checkbox'
           type="checkbox"
           checked={!!task.completed}
@@ -240,7 +242,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
           >
             {task.name || taskName}
           </label>
-        )}
+        )} */}
         {task.description.text ? (
           <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
           </button>
