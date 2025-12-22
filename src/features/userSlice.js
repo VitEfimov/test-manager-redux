@@ -2,9 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const loadFromLocalStorageUser = () => {
     const defaultUser = [{
-        name: '',
-        email: '',
-        password: ''
+        name: 'New User',
+        email: 'some@gmail.com',
+        password: '',
+        theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
     }];
 
     const savedData = JSON.parse(localStorage.getItem('user'));
@@ -37,9 +38,13 @@ const userSlice = createSlice({
             state.user[0].password = action.payload;
             localStorage.setItem('user', JSON.stringify(state.user));
         },
+        updateUserTheme: (state, action) => {
+            state.user[0].theme = action.payload;
+            localStorage.setItem('user', JSON.stringify(state.user));
+        },
     },
 });
 
-export const { updateUserName, updateUserEmail, updateUserPassword } = userSlice.actions;
+export const { updateUserName, updateUserEmail, updateUserPassword, updateUserTheme } = userSlice.actions;
 
 export default userSlice.reducer;

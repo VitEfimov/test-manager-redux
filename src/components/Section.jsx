@@ -8,6 +8,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FcAcceptDatabase, FcDataRecovery, FcDatabase } from "react-icons/fc";
 import { ImMenu } from "react-icons/im";
 import { useClickOutside } from '../custom-hooks/ClickOut';
+import { MdDragIndicator } from "react-icons/md";
 
 import { Draggable } from '@hello-pangea/dnd';
 
@@ -185,6 +186,7 @@ const Section = ({ task, checked, destination, index }) => {
             <span className='section__task-icon' draggable><GrDrag className='section__task-icon__grdrag' />
 
             </span>
+            <span><MdDragIndicator /></span>
             <input className='section_task-checkbox'
               type="checkbox"
               checked={!!task.completed}
