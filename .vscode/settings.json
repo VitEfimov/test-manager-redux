@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "playwright-report"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask, deleteTask } from '../features/taskSlice';
+import { logout } from '../features/userSlice';
 import { MdDelete } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaTasks } from "react-icons/fa";
@@ -15,7 +16,7 @@ import { ImMenu4, ImMenu3 } from "react-icons/im";
 
 
 const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
-
+    const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const user = useSelector(state => state.userReducer.user || []);
     const handleNavigation = (page) => {
@@ -68,7 +69,7 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
                     <button className="nav-button settings" onClick={() => handleNavigation('Settings')}>
                         <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
                     </button>
-                    <button className="nav-button " onClick={() => handleNavigation('Logout')} disabled>
+                    <button className="nav-button " onClick={() => dispatch(logout())}>
                         <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span>
                     </button>
                     </div>
