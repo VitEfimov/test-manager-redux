@@ -1,5 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchTasks } from './features/taskSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header'
 import Pomodoro from './components/Pomodoro';
@@ -7,6 +9,7 @@ import ListOfSections from './components/ListOfSections';
 import Dashboard from './components/Dashboard';
 import Settings from './components/Settings';
 import About from './components/About';
+import Login from './components/Login';
 
 function App() {
 
@@ -16,6 +19,16 @@ function App() {
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [title, setTitle] = useState('');
   const [sidebarView, setSidebarView] = useState(true);
+  
+  const dispatch = useDispatch();
+  const { isAuthenticated, token } = useSelector((state) => state.userReducer);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchTasks());
+    }
+  }, [dispatch, isAuthenticated, token]);
+
   const renderPage = (sidebarView) => {
     switch (currentPage) {
       case 'Board':
@@ -54,19 +67,16 @@ function App() {
   }, [isPomodoroActive, timeRemaining]);
 
 
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
   return (
 
 
     <main className='container'>
-      {sidebarView ? 
-        <Sidebar setCurrentPage={setCurrentPage}
-        setTitle={setTitle}
-        sidebarView={sidebarView}
-        setSidebarView={setSidebarView}/>
-        :
-        null}
-        <div className='main-content'>
-        <Header 
+      
+      <Header
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
         title={title}
@@ -75,9 +85,17 @@ function App() {
         isPomodoroActive={isPomodoroActive}
         timeRemaining={timeRemaining}
         isTimeOver={isTimeOver} />
+      <div className='main-content'>
+{sidebarView ?
+        <Sidebar setCurrentPage={setCurrentPage}
+          setTitle={setTitle}
+          sidebarView={sidebarView}
+          setSidebarView={setSidebarView} />
+        :
+        null}
         {renderPage(sidebarView)}
-        </div>
-      </main>
+      </div>
+    </main>
 
   );
 }

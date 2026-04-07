@@ -60,7 +60,7 @@ dayjs.extend(calendar)
 dayjs.extend(isoWeek)
 console.log("dayjs().isoWeek()",dayjs().isoWeek());
 
-dayjs().calendar(dayjs('2008-01-01'))
+dayjs().calendar(dayjs('2023-01-01'))
 dayjs().calendar(null, {
   sameDay: '[Today at] h:mm A', // The same day ( Today at 2:30 AM )
   nextDay: '[Tomorrow at] h:mm A', // The next day ( Tomorrow at 2:30 AM )
@@ -79,3 +79,24 @@ const FILTERS = {
 
 }
 export default FILTERS;
+
+
+
+
+// filters.js
+// import dayjs from 'dayjs';
+// import isoWeek from 'dayjs/plugin/isoWeek';
+// dayjs.extend(isoWeek);
+
+// const now = dayjs();
+
+// export const FILTERS = {
+//   now,
+//   startOfToday: now.startOf('day'),
+//   endOfToday: now.endOf('day'),
+//   startOfTomorrow: now.add(1, 'day').startOf('day'),
+//   endOfThisWeek: now.endOf('isoWeek'),            // end of current iso-week
+//   startOfNextWeek: now.add(1, 'week').startOf('isoWeek'),
+//   endOfNextWeek: now.add(1, 'week').endOf('isoWeek'),
+//   startOfLater: now.add(1, 'week').endOf('isoWeek').add(1, 'day').startOf('day')
+// };

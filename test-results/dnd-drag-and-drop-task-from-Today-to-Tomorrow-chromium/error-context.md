@@ -1,0 +1,69 @@
+# Page snapshot
+
+```yaml
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - paragraph
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - heading "New User" [level=2] [ref=e8]
+          - paragraph [ref=e9]: some@gmail.com
+          - img [ref=e11]
+        - img [ref=e15]
+        - button [ref=e18] [cursor=pointer]:
+          - img [ref=e19]
+      - generic [ref=e22]:
+        - generic [ref=e24]:
+          - paragraph [ref=e25]: Add settings
+          - paragraph [ref=e26]: to display weather
+        - img [ref=e28]
+  - generic [ref=e31]:
+    - navigation [ref=e32]:
+      - generic [ref=e34]:
+        - button "Dashboard" [ref=e35] [cursor=pointer]:
+          - generic [ref=e36]: Dashboard
+        - button "Board" [ref=e37] [cursor=pointer]:
+          - generic [ref=e38]: Board
+        - button "Pomodoro" [ref=e39] [cursor=pointer]:
+          - generic [ref=e40]: Pomodoro
+        - button "About" [ref=e41] [cursor=pointer]:
+          - generic [ref=e42]: About
+        - button "Settings" [ref=e43] [cursor=pointer]:
+          - generic [ref=e44]: Settings
+        - button "LogOut" [disabled] [ref=e45]:
+          - generic [ref=e46]: LogOut
+    - generic [ref=e48]:
+      - generic [ref=e50]:
+        - heading "Tasks" [level=2] [ref=e51]
+        - heading "Due date" [level=2] [ref=e52]
+        - heading "Priority" [level=2] [ref=e53]
+      - list [ref=e54]:
+        - heading "Today" [level=3] [ref=e55]
+        - listitem [ref=e56]:
+          - generic [ref=e57]:
+            - button [ref=e58]:
+              - img [ref=e59]
+            - checkbox [ref=e61]
+            - generic [ref=e62]: Add first task...
+            - button [ref=e63] [cursor=pointer]:
+              - img [ref=e64]
+          - paragraph [ref=e70] [cursor=pointer]: January 20, 2026
+          - button "High" [ref=e73] [cursor=pointer]
+          - img [ref=e75] [cursor=pointer]
+        - button "Add task..." [ref=e80] [cursor=pointer]
+      - list [ref=e81]:
+        - heading "Tomorrow" [level=3] [ref=e82]
+        - button "Add task..." [ref=e85] [cursor=pointer]
+      - list [ref=e86]:
+        - heading "On this week" [level=3] [ref=e87]
+        - button "Add task..." [ref=e90] [cursor=pointer]
+      - list [ref=e91]:
+        - heading "On next week" [level=3] [ref=e92]
+        - button "Add task..." [ref=e95] [cursor=pointer]
+      - list [ref=e96]:
+        - heading "Later" [level=3] [ref=e97]
+        - button "Add task..." [ref=e100] [cursor=pointer]
+      - list [ref=e101]:
+        - heading "Completed" [level=3] [ref=e102]
+```

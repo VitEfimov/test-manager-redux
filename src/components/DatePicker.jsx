@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 
 const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => {
   const [previewDate, setPreviewDate] = useState(currentDate ? new Date(currentDate) : new Date());
 
   const handleDayClick = (day) => {
-    // Set preview date without applying it yet
     setPreviewDate(day);
   };
 
   const handleSetDate = () => {
-    // Apply the preview date when Set button is clicked
     handleDateSelection(previewDate);
+    
     setShowDatePicker(false);
   };
 
   const handleCancel = () => {
-    // Cancel and close without applying changes
     setShowDatePicker(false);
+    // setShowDatePicker(!setShowDatePicker);
+    console.log("Cancel clicked!");
   };
 
+  const dayPickerRef = useRef(null)
+
+  useClickOutside(dayPickerRef, () => setShowDatePicker(false))
+
   return (
-    <div className="date-picker-container">
+    <div ref={dayPickerRef} className="date-picker-container">
       <DayPicker
         className='date__picker'
         selected={previewDate}
@@ -52,3 +57,4 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
 };
 
 export default DatePicker;
+

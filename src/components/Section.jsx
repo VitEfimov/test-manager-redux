@@ -1,12 +1,16 @@
 import React from 'react'
 import { MdDelete } from "react-icons/md";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FcAcceptDatabase, FcDataRecovery, FcDatabase  } from "react-icons/fc";
+import { FcAcceptDatabase, FcDataRecovery, FcDatabase } from "react-icons/fc";
 import { ImMenu } from "react-icons/im";
+import { useClickOutside } from '../custom-hooks/ClickOut';
+import { MdDragIndicator } from "react-icons/md";
+
+import { Draggable } from '@hello-pangea/dnd';
 
 
 import { GrDrag } from "react-icons/gr";
@@ -16,22 +20,27 @@ import Description from './Description';
 import { TfiLayoutMenuV } from "react-icons/tfi";
 import ReactDatePicker from './ReactDatePicker';
 
+
+
 dayjs.extend(isoWeek);
-const Section = ({ task, checked, destination }) => {
+const Section = ({ task, checked, destination, index, isDraggable = true }) => {
 
   const dispatch = useDispatch();
   const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
+  const [taskTime, setTaskTime] = useState(task.time || '')
   const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
   // const [selectedDate, setSelectedDate] = useState(dayjs(task.completionDate));
   const [selectedDate, setSelectedDate] = useState(task.completionDate ? new Date(task.completionDate) : new Date());
   const [checkboxChecked, setCheckboxChecked] = useState(task.completed);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  console.log(showDatePicker);
+
 
   const handleSaveChanges = () => {
-    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString() }));
+    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString(), time: taskTime }));
   };
 
   const handleCheckbox = () => {
@@ -105,17 +114,28 @@ const Section = ({ task, checked, destination }) => {
     // if (showDatePicker === false) {
     //   setShowDatePicker(true);
     // }else{setShowDatePicker(false);}
-    setShowDatePicker(true);
+    // setShowDatePicker(!showDatePicker);
+    // if (showDatePicker == true){
+    //   setShowDatePicker(false)
+    // }
+    // setShowDatePicker(true)
+    setShowDatePicker(prev => !prev);
   }
 
   const handleDateSelection = (date) => {
     const isoDate = dayjs(date).toISOString();
-    setSelectedDate(date); // Keep it as native Date
+    setSelectedDate(date);
     dispatch(updateTask({
       taskId: task.id,
       completionDate: isoDate,
     }));
   };
+
+  const handleTimeChange = (e) => {
+    setTaskTime(e.target.value);
+    dispatch(updateTask({ taskId: task.id, time: e.target.value }))
+
+  }
 
   // const handleDateSelection = (date) => {
   //   setSelectedDate(dayjs(date));
@@ -132,24 +152,82 @@ const Section = ({ task, checked, destination }) => {
       handleInputBlur();
     }
   };
+
+
+  const [openModalTaskId, setOpenModalTaskId] = useState(null);
+  const [openPopup, setOpenPopup] = useState(null)
   const [modal, setModal] = useState(false)
-  const handleModal = () => { setModal(!modal); }
+  const handleModal = () => {
+    if (modal === true) {
+      setModal(false)
+      setModal(true)
+    }
+    setModal(!modal);
+  }
 
-  return (
-    <li className={`section__task ${task.completed ? 'completed-task' : ''}`}>
+  const handleModalOpt = () => {
+    setOpenModalTaskId(openPopup === 'description' ? null : 'description')
+
+  }
+
+  // console.log("rendering Section:", task.id, task.completionDate);
+
+  const priorityRef = useRef(null)
+
+  useClickOutside(priorityRef, () => setTaskPrioritySelect(false))
+
+
+
+  const renderContent = (provided) => (
+    <li
+      className={`section__task ${task.completed ? 'completed-task' : ''}`}
+      ref={provided?.innerRef}
+      {...provided?.draggableProps}
+      // {...provided?.dragHandleProps}
+    >
       <div className='section__task-name'>
-        <span className='section__task-icon' draggable><GrDrag className='section__task-icon__grdrag' />
+        <span
+          className='section__task-icon'
+          {...provided?.dragHandleProps}
 
+        >
+          <GrDrag className='section__task-icon__grdrag' />
         </span>
         <input className='section_task-checkbox'
           type="checkbox"
-          checked={task.completed}
+          checked={!!task.completed}
           onChange={handleCheckbox}
         />
         {editingTaskName && !task.completed ? (
           <input
             className='section__task-input'
-            value={taskName}
+            value={taskName ?? ""}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyPress={handleKeyPress}
+            autoFocus
+            style={{ verticalAlign: 'middle' }} />
+        ) : (
+          <label
+            className='section__task-label'
+            htmlFor="section__task-name"
+            onClick={handleTaskNameChange}
+            style={{ lineHeight: 'normal' }}
+          >
+            {task.name || taskName}
+          </label>
+        )}
+
+        {/* <span><MdDragIndicator /></span>
+        <input className='section_task-checkbox'
+          type="checkbox"
+          checked={!!task.completed}
+          onChange={handleCheckbox}
+        />
+        {editingTaskName && !task.completed ? (
+          <input
+            className='section__task-input'
+            value={taskName ?? ""}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             onKeyPress={handleKeyPress}
@@ -164,12 +242,11 @@ const Section = ({ task, checked, destination }) => {
           >
             {task.name || taskName}
           </label>
-        )}
-
-        {task.description.text?(
+        )} */}
+        {task.description.text ? (
           <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
           </button>
-        ):(
+        ) : (
           <button className='section__task-name-description' onClick={handleModal}><FcDatabase />
 
           </button>
@@ -192,7 +269,9 @@ const Section = ({ task, checked, destination }) => {
         }
       </div>
 
-      <div className='section__task-date' onClick={handleDatePicker}>
+      {/* <div className='section__task-date' onClick={handleDatePicker}> */}
+      <div className='section__task-date'>
+
         {
           showDatePicker && !task.completed ? (
             <DatePicker
@@ -201,28 +280,14 @@ const Section = ({ task, checked, destination }) => {
               currentDate={selectedDate}
             />
           ) : (
-            <p>{dayjs(selectedDate).format('MMMM D, YYYY')}</p>
+            <p onClick={handleDatePicker}>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
+            // <p>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
+
           )
         }
       </div>
-      {/* <div className='section__task-date' onClick={handleDatePicker} >
-        {
-          showDatePicker &&
-            !task.completed
-            ?
-            // <ReactDatePicker
-            // handleDateSelection={handleDateSelection}
-            // setShowDatePicker={setShowDatePicker}/>
-            <DatePicker
-              handleDateSelection={handleDateSelection}
-              setShowDatePicker={setShowDatePicker}
-            />
-            :
-            <p>
-              {dayjs(task.completionDate).format('MMMM D, YYYY')}
-            </p>}
-      </div> */}
-      <div className='section__task-priority'>
+
+      <div ref={priorityRef} className='section__task-priority'>
         {taskPrioritySelect && !task.completed ? (
           <div className='section__task-priority-select'>
             {['Low', 'Medium', 'High'].map((option) => (
@@ -263,6 +328,16 @@ const Section = ({ task, checked, destination }) => {
         <MdDelete onClick={handleDeleteTask} />
       </div>
     </li>
+  );
+
+  if (!isDraggable) {
+    return renderContent();
+  }
+
+  return (
+    <Draggable draggableId={task.id.toString()} index={typeof index === 'number' ? index : 0}>
+      {(provided) => renderContent(provided)}
+    </Draggable>
   )
 }
 

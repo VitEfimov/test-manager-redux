@@ -1,11 +1,13 @@
 import React from 'react'
 import dayjs from 'dayjs';
 import { MdDelete } from "react-icons/md";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTask } from '../features/taskSlice';
 import { PriorotyDropdown } from './ui-components/PriorotyDropdown';
 import DatePicker from './DatePicker';
+import { useClickOutside } from '../custom-hooks/ClickOut';
+import { SiTrueup } from 'react-icons/si';
 
 
 const AddTask = ({ date }) => {
@@ -94,10 +96,12 @@ const AddTask = ({ date }) => {
         setTaskPrioritySelect(false);
     };
 
-
+    const addTaskFormRef = useRef(null)
+    useClickOutside(addTaskFormRef, () => setAddTaskForm(false))
+    
 
     return (
-        <div className='add-task'>
+        <div className='add-task' ref={addTaskFormRef}>
             {addTaskForm &&
                 <div className='section__task add-task'>
                     <div className='section__task-name add-task'>
@@ -119,7 +123,9 @@ const AddTask = ({ date }) => {
                                 if (e.key === 'Enter') {
                                     handleAddTask();
                                 }
-                            }}
+                            }
+                            }
+                            autoFocus
                         />
                     </div>
                     <div className='section__task-date add-task'>

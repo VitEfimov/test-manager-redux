@@ -24,13 +24,13 @@ const loadFromLocalStoragePomodoro = () => {
       localStorage.setItem('pomodoro', JSON.stringify(defaultPomodoro));
       return defaultPomodoro;
     }
-    
+
     console.log('Loading saved Pomodoro data:', savedData);
-    
+
     // Ensure all required properties exist and are valid
     if (savedData[0]) {
       const pomodoro = savedData[0];
-      
+
       // Ensure intervalCount is always an object
       if (typeof pomodoro.intervalCount !== 'object') {
         console.log('Fixing invalid intervalCount:', pomodoro.intervalCount);
@@ -40,7 +40,7 @@ const loadFromLocalStoragePomodoro = () => {
           passed: 0,
         };
       }
-      
+
       // Ensure all time values exist and are valid
       if (!pomodoro.initialTime || pomodoro.initialTime <= 0) {
         console.log('Fixing invalid initialTime:', pomodoro.initialTime);
@@ -54,18 +54,18 @@ const loadFromLocalStoragePomodoro = () => {
         console.log('Fixing invalid breakInterval:', pomodoro.breakInterval);
         pomodoro.breakInterval = DEFAULT_BREAK_TIME;
       }
-      
+
       // Reset progress and passed when loading from storage
       pomodoro.progress = 0;
       pomodoro.passed = 0;
       pomodoro.isActive = false;
       pomodoro.isBreak = false;
-      
+
       // Save the corrected data back to localStorage
       localStorage.setItem('pomodoro', JSON.stringify(savedData));
       console.log('Saved corrected Pomodoro data:', savedData);
     }
-    
+
     return savedData;
   } catch (error) {
     console.error('Error loading Pomodoro data from localStorage:', error);
@@ -102,19 +102,28 @@ export const pomodoroSlice = createSlice({
         state.pomodoro[0].breakInterval = savedData[0].breakInterval;
         state.pomodoro[0].intervalCount = savedData[0].intervalCount;
       }
-      
+
       // Reset only the timer state
       state.pomodoro[0].isActive = false;
       state.pomodoro[0].time = state.pomodoro[0].initialTime;
       state.pomodoro[0].isBreak = false;
       state.pomodoro[0].intervalCount.progress = 0;
       state.pomodoro[0].intervalCount.passed = 0;
-      
+
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
     },
+    // updateTime: (state, action) => {
+    //   // This is for updating the current time during countdown
+    //   state.pomodoro[0].time = action.payload;
+    //   localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
+    // },
     updateTime: (state, action) => {
-      // This is for updating the current time during countdown
       state.pomodoro[0].time = action.payload;
+
+      const initial = state.pomodoro[0].initialTime;
+      state.pomodoro[0].intervalCount.progress =
+        100 - Math.round((action.payload / initial) * 100);
+
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
     },
     toggleBreak: (state) => {
@@ -156,12 +165,12 @@ export const pomodoroSlice = createSlice({
       // Ensure intervalCount is an object
       if (typeof state.pomodoro[0].intervalCount !== 'object') {
         state.pomodoro[0].intervalCount = {
-          count: 4,
+          count: 5,
           progress: 0,
           passed: 0,
         };
       }
-      
+
       // Only increment if we haven't completed all intervals
       if (state.pomodoro[0].intervalCount.passed < state.pomodoro[0].intervalCount.count) {
         state.pomodoro[0].intervalCount.passed += 1;
