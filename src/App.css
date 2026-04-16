@@ -347,7 +347,7 @@ border-radius: 10px;}
   color: var(--dark-font-color-white);
   box-shadow: none;
   border: none;
-  font-size: calc(3vw + 1vmin);
+  font-size: calc(2vw + 1vmin);
   cursor: pointer;
   width: calc(10vw + 1vmin);
 }
@@ -359,7 +359,7 @@ border-radius: 10px;}
   color: var(--dark-font-color-white);
   box-shadow: none;
   border: none;
-  font-size: calc(3vw + 1vmin);
+  font-size: calc(2vw + 1vmin);
   cursor: pointer;
   width: calc(10vw + 1vmin);
 }
@@ -1673,7 +1673,9 @@ padding: 5dvh;
   .nav-button>.pomodoro {
     display: none;
   }
-
+  .pomodoro {
+    display: none;
+  }
   .pomodoro__container-element-container {
     flex-direction: column;
 
