@@ -26,5 +26,13 @@ export default async function handler(req, res) {
 
   const token = createToken(user);
 
-  res.status(201).json({ token });
+  const { serialize } = require('cookie');
+  res.setHeader('Set-Cookie', serialize('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/'
+  }));
+
+  res.status(201).json({ email });
 }

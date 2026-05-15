@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks } from './features/taskSlice';
+import { checkAuth } from './features/userSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header'
 import Pomodoro from './components/Pomodoro';
@@ -21,13 +22,17 @@ function App() {
   const [sidebarView, setSidebarView] = useState(true);
   
   const dispatch = useDispatch();
-  const { isAuthenticated, token } = useSelector((state) => state.userReducer);
+  const { isAuthenticated, loading } = useSelector((state) => state.userReducer);
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchTasks());
     }
-  }, [dispatch, isAuthenticated, token]);
+  }, [dispatch, isAuthenticated]);
 
   const renderPage = (sidebarView) => {
     switch (currentPage) {
@@ -66,6 +71,10 @@ function App() {
     return () => clearInterval(intervalId);
   }, [isPomodoroActive, timeRemaining]);
 
+
+  if (loading && !isAuthenticated) {
+    return <div>Loading...</div>; // Prevent flash of login screen while checking auth
+  }
 
   if (!isAuthenticated) {
     return <Login />;

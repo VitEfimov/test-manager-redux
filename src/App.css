@@ -557,8 +557,20 @@ border-radius: 10px;}
   /* justify-content: center; */
   align-items: center;
   width: 100%;
-  /* gap: 20%; */
-  /* margin: auto; */
+  position: relative;
+  /* Create positioning context for the row */
+}
+
+/* Elevate hovered row slightly so its own hover effects work */
+.section__task:hover {
+  z-index: 40;
+}
+
+/* Elevate the active row's z-index much higher so its dropdowns cover subsequent rows AND hovered rows */
+.section__task:focus-within,
+.section__task:has(.section__task-priority-select),
+.section__task:has(.date-picker-container) {
+  z-index: 60;
 }
 
 
@@ -723,7 +735,7 @@ input {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0);
   width: 100%;
-  height: 100%;
+  height: 110%;
   pointer-events: all;
   z-index: 11;
   position: absolute;
@@ -925,6 +937,8 @@ button[type='submit']:hover {
   user-select: none;
   /* font-size: calc(7px + 1vmin); */
   width: 15dvw;
+  position: relative;
+  z-index: 20;
 }
 
 .date__picker {
@@ -1053,7 +1067,8 @@ button[type='submit']:hover {
   /* font-size: calc(7px + 1vmin); */
   width: 8dvw;
   padding-left: 1dvw;
-
+  position: relative;
+  z-index: 10;
 }
 
 /*   grid-area: section__task-date;
@@ -1108,6 +1123,10 @@ button[type='submit']:hover {
 
 .section__task-priority-select {
   position: absolute;
+  top: 0;
+  /* Align to the top of the parent */
+  left: 10px;
+  /* Adjust horizontal offset if needed */
   width: 100px;
   height: fit-content;
   display: flex;
@@ -1115,9 +1134,9 @@ button[type='submit']:hover {
   margin: 5px;
   background: var(--dark-background-color-sidebar);
   border-radius: 10px;
-  z-index: 1;
+  z-index: 10;
+  /* Make sure it stays above other tasks */
   animation: slideInRight 0.5s ease-in-out forwards;
-
 }
 
 .section__task-priority>.add__task-btn {
@@ -1673,9 +1692,11 @@ padding: 5dvh;
   .nav-button>.pomodoro {
     display: none;
   }
+
   .pomodoro {
     display: none;
   }
+
   .pomodoro__container-element-container {
     flex-direction: column;
 

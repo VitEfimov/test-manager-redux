@@ -1,49 +1,48 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const loadTokenFromSessionStorage = () => sessionStorage.getItem('token');
+import axios from 'axios';
+
 const loadThemeFromLocalStorage = () => {
     return localStorage.getItem('theme') === 'dark' || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 };
 
-export const loginUser = createAsyncThunk('user/login', async ({ email, password }, thunkAPI) => {
+export const checkAuth = createAsyncThunk('user/checkAuth', async (_, thunkAPI) => {
     try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
-        if (!response.ok) {
-            return thunkAPI.rejectWithValue(data.message);
-        }
-        sessionStorage.setItem('token', data.token);
-        return data.token;
+        const response = await axios.get('/api/auth/me', { withCredentials: true });
+        return response.data;
     } catch (err) {
-        return thunkAPI.rejectWithValue(err.message);
+        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+    }
+});
+
+export const loginUser = createAsyncThunk('user/login', async ({ email, password, rememberMe }, thunkAPI) => {
+    try {
+        const response = await axios.post('/api/auth/login', { email, password, rememberMe }, { withCredentials: true });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
     }
 });
 
 export const registerUser = createAsyncThunk('user/register', async ({ email, password }, thunkAPI) => {
     try {
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
-        if (!response.ok) {
-            return thunkAPI.rejectWithValue(data.message);
-        }
-        sessionStorage.setItem('token', data.token);
-        return data.token;
+        const response = await axios.post('/api/auth/register', { email, password }, { withCredentials: true });
+        return response.data;
     } catch (err) {
-        return thunkAPI.rejectWithValue(err.message);
+        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+    }
+});
+
+export const logoutUser = createAsyncThunk('user/logout', async (_, thunkAPI) => {
+    try {
+        await axios.post('/api/auth/logout', {}, { withCredentials: true });
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
     }
 });
 
 const initialState = {
-    token: loadTokenFromSessionStorage(),
-    isAuthenticated: !!loadTokenFromSessionStorage(),
+    isAuthenticated: false,
     loading: false,
     error: null,
     theme: loadThemeFromLocalStorage(),
@@ -54,8 +53,6 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            sessionStorage.removeItem('token');
-            state.token = null;
             state.isAuthenticated = false;
         },
         updateUserTheme: (state, action) => {
@@ -65,10 +62,18 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; })
-            .addCase(loginUser.fulfilled, (state, action) => {
+            .addCase(checkAuth.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(checkAuth.fulfilled, (state) => {
                 state.loading = false;
-                state.token = action.payload;
+                state.isAuthenticated = true;
+            })
+            .addCase(checkAuth.rejected, (state) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+            })
+            .addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(loginUser.fulfilled, (state) => {
+                state.loading = false;
                 state.isAuthenticated = true;
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -76,14 +81,16 @@ const userSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(registerUser.pending, (state) => { state.loading = true; state.error = null; })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.loading = false;
-                state.token = action.payload;
                 state.isAuthenticated = true;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+            })
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.isAuthenticated = false;
             });
     }
 });

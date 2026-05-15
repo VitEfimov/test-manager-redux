@@ -3,9 +3,11 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 const uri = process.env.MONGO_URI;
 if (!uri) {
@@ -26,9 +28,8 @@ client.connect().then(() => {
 const SECRET = process.env.JWT_SECRET || 'super_secret_dev_key';
 
 const verifyToken = (req, res, next) => {
-    const auth = req.headers.authorization || req.headers.Authorization;
-    if (!auth) return res.status(401).json({ message: 'No token provided' });
-    const token = auth.split(' ')[1];
+    const token = req.cookies?.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    if (!token) return res.status(401).json({ message: 'No token provided' });
     try {
         req.user = jwt.verify(token, SECRET);
         next();
@@ -46,7 +47,15 @@ app.post('/api/auth/register', async (req, res) => {
         const hashed = await bcrypt.hash(password, 10);
         const result = await db.collection('users').insertOne({ email, password: hashed });
         const token = jwt.sign({ userId: result.insertedId, email }, SECRET, { expiresIn: '7d' });
-        res.status(201).json({ token });
+
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        };
+        res.cookie('token', token, cookieOptions);
+
+        res.status(201).json({ email });
     } catch (e) {
         res.status(500).json({ message: 'Database Error' });
     }
@@ -54,18 +63,40 @@ app.post('/api/auth/register', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, rememberMe } = req.body;
         const user = await db.collection('users').findOne({ email });
         if (!user) return res.status(400).json({ message: 'Invalid credentials' });
         
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
         
-        const token = jwt.sign({ userId: user._id, email }, SECRET, { expiresIn: '7d' });
-        res.status(200).json({ token });
+        const jwtExpiry = rememberMe ? '7d' : '1d';
+        const token = jwt.sign({ userId: user._id, email }, SECRET, { expiresIn: jwtExpiry });
+
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        };
+
+        if (rememberMe) {
+            cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000;
+        }
+
+        res.cookie('token', token, cookieOptions);
+        res.status(200).json({ email: user.email });
     } catch (e) {
         res.status(500).json({ message: 'Database Error' });
     }
+});
+
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logged out successfully' });
+});
+
+app.get('/api/auth/me', verifyToken, (req, res) => {
+    res.status(200).json({ email: req.user.email });
 });
 
 app.get('/api/tasks', verifyToken, async (req, res) => {
