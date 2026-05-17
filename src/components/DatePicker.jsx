@@ -13,7 +13,7 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
 
   const handleSetDate = () => {
     handleDateSelection(previewDate);
-    
+
     setShowDatePicker(false);
   };
 
@@ -37,16 +37,20 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
         toYear={2090}
         mode='single'
         showOutsideDays
+        modifiersClassNames={{
+          today: 'today-date',
+          selected: 'my-selected'
+        }}
       />
       <div className="date-picker-controls">
-        <button 
-          className="date-picker-set-btn" 
+        <button
+          className="date-picker-set-btn"
           onClick={handleSetDate}
         >
           Set
         </button>
-        <button 
-          className="date-picker-cancel-btn" 
+        <button
+          className="date-picker-cancel-btn"
           onClick={handleCancel}
         >
           Cancel

@@ -5,13 +5,16 @@ import { ImMenu4, ImMenu3 } from "react-icons/im";
 import { useDispatch, useSelector } from 'react-redux';
 import { CgToggleSquare, CgToggleSquareOff } from "react-icons/cg";
 import { use } from 'react';
+import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
+import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
+
 
 const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView, currentPage }) => {
-  const user = useSelector(state => state.userReducer.user || []);
-  const [toggle, setToggle] = useState(user.theme)
+  const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
+  const theme = useSelector(state => state.userReducer.theme);
+  const [toggle, setToggle] = useState(theme)
 
   console.log('toggle=',toggle)
-  console.log('user=',user)
 
   // const handleToggle = () => {
   //   if (toggle === 'dark'){
@@ -32,18 +35,18 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
 
   return (
     <header className='header'>
-      <p>{user.name}</p>
       <header className='header__title'>
         <div className='header__title-content'>
           <section className='sidebar__header-userinfo'>
-            <h2>{user[0].name}</h2>
-            <p>{user[0].email}</p>
+            <h2>My Tasks</h2>
             <span><CgToggleSquare /></span>
           </section>
           <span><CgToggleSquare /></span>
           <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
             {sidebarView ?
-              <ImMenu4 />
+              // <ImMenu4 />
+              <CiSquareChevUp />
+
               :
               null
             }
@@ -53,7 +56,9 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
           {/* {currentPage=='Board'? */}
           {!sidebarView ?
             <button className='header__title-sidebar-view-btn-close' onClick={() => setSidebarView(!sidebarView)}>
-              <ImMenu3 />
+              {/* <ImMenu3 /> */}
+              <CiSquareChevDown />
+
             </button> : null}
         </div>
         {/* <span><CgToggleSquare />cdgfvbcv</span> */}

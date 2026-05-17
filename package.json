@@ -8,7 +8,17 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.16.1",
+    "bcryptjs": "^3.0.3",
+    "concurrently": "^9.2.1",
+    "cookie": "^1.1.1",
+    "cookie-parser": "^1.4.7",
+    "cross-env": "^10.1.0",
     "dayjs": "^1.11.10",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.1.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-datepicker": "^7.3.0",
@@ -21,11 +31,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start:react": "react-scripts start",
+    "start:server": "node backend/server.js",
+    "start": "concurrently \"npm run start:server\" \"npm run start:react\"",
+    "build": "cross-env CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -45,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.57.0"
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.9"
   }
 }
