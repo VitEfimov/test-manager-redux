@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks } from './features/taskSlice';
+import { checkAuth } from './features/userSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header'
 import Pomodoro from './components/Pomodoro';
@@ -10,6 +11,7 @@ import Dashboard from './components/Dashboard';
 import Settings from './components/Settings';
 import About from './components/About';
 import Login from './components/Login';
+import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
 
 function App() {
 
@@ -21,13 +23,44 @@ function App() {
   const [sidebarView, setSidebarView] = useState(true);
   
   const dispatch = useDispatch();
-  const { isAuthenticated, token } = useSelector((state) => state.userReducer);
+  const { isAuthenticated, loading } = useSelector((state) => state.userReducer);
+  const theme = useSelector((state) => state.themeReducer);
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchTasks());
     }
-  }, [dispatch, isAuthenticated, token]);
+  }, [dispatch, isAuthenticated]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    
+    // Helper to set or remove property
+    const setOrReset = (variable, value) => {
+      if (value) root.style.setProperty(variable, value);
+      else root.style.removeProperty(variable);
+    };
+
+    setOrReset('--dark-background-color-sidebar', theme.colors.sidebarBg);
+    setOrReset('--dark-background-color-main', theme.colors.mainBg);
+    setOrReset('--dark-background-color-header', theme.colors.headerBg);
+    setOrReset('--dark-font-color-white', theme.colors.textColor);
+    
+    // Font size
+    let fontCalc = 'calc(7px + 1vmin)';
+    if (theme.fontSize === 'small') fontCalc = 'calc(5px + 1vmin)';
+    if (theme.fontSize === 'big') fontCalc = 'calc(10px + 1vmin)';
+    root.style.setProperty('font-size', fontCalc);
+
+    // Columns
+    root.style.setProperty('--col-task-width', `${theme.columnWidths.taskName}dvw`);
+    root.style.setProperty('--col-due-width', `${theme.columnWidths.dueDate}dvw`);
+    root.style.setProperty('--col-priority-width', `${theme.columnWidths.priority}dvw`);
+  }, [theme]);
 
   const renderPage = (sidebarView) => {
     switch (currentPage) {
@@ -67,6 +100,10 @@ function App() {
   }, [isPomodoroActive, timeRemaining]);
 
 
+  if (loading && !isAuthenticated) {
+    return <div>Loading...</div>; // Prevent flash of login screen while checking auth
+  }
+
   if (!isAuthenticated) {
     return <Login />;
   }
@@ -95,6 +132,7 @@ function App() {
         null}
         {renderPage(sidebarView)}
       </div>
+      <ThemeSettingsSidebar />
     </main>
 
   );

@@ -1,0 +1,73 @@
+import { createSlice } from '@reduxjs/toolkit';
+
+const loadThemeState = () => {
+  try {
+    const serializedState = localStorage.getItem('customTheme');
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+const initialState = loadThemeState() || {
+  colors: {
+    sidebarBg: null, 
+    mainBg: null,    
+    textColor: null
+  },
+  fontSize: 'normal', // 'small', 'normal', 'big'
+  columnWidths: {
+    taskName: 55,
+    dueDate: 15,
+    priority: 10
+  },
+  isSettingsOpen: false
+};
+
+const themeSlice = createSlice({
+  name: 'theme',
+  initialState,
+  reducers: {
+    setThemeColor: (state, action) => {
+      const { key, value } = action.payload;
+      state.colors[key] = value;
+      localStorage.setItem('customTheme', JSON.stringify(state));
+    },
+    setFontSize: (state, action) => {
+      state.fontSize = action.payload;
+      localStorage.setItem('customTheme', JSON.stringify(state));
+    },
+    setColumnWidth: (state, action) => {
+      const { key, value } = action.payload;
+      state.columnWidths[key] = value;
+      localStorage.setItem('customTheme', JSON.stringify(state));
+    },
+    toggleSettingsOpen: (state, action) => {
+      if (action.payload !== undefined) {
+        state.isSettingsOpen = action.payload;
+      } else {
+        state.isSettingsOpen = !state.isSettingsOpen;
+      }
+    },
+    resetTheme: (state) => {
+      state.colors = {
+        sidebarBg: null,
+        mainBg: null,
+        textColor: null
+      };
+      state.fontSize = 'normal';
+      state.columnWidths = {
+        taskName: 55,
+        dueDate: 15,
+        priority: 10
+      };
+      localStorage.removeItem('customTheme');
+    }
+  }
+});
+
+export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, resetTheme } = themeSlice.actions;
+export default themeSlice.reducer;

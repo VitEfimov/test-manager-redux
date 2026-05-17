@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const client = await clientPromise;
   const db = client.db('task_manager');
 
-  const { email, password } = req.body;
+  const { email, password, rememberMe } = req.body;
 
   const user = await db.collection('users').findOne({ email });
 
@@ -24,5 +24,19 @@ export default async function handler(req, res) {
 
   const token = createToken(user);
 
-  res.status(200).json({ token });
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/'
+  };
+
+  if (rememberMe) {
+    cookieOptions.maxAge = 60 * 60 * 24 * 7; // 7 days
+  }
+
+  const { serialize } = require('cookie');
+  res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+
+  res.status(200).json({ email: user.email });
 }

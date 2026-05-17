@@ -1,24 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const getAuthHeaders = () => ({
-  'Content-Type': 'application/json',
-  Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-});
+import axios from 'axios';
 
 export const fetchTasks = createAsyncThunk('task/fetchTasks', async (_, thunkAPI) => {
-    const response = await fetch('/api/tasks', { headers: getAuthHeaders() });
-    if (!response.ok) return thunkAPI.rejectWithValue('Failed to fetch tasks');
-    return response.json();
+    const response = await axios.get('/api/tasks', { withCredentials: true });
+    return response.data;
 });
 
 export const addTaskAsync = createAsyncThunk('task/addTaskAsync', async (task, thunkAPI) => {
-    const response = await fetch('/api/tasks', {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(task),
-    });
-    if (!response.ok) return thunkAPI.rejectWithValue('Failed to add task');
-    return response.json();
+    const response = await axios.post('/api/tasks', task, { withCredentials: true });
+    return response.data;
 });
 
 export const updateTaskAsync = createAsyncThunk('task/updateTaskAsync', async (updateData, thunkAPI) => {
@@ -35,22 +26,13 @@ export const updateTaskAsync = createAsyncThunk('task/updateTaskAsync', async (u
     }
     payload.lastUpdatedDate = new Date().toISOString();
 
-    const response = await fetch(`/api/tasks/${taskId}`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload),
-    });
-    if (!response.ok) return thunkAPI.rejectWithValue('Failed to update task');
+    await axios.put(`/api/tasks/${taskId}`, payload, { withCredentials: true });
     
     return { taskId, payload };
 });
 
 export const deleteTaskAsync = createAsyncThunk('task/deleteTaskAsync', async (taskId, thunkAPI) => {
-    const response = await fetch(`/api/tasks/${taskId}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-    });
-    if (!response.ok) return thunkAPI.rejectWithValue('Failed to delete task');
+    await axios.delete(`/api/tasks/${taskId}`, { withCredentials: true });
     return taskId;
 });
 

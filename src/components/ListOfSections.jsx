@@ -9,6 +9,7 @@ import HeaderListOfSection from './HeaderListOfSection';
 import Sidebar from './Sidebar';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { updateTask } from '../features/taskSlice';
+import ColumnResizer from './ColumnResizer';
 
 
 dayjs.extend(isSameOrBefore);
@@ -16,6 +17,7 @@ dayjs.extend(isSameOrBefore);
 const ListOfSections = ({ sidebarView }) => {
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks || []);
+    const theme = useSelector(state => state.themeReducer);
     const [missedTasks, setMissedTasks] = useState(false);
 
 
@@ -160,9 +162,18 @@ const ListOfSections = ({ sidebarView }) => {
                             <button className="header__board-view-btn">Board</button>
                         </div>
                         <section className='header__board-sections'>
-                            <h2 className='header__board-sections-task-name'>Tasks</h2>
-                            <h2 className='header__board-sections-due-date'>Due date</h2>
-                            <h2 className='header__board-sections-priority'>Priority</h2>
+                            <h2 className='header__board-sections-task-name' style={{ position: 'relative' }}>
+                                Tasks
+                                <ColumnResizer columnKey="taskName" currentWidthDvw={theme.columnWidths.taskName} minWidth={15} />
+                            </h2>
+                            <h2 className='header__board-sections-due-date' style={{ position: 'relative' }}>
+                                Due date
+                                <ColumnResizer columnKey="dueDate" currentWidthDvw={theme.columnWidths.dueDate} minWidth={8} />
+                            </h2>
+                            <h2 className='header__board-sections-priority' style={{ position: 'relative' }}>
+                                Priority
+                                <ColumnResizer columnKey="priority" currentWidthDvw={theme.columnWidths.priority} minWidth={5} />
+                            </h2>
                         </section>
                     </header>
                     {/* <section className='section'> */}

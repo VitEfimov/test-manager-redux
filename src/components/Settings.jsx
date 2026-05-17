@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
 import { setBreakInterval, setIntervalCount, updateTime, setTime } from '../features/pomodoroSlice';
 import { logout } from '../features/userSlice';
+import { toggleSettingsOpen } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
 
@@ -128,9 +129,7 @@ const Settings = ({ setCurrentPage }) => {
             </i>
           </h3>
           <div className='settings__item' >
-            <label className='settings__item-label' disabled>Theme:</label>
-            <input type="text" style={{ backgroundColor: 'green', userSelect: 'none' }} value="TODO"
-            />
+            <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(toggleSettingsOpen(true))}>Customize Theme</button>
           </div>
         </div>
 

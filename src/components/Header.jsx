@@ -5,6 +5,9 @@ import { ImMenu4, ImMenu3 } from "react-icons/im";
 import { useDispatch, useSelector } from 'react-redux';
 import { CgToggleSquare, CgToggleSquareOff } from "react-icons/cg";
 import { use } from 'react';
+import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
+import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
+
 
 const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView, currentPage }) => {
   const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
@@ -41,7 +44,9 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
           <span><CgToggleSquare /></span>
           <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
             {sidebarView ?
-              <ImMenu4 />
+              // <ImMenu4 />
+              <CiSquareChevUp />
+
               :
               null
             }
@@ -51,7 +56,9 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
           {/* {currentPage=='Board'? */}
           {!sidebarView ?
             <button className='header__title-sidebar-view-btn-close' onClick={() => setSidebarView(!sidebarView)}>
-              <ImMenu3 />
+              {/* <ImMenu3 /> */}
+              <CiSquareChevDown />
+
             </button> : null}
         </div>
         {/* <span><CgToggleSquare />cdgfvbcv</span> */}
