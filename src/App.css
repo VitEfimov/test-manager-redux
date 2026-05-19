@@ -656,10 +656,11 @@ border-radius: 10px;}
 }
 
 input {
-  accent-color: var(--dark-font-color-white);
+  accent-color: var(--dark-font-color-black);
   border: none;
   box-sizing: none;
   outline: none;
+  color: black;
 }
 
 
@@ -923,6 +924,7 @@ input[type='password'] {
   background-color: var(--background-color-main);
   -moz-appearance: textfield;
   color: var(--dark-font-color-black);
+  color: black;
 }
 
 textarea {
@@ -1250,7 +1252,7 @@ button[type='submit']:hover {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  color: var(--dark-font-color-grey);
+  color: var(--dark-background-color-main);
   transition: all 0.15s ease-in-out;
   /* transition: top 0.5s ease; */
 
