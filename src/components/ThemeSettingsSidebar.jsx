@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setThemeColor, setFontSize, toggleSettingsOpen, resetTheme } from '../features/themeSlice';
+import { setThemeColor, setFontSize, toggleSettingsOpen, resetTheme, setDefaultTaskLimit } from '../features/themeSlice';
 
 const ThemeSettingsSidebar = () => {
   const dispatch = useDispatch();
@@ -73,6 +73,25 @@ const ThemeSettingsSidebar = () => {
             <option value="normal">Normal</option>
             <option value="big">Big</option>
           </select>
+        </div>
+
+        <div className="theme-settings-group">
+          <label>Task Display Limit</label>
+          <input 
+            type="number" 
+            min="1"
+            value={theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10} 
+            onChange={(e) => dispatch(setDefaultTaskLimit(e.target.value))}
+            style={{ 
+              width: '60px', 
+              padding: '5px', 
+              borderRadius: '4px', 
+              border: '1px solid var(--dark-background-color-sidebar)', 
+              background: 'transparent', 
+              color: 'inherit',
+              textAlign: 'center'
+            }}
+          />
         </div>
 
         <div className="theme-settings-footer">

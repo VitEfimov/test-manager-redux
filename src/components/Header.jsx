@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Weather from './Weather';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { ImMenu4, ImMenu3 } from "react-icons/im";
@@ -7,50 +7,34 @@ import { CgToggleSquare, CgToggleSquareOff } from "react-icons/cg";
 import { use } from 'react';
 import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
 import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
+import { updateUserTheme } from '../features/userSlice';
 
 
-const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView, currentPage }) => {
+const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView, currentPage, showWeather }) => {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
   const theme = useSelector(state => state.userReducer.theme);
-  const [toggle, setToggle] = useState(theme)
-
-  console.log('toggle=',toggle)
-
-  // const handleToggle = () => {
-  //   if (toggle === 'dark'){
-  //     setToggle('light')
-  //   }else{
-  //     setToggle('dark')
-  //   }
-  // }
 
   const handleToggle = () => {
-    setToggle(prev => !prev);
-    // if (toggle === true){
-    //   setToggle(false)
-    // }else{
-    //   setToggle(true)
-    // }
-  }
+    dispatch(updateUserTheme(!theme));
+  };
 
   return (
-    <header className='header'>
+    <header className={`header ${showWeather ? 'weather-active' : 'weather-inactive'}`}>
+      {showWeather ?
+        <Weather />
+        : null}
       <header className='header__title'>
         <div className='header__title-content'>
-          <section className='sidebar__header-userinfo'>
+          {/* <section className='sidebar__header-userinfo'>
             <h2>My Tasks</h2>
             <span><CgToggleSquare /></span>
-          </section>
-          <span><CgToggleSquare /></span>
-          <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
-            {sidebarView ?
-              // <ImMenu4 />
+          </section> */}
+          {sidebarView ? (
+            <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
               <CiSquareChevUp />
-
-              :
-              null
-            }
-          </button>
+            </button>
+          ) : null}
           {/* <span><CgToggleSquare />cdgfvbcv</span> */}
           {/* <h1>{title}</h1> */}
           {/* {currentPage=='Board'? */}
@@ -62,17 +46,17 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
             </button> : null}
         </div>
         {/* <span><CgToggleSquare />cdgfvbcv</span> */}
-        <div>
-        <Weather />
-        {toggle === true ?
-        <span onClick={()=>handleToggle()}><CgToggleSquare /></span>
-        :
-        <span onClick={()=>handleToggle()}><CgToggleSquareOff /></span>
-      }
-        
+        <div className='header__title-sidebar-theme-toggle'>
+          {/* <Weather /> */}
+          {theme === true ?
+            <span className='header__title-sidebar-theme-toggle dark' onClick={() => handleToggle()}><CgToggleSquare /></span>
+            :
+            <span className='header__title-sidebar-theme-toggle light' onClick={() => handleToggle()}><CgToggleSquareOff /></span>
+          }
+
         </div>
       </header>
-      
+
       {isPromodoroActive && !isTimeOver && (
         <div className="promodoro-banner" style={{ background: 'red' }}>
           Time Remaining: {timeRemaining}
@@ -83,7 +67,7 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
           Time's Up!
         </div>
       )}
-      
+
     </header>
   );
 }

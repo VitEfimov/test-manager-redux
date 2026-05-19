@@ -20,6 +20,56 @@ const ListOfSections = ({ sidebarView }) => {
     const theme = useSelector(state => state.themeReducer);
     const [missedTasks, setMissedTasks] = useState(false);
 
+    const [expandedSections, setExpandedSections] = useState({});
+
+    const toggleSection = (id) => {
+        setExpandedSections(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
+
+    const limit = theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10;
+
+    const renderSectionItems = (tasksList, sectionId) => {
+        const isExpanded = !!expandedSections[sectionId];
+        const displayTasks = isExpanded ? tasksList : tasksList.slice(0, limit);
+        return displayTasks.map((task, index) => (
+            <Section 
+                key={task.id} 
+                task={task} 
+                index={index} 
+                checked={sectionId === 'completed'}
+            />
+        ));
+    };
+
+    const renderExpandCollapseButton = (tasksList, sectionId) => {
+        if (tasksList.length <= limit) return null;
+        const isExpanded = !!expandedSections[sectionId];
+        return (
+            <div className="section__expand-collapse-container">
+                <button 
+                    type="button" 
+                    className="section__expand-collapse-btn" 
+                    onClick={() => toggleSection(sectionId)}
+                >
+                    {isExpanded ? (
+                        <>
+                            <span>Show Less</span>
+                            <i className="fa-solid fa-chevron-up"></i>
+                        </>
+                    ) : (
+                        <>
+                            <span>Show All ({tasksList.length})</span>
+                            <i className="fa-solid fa-chevron-down"></i>
+                        </>
+                    )}
+                </button>
+            </div>
+        );
+    };
+
 
     const [open, setOpen] = useState(false);
     let openRef = useRef();
@@ -75,6 +125,25 @@ const ListOfSections = ({ sidebarView }) => {
         }
         return dateA - dateB;
     });
+
+    const missedFiltered = sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
+    const todayFiltered = sortedTasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
+    const tomorrowFiltered = sortedTasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day') && !task.completed);
+    const onThisWeekFiltered = sortedTasks.filter(task =>
+        dayjs(task.completionDate).isAfter(dayjs().add(1, 'day'), 'day') &&
+        dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day')
+        && !task.completed
+    );
+    const onNextWeekFiltered = sortedTasks.filter(task =>
+        !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
+        dayjs(task.completionDate).isAfter(FILTERS['on-this-week'], 'day')
+        && dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day')
+        && !task.completed
+    );
+    const laterFiltered = sortedTasks.filter(task =>
+        dayjs(task.completionDate).isAfter(FILTERS['on-next-week'], 'day') && !task.completed
+    );
+    const completedFiltered = sortedTasks.filter(task => task.completed);
 
     const onDragEnd = (result) => {
         const { destination, source, draggableId } = result;
@@ -195,17 +264,9 @@ const ListOfSections = ({ sidebarView }) => {
 
                                     </div>
                                     <div className='section__line-top'></div>
-                                    {sortedTasks
-                                        .filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed)
-                                        .map((task, index) => (
-                                            <Section
-                                                key={task.id}
-                                                task={task}
-                                                checked={false}
-                                                index={index}
-                                            />
-                                        ))}
+                                    {renderSectionItems(missedFiltered, 'missed')}
                                     {provided.placeholder}
+                                    {renderExpandCollapseButton(missedFiltered, 'missed')}
                                 </ul>
                             )}
                         </Droppable>
@@ -219,12 +280,9 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <h3>Today</h3>
                                 <div className='section__line-top'></div>
-                                {sortedTasks
-                                    .filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed)
-                                    .map((task, index) => (
-                                        <Section key={task.id} task={task} index={index} />
-                                    ))}
+                                {renderSectionItems(todayFiltered, 'today')}
                                 {provided.placeholder}
+                                {renderExpandCollapseButton(todayFiltered, 'today')}
                                 <AddTask date="today" />
                             </ul>
                         )}
@@ -238,13 +296,9 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <h3>Tomorrow</h3>
                                 <div className='section__line-top'></div>
-                                {sortedTasks
-                                    .filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day')
-                                        && !task.completed)
-                                    .map((task, index) => (
-                                        <Section key={task.id} task={task} index={index} />
-                                    ))}
+                                {renderSectionItems(tomorrowFiltered, 'tomorrow')}
                                 {provided.placeholder}
+                                {renderExpandCollapseButton(tomorrowFiltered, 'tomorrow')}
                                 <AddTask
                                     date="tomorrow"
                                 />
@@ -260,20 +314,9 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <h3>On this week</h3>
                                 <div className='section__line-top'></div>
-                                {sortedTasks
-                                    .filter(task =>
-                                        dayjs(task.completionDate).isAfter(dayjs().add(1, 'day'), 'day') &&
-                                        dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day')
-                                        && !task.completed
-                                    )
-                                    .map((task, index) => (
-                                        <Section
-                                            key={task.id}
-                                            task={task}
-                                            index={index}
-                                        />
-                                    ))}
+                                {renderSectionItems(onThisWeekFiltered, 'on-this-week')}
                                 {provided.placeholder}
+                                {renderExpandCollapseButton(onThisWeekFiltered, 'on-this-week')}
                                 <AddTask
                                     date="on-this-week"
                                 />
@@ -289,20 +332,9 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <h3>On next week</h3>
                                 <div className='section__line-top'></div>
-                                {sortedTasks
-                                    .filter(task =>
-                                        !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
-                                        dayjs(task.completionDate).isAfter(FILTERS['on-this-week'], 'day')
-                                        && dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day')
-                                        && !task.completed)
-                                    .map((task, index) => (
-                                        <Section
-                                            key={task.id}
-                                            task={task}
-                                            index={index}
-                                        />
-                                    ))}
+                                {renderSectionItems(onNextWeekFiltered, 'on-next-week')}
                                 {provided.placeholder}
+                                {renderExpandCollapseButton(onNextWeekFiltered, 'on-next-week')}
                                 <AddTask
                                     date="on-next-week"
                                 />
@@ -318,17 +350,9 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <h3>Later</h3>
                                 <div className='section__line-top'></div>
-                                {sortedTasks
-                                    .filter(task =>
-                                        dayjs(task.completionDate).isAfter(FILTERS['on-next-week'], 'day') && !task.completed)
-                                    .map((task, index) => (
-                                        <Section
-                                            key={task.id}
-                                            task={task}
-                                            index={index}
-                                        />
-                                    ))}
+                                {renderSectionItems(laterFiltered, 'later')}
                                 {provided.placeholder}
+                                {renderExpandCollapseButton(laterFiltered, 'later')}
                                 <AddTask
                                     date="later"
                                 />
@@ -344,16 +368,9 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <h3>Completed</h3>
                                 <div className='section__line-top'></div>
-                                {sortedTasks
-                                    .filter(task => task.completed).map((task, index) => (
-                                        <Section
-                                            key={task.id}
-                                            task={task}
-                                            checked={true}
-                                            index={index}
-                                        />
-                                    ))}
+                                {renderSectionItems(completedFiltered, 'completed')}
                                 {provided.placeholder}
+                                {renderExpandCollapseButton(completedFiltered, 'completed')}
                             </ul>
                         )}
                     </Droppable>

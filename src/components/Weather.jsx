@@ -53,7 +53,7 @@ const Weather = () => {
         </div>
     ) : (
       <div className="header__weather-info">
-        <p>Add settings</p><p>to display weather</p>
+        <p>Add settings to display weather</p>
       </div>
     )}
   </div>

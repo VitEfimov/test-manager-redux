@@ -21,10 +21,12 @@ function App() {
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [title, setTitle] = useState('');
   const [sidebarView, setSidebarView] = useState(true);
-  
+
   const dispatch = useDispatch();
-  const { isAuthenticated, loading } = useSelector((state) => state.userReducer);
+  const { isAuthenticated, loading, theme: userTheme } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer);
+  const [showWeather, setShowWeather] = useState(false);
+
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -37,8 +39,12 @@ function App() {
   }, [dispatch, isAuthenticated]);
 
   useEffect(() => {
+    document.documentElement.style.colorScheme = userTheme ? 'dark' : 'light';
+  }, [userTheme]);
+
+  useEffect(() => {
     const root = document.documentElement;
-    
+
     // Helper to set or remove property
     const setOrReset = (variable, value) => {
       if (value) root.style.setProperty(variable, value);
@@ -49,7 +55,7 @@ function App() {
     setOrReset('--dark-background-color-main', theme.colors.mainBg);
     setOrReset('--dark-background-color-header', theme.colors.headerBg);
     setOrReset('--dark-font-color-white', theme.colors.textColor);
-    
+
     // Font size
     let fontCalc = 'calc(7px + 1vmin)';
     if (theme.fontSize === 'small') fontCalc = 'calc(5px + 1vmin)';
@@ -79,7 +85,9 @@ function App() {
         return <About />;
       case 'Settings':
         return <Settings
-          setCurrentPage={setCurrentPage} />;
+          setCurrentPage={setCurrentPage}
+          showWeather={showWeather}
+          setShowWeather={setShowWeather} />;
       default:
         return <Dashboard />;
     }
@@ -112,7 +120,7 @@ function App() {
 
 
     <main className='container'>
-      
+
       <Header
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
@@ -121,15 +129,18 @@ function App() {
         setSidebarView={setSidebarView}
         isPomodoroActive={isPomodoroActive}
         timeRemaining={timeRemaining}
-        isTimeOver={isTimeOver} />
+        isTimeOver={isTimeOver}
+        showWeather={showWeather}
+        setShowWeather={setShowWeather}
+      />
       <div className='main-content'>
-{sidebarView ?
-        <Sidebar setCurrentPage={setCurrentPage}
-          setTitle={setTitle}
-          sidebarView={sidebarView}
-          setSidebarView={setSidebarView} />
-        :
-        null}
+        {sidebarView ?
+          <Sidebar setCurrentPage={setCurrentPage}
+            setTitle={setTitle}
+            sidebarView={sidebarView}
+            setSidebarView={setSidebarView} />
+          :
+          null}
         {renderPage(sidebarView)}
       </div>
       <ThemeSettingsSidebar />

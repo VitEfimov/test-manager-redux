@@ -81,9 +81,11 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   };
 
   const handleDeleteTask = () => {
-    dispatch(deleteTask({
-      taskId: task.id
-    }));
+    if (window.confirm(`Are you sure you want to delete the task "${task.taskname}"?`)) {
+      dispatch(deleteTask({
+        taskId: task.id
+      }));
+    }
   };
 
   const [editingTaskName, setEditingTaskName] = useState(false);

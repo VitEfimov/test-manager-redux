@@ -12,19 +12,21 @@ const loadThemeState = () => {
   }
 };
 
-const initialState = loadThemeState() || {
-  colors: {
+const loaded = loadThemeState();
+const initialState = {
+  colors: loaded?.colors || {
     sidebarBg: null, 
     mainBg: null,    
     textColor: null
   },
-  fontSize: 'normal', // 'small', 'normal', 'big'
-  columnWidths: {
+  fontSize: loaded?.fontSize || 'normal', // 'small', 'normal', 'big'
+  columnWidths: loaded?.columnWidths || {
     taskName: 55,
     dueDate: 15,
     priority: 10
   },
-  isSettingsOpen: false
+  defaultTaskLimit: loaded?.defaultTaskLimit !== undefined ? loaded.defaultTaskLimit : 10,
+  isSettingsOpen: loaded?.isSettingsOpen || false
 };
 
 const themeSlice = createSlice({
@@ -64,10 +66,15 @@ const themeSlice = createSlice({
         dueDate: 15,
         priority: 10
       };
+      state.defaultTaskLimit = 10;
       localStorage.removeItem('customTheme');
+    },
+    setDefaultTaskLimit: (state, action) => {
+      state.defaultTaskLimit = Math.max(1, Number(action.payload) || 1);
+      localStorage.setItem('customTheme', JSON.stringify(state));
     }
   }
 });
 
-export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, resetTheme } = themeSlice.actions;
+export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, resetTheme, setDefaultTaskLimit } = themeSlice.actions;
 export default themeSlice.reducer;

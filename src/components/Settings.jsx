@@ -7,7 +7,7 @@ import { toggleSettingsOpen } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
 
-const Settings = ({ setCurrentPage }) => {
+const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
   const weather = useSelector((state) => state.weatherReducer.weather);
   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
@@ -28,6 +28,10 @@ const Settings = ({ setCurrentPage }) => {
 
   const handleCityApi = (e) => {
     setNewApiKey(e.target.value);
+  };
+
+  const handleShowWeather = (e) => {
+    setShowWeather(e.target.checked);
   };
 
   const handleSetWorkInterval = (e) => {
@@ -53,17 +57,17 @@ const Settings = ({ setCurrentPage }) => {
   const fields = [
     { title: 'User information', description: 'Logout of your account' },
     // { title: 'Weather', description: 'Add city and API key for weather data, use freeAPI: api.openweathermap.org' },
-    { 
-      title: 'Weather', 
+    {
+      title: 'Weather',
       description: (
-          <p>
-              Add city and API key for weather data. Use free API: 
-              <a href="https://api.openweathermap.org" target="_blank" rel="noopener noreferrer">
-                  openweathermap
-              </a>
-          </p>
-      ) 
-  },
+        <p>
+          Add city and API key for weather data. Use free API:
+          <a href="https://api.openweathermap.org" target="_blank" rel="noopener noreferrer">
+            openweathermap
+          </a>
+        </p>
+      )
+    },
     { title: 'Promodoro', description: 'Customize pomodoro timer intervals' },
     { title: 'Other', description: 'You can change theme color' }
   ];
@@ -98,6 +102,10 @@ const Settings = ({ setCurrentPage }) => {
           <div className='settings__item'>
             <label className='settings__item-label'>API Key:</label>
             <input type="password" value={newApiKey} onChange={handleCityApi} />
+          </div>
+          <div className='settings__item'>
+            <label className='settings__item-label'>Show weather on board:</label>
+            <input className='settings__item-checkbox' type="checkbox" checked={showWeather} onChange={handleShowWeather} />
           </div>
         </div>
         <div className='settings__block'>
