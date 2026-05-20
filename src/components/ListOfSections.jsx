@@ -278,7 +278,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>Today</h3>
+                                <h3>Today ({dayjs().format('dddd')})</h3>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(todayFiltered, 'today')}
                                 {provided.placeholder}
@@ -294,7 +294,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>Tomorrow</h3>
+                                <h3>Tomorrow ({dayjs().add(1, 'day').format('dddd')})</h3>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(tomorrowFiltered, 'tomorrow')}
                                 {provided.placeholder}

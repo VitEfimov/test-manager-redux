@@ -964,13 +964,14 @@ button[type='submit']:hover {
 
 .section__task-date {
   grid-area: section__task-date;
-  padding-left: 1dvw;
+  /* padding-left: 1dvw; */
   align-self: center;
   cursor: pointer;
   user-select: none;
   width: var(--col-due-width);
   position: relative;
   z-index: 20;
+  width: var(--col-due-width);
 }
 
 .date__picker {
@@ -1824,6 +1825,7 @@ padding: 5dvh;
     width: 2vw;
     padding-right: 7vw;
     font-size: calc(15px + 1vmin);
+    display: none;
   }
 
   .section__task-delete-btn {
@@ -1914,7 +1916,7 @@ padding: 5dvh;
   .section__task-date {
     /* font-size: calc(7px + 1vmin); */
     padding-right: 2px;
-    width: calc(125px + 1vmin);
+    width: fit-content;
   }
 
   .section__task-priority {
@@ -1960,7 +1962,7 @@ padding: 5dvh;
   .dashboard__section {
     width: min-content;
     min-width: 150px;
-    max-height: 150px;
+    max-height: 100px;
 
     & h2 {
       /* font-size: calc(15px + 1vw); */
@@ -2386,4 +2388,12 @@ padding: 5dvh;
 .section__expand-collapse-btn i {
   font-size: 0.75rem;
   transition: transform 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .section__task-delete-btn,
+  .section__task-priority,
+  .section__task-icon {
+    display: none !important;
+  }
 }

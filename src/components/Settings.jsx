@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
 import { setBreakInterval, setIntervalCount, updateTime, setTime } from '../features/pomodoroSlice';
 import { logout } from '../features/userSlice';
-import { toggleSettingsOpen } from '../features/themeSlice';
+import { toggleSettingsOpen, setDateFormat } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
 
@@ -11,6 +11,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
   const weather = useSelector((state) => state.weatherReducer.weather);
   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
+  const theme = useSelector(state => state.themeReducer);
+  const dateFormat = theme.dateFormat || 'full';
+  
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
   const time = pomodoro[0].initialTime / 60; // Use initialTime instead of time
@@ -21,6 +24,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newWorkInterval, setNewWorkInterval] = useState(time);
   const [newBreakInterval, setNewBreakInterval] = useState(breakInterval);
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
+  const [newDateFormat, setNewDateFormat] = useState(dateFormat);
 
   const handleCityChange = (e) => {
     setNewCity(e.target.value);
@@ -51,6 +55,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setTime(newWorkInterval))
     dispatch(setBreakInterval(newBreakInterval))
     dispatch(setIntervalCount(newIntervalCount))
+    dispatch(setDateFormat(newDateFormat));
     setCurrentPage('Board');
   };
 
@@ -136,7 +141,28 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
               <InfomationIcon field={fields[3]} />
             </i>
           </h3>
-          <div className='settings__item' >
+          <div className='settings__item'>
+            <label className='settings__item-label'>Due Date Format:</label>
+            <select
+              style={{
+                padding: '8px',
+                borderRadius: '6px',
+                border: '1px solid var(--dark-font-color-grey)',
+                backgroundColor: 'var(--dark-background-color-sidebar)',
+                color: 'var(--dark-font-color-white)',
+                cursor: 'pointer',
+                outline: 'none',
+                width: '180px',
+                textAlign: 'center'
+              }}
+              value={newDateFormat}
+              onChange={(e) => setNewDateFormat(e.target.value)}
+            >
+              <option value="full">Full (MMMM D, YYYY)</option>
+              <option value="short">Short (MMM D)</option>
+            </select>
+          </div>
+          <div className='settings__item' style={{ marginTop: '1dvh' }}>
             <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(toggleSettingsOpen(true))}>Customize Theme</button>
           </div>
         </div>

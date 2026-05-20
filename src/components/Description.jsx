@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateTask } from '../features/taskSlice';
+import { updateTask, deleteTask } from '../features/taskSlice';
 import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 import ReactDOM from 'react-dom';
@@ -57,13 +57,40 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     setModal(false);
   };
 
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete the task "${formData.name}"?`)) {
+      dispatch(deleteTask({ taskId: task.id }));
+      setModal(false);
+    }
+  };
+
+  const handleAutoSave = () => {
+    const updatedTask = {
+      taskId: task.id,
+      name: formData.name,
+      priority: formData.priority,
+      completed: formData.completed,
+      completionDate: formData.completionDate,
+      time: formData.time,
+      description: {
+        text: formData.descriptionText,
+        img: formData.descriptionImg,
+        url: formData.descriptionUrl,
+      },
+    };
+    dispatch(updateTask(updatedTask));
+    setTaskName(formData.name);
+    setTaskPriority(formData.priority);
+    setModal(false);
+  };
+
   const descriptionRef = useRef(null);
-  useClickOutside(descriptionRef, () => setModal(false));
+  useClickOutside(descriptionRef, handleAutoSave);
 
   return ReactDOM.createPortal(
     <div className="description__modal">
       <div ref={descriptionRef} className="description__modal-content">
-        <span className="description__close" onClick={() => setModal(false)}>
+        <span className="description__close" onClick={handleAutoSave}>
           &times;
         </span>
         <form onSubmit={handleSubmit}>
@@ -90,10 +117,13 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
           <label>Completion Date:</label>
           <input
             className="description__input"
-            type="text"
+            type="date"
             name="completionDate"
-            value={dayjs(formData.completionDate).format('MMMM D, YYYY')}
-            disabled
+            value={formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : ''}
+            onChange={(e) => {
+              const newDate = e.target.value ? new Date(e.target.value).toISOString() : '';
+              setFormData({ ...formData, completionDate: newDate });
+            }}
           />
 
           <label>Time:</label>
@@ -110,7 +140,26 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
             onChange={handleChange}
           ></textarea>
 
-          <button type="submit">Submit</button>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+            <button type="submit" style={{ flex: 1 }}>Submit</button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              style={{
+                flex: 1,
+                backgroundColor: 'rgb(241, 81, 81)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '10px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s ease-in-out'
+              }}
+            >
+              Delete Task
+            </button>
+          </div>
         </form>
       </div>
     </div>,

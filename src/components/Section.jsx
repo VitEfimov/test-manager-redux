@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdDelete } from "react-icons/md";
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -26,6 +26,8 @@ dayjs.extend(isoWeek);
 const Section = ({ task, checked, destination, index, isDraggable = true }) => {
 
   const dispatch = useDispatch();
+  const theme = useSelector((state) => state.themeReducer);
+  const dateFormat = theme.dateFormat || 'full';
   const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
@@ -113,14 +115,10 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   };
 
   const handleDatePicker = () => {
-    // if (showDatePicker === false) {
-    //   setShowDatePicker(true);
-    // }else{setShowDatePicker(false);}
-    // setShowDatePicker(!showDatePicker);
-    // if (showDatePicker == true){
-    //   setShowDatePicker(false)
-    // }
-    // setShowDatePicker(true)
+    if (window.innerWidth <= 768) {
+      setModal(true);
+      return;
+    }
     setShowDatePicker(prev => !prev);
   }
 
@@ -180,19 +178,27 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
 
 
 
+  const getPriorityBgColor = (priority) => {
+    switch (priority?.toLowerCase()) {
+      case 'high':
+        return 'rgba(241, 81, 81, 0.1)';
+      case 'medium':
+        return 'rgba(218, 143, 3, 0.1)';
+      case 'low':
+        return 'rgba(71, 133, 71, 0.1)';
+      default:
+        return 'transparent';
+    }
+  };
+
   const renderContent = (provided) => (
     <li
       className={`section__task ${task.completed ? 'completed-task' : ''}`}
       ref={provided?.innerRef}
       {...provided?.draggableProps}
-      // {...provided?.dragHandleProps}
     >
       <div className='section__task-name'>
-        <span
-          className='section__task-icon'
-          {...provided?.dragHandleProps}
-
-        >
+        <span className='section__task-icon'>
           <GrDrag className='section__task-icon__grdrag' />
         </span>
         <input className='section_task-checkbox'
@@ -214,7 +220,16 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
             className='section__task-label'
             htmlFor="section__task-name"
             onClick={handleTaskNameChange}
-            style={{ lineHeight: 'normal' }}
+            style={{
+              lineHeight: 'normal',
+              backgroundColor: getPriorityBgColor(taskPriority),
+              padding: '6px 12px',
+              borderRadius: '6px',
+              display: 'inline-block',
+              transition: 'background-color 0.2s ease',
+              cursor: 'grab'
+            }}
+            {...provided?.dragHandleProps}
           >
             {task.name || taskName}
           </label>
@@ -282,9 +297,24 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
               currentDate={selectedDate}
             />
           ) : (
-            <p onClick={handleDatePicker}>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
-            // <p>{dayjs(task.completionDate).format('MMMM D, YYYY')}</p>
-
+            <>
+              <p onClick={handleDatePicker}>
+                {dayjs(task.completionDate).format(
+                  dateFormat === 'short' ? 'MMM D' : 'MMMM D, YYYY'
+                )}
+              </p>
+              {task.time && (
+                <span className="section__task-time-display" style={{
+                  fontSize: '0.82em',
+                  color: 'var(--dark-font-color-grey)',
+                  display: 'block',
+                  marginTop: '4px',
+                  fontWeight: '500'
+                }}>
+                  {task.time}
+                </span>
+              )}
+            </>
           )
         }
       </div>
