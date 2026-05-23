@@ -95,8 +95,8 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
         </span>
         <form onSubmit={handleSubmit}>
           <label>Task:</label>
-          <input
-            className="description__input task-name"
+          <textarea
+            className="description__input-task-name"
             type="text"
             name="name"
             value={formData.name}
@@ -109,6 +109,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
             value={formData.priority}
             onChange={handleChange}
           >
+            <option value="null">Priority</option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
@@ -134,7 +135,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
 
           <label>Description:</label>
           <textarea
-            className="description__input"
+            className="description__input-description-field"
             name="descriptionText"
             value={formData.descriptionText}
             onChange={handleChange}

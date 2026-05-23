@@ -6,6 +6,10 @@ const loadThemeFromLocalStorage = () => {
     return localStorage.getItem('theme') === 'dark' || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 };
 
+const loadShowWeatherFromLocalStorage = () => {
+    return localStorage.getItem('showWeather') === 'true';
+};
+
 export const checkAuth = createAsyncThunk('user/checkAuth', async (_, thunkAPI) => {
     try {
         const response = await axios.get('/api/auth/me', { withCredentials: true });
@@ -46,6 +50,7 @@ const initialState = {
     loading: false,
     error: null,
     theme: loadThemeFromLocalStorage(),
+    showWeather: loadShowWeatherFromLocalStorage(),
 };
 
 const userSlice = createSlice({
@@ -58,6 +63,10 @@ const userSlice = createSlice({
         updateUserTheme: (state, action) => {
             state.theme = action.payload;
             localStorage.setItem('theme', action.payload ? 'dark' : 'light');
+        },
+        updateShowWeather: (state, action) => {
+            state.showWeather = action.payload;
+            localStorage.setItem('showWeather', action.payload ? 'true' : 'false');
         },
     },
     extraReducers: (builder) => {
@@ -95,5 +104,5 @@ const userSlice = createSlice({
     }
 });
 
-export const { logout, updateUserTheme } = userSlice.actions;
+export const { logout, updateUserTheme, updateShowWeather } = userSlice.actions;
 export default userSlice.reducer;

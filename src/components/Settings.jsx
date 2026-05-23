@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
 import { setBreakInterval, setIntervalCount, updateTime, setTime } from '../features/pomodoroSlice';
 import { logout } from '../features/userSlice';
-import { toggleSettingsOpen, setDateFormat } from '../features/themeSlice';
+import { toggleSettingsOpen, setDateFormat, setTaskNameWrap } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
 
@@ -13,6 +13,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
   const theme = useSelector(state => state.themeReducer);
   const dateFormat = theme.dateFormat || 'full';
+  const taskNameWrap = theme.taskNameWrap || 'ellipsis';
   
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
@@ -25,6 +26,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newBreakInterval, setNewBreakInterval] = useState(breakInterval);
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
   const [newDateFormat, setNewDateFormat] = useState(dateFormat);
+  const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
 
   const handleCityChange = (e) => {
     setNewCity(e.target.value);
@@ -56,6 +58,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setBreakInterval(newBreakInterval))
     dispatch(setIntervalCount(newIntervalCount))
     dispatch(setDateFormat(newDateFormat));
+    dispatch(setTaskNameWrap(newTaskNameWrap));
     setCurrentPage('Board');
   };
 
@@ -82,7 +85,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     <section className='section'>
       <button className='settings__save-btn' type='submit' onClick={handleSave}>Save</button>
       <div className='settings__conteiner'>
-        <div className='settings__block'>
+        <div className='settings__block user-settings'>
           <h3 className='settings__block-header'>
             User information
             <i>
@@ -92,8 +95,11 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
           <div className='settings__item' style={{ paddingBottom: '1rem' }}>
             <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(logout())}>Logout</button>
           </div>
+          <div className='settings__item' style={{ paddingBottom: '1rem' }}>
+            <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(logout())}>Change password</button>
+          </div>
         </div>
-        <div className='settings__block'>
+        <div className='settings__block weather-settings'>
           <h3 className='settings__block-header'>
             Weather
             <i>
@@ -113,7 +119,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             <input className='settings__item-checkbox' type="checkbox" checked={showWeather} onChange={handleShowWeather} />
           </div>
         </div>
-        <div className='settings__block'>
+        <div className='settings__block pomodoro-settings'>
           <h3 className='settings__block-header'>
             Promodoro
             <i>
@@ -136,7 +142,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
         </div>
         <div className='settings__block' >
           <h3 className='settings__block-header'>
-            Other
+            Customation
             <i>
               <InfomationIcon field={fields[3]} />
             </i>
@@ -160,6 +166,27 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             >
               <option value="full">Full (MMMM D, YYYY)</option>
               <option value="short">Short (MMM D)</option>
+            </select>
+          </div>
+          <div className='settings__item' style={{ marginTop: '1dvh' }}>
+            <label className='settings__item-label'>Task Name Wrap:</label>
+            <select
+              style={{
+                padding: '8px',
+                borderRadius: '6px',
+                border: '1px solid var(--dark-font-color-grey)',
+                backgroundColor: 'var(--dark-background-color-sidebar)',
+                color: 'var(--dark-font-color-white)',
+                cursor: 'pointer',
+                outline: 'none',
+                width: '180px',
+                textAlign: 'center'
+              }}
+              value={newTaskNameWrap}
+              onChange={(e) => setNewTaskNameWrap(e.target.value)}
+            >
+              <option value="ellipsis">Ellipsis (Short)</option>
+              <option value="wrap">Wrap (Full)</option>
             </select>
           </div>
           <div className='settings__item' style={{ marginTop: '1dvh' }}>

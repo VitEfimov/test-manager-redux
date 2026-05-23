@@ -28,6 +28,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.themeReducer);
   const dateFormat = theme.dateFormat || 'full';
+  const taskNameWrap = theme.taskNameWrap || 'ellipsis';
   const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
@@ -181,11 +182,11 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   const getPriorityBgColor = (priority) => {
     switch (priority?.toLowerCase()) {
       case 'high':
-        return 'rgba(241, 81, 81, 0.1)';
+        return 'rgba(241, 81, 81, 0.3)';
       case 'medium':
-        return 'rgba(218, 143, 3, 0.1)';
+        return 'rgba(218, 143, 3, 0.3)';
       case 'low':
-        return 'rgba(71, 133, 71, 0.1)';
+        return 'rgba(71, 133, 71, 0.3)';
       default:
         return 'transparent';
     }
@@ -197,7 +198,14 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
       ref={provided?.innerRef}
       {...provided?.draggableProps}
     >
-      <div className='section__task-name'>
+      <div className='section__task-name' style={taskNameWrap === 'wrap' ? {
+        height: 'auto',
+        minHeight: '40px',
+        whiteSpace: 'normal',
+        overflow: 'visible',
+        display: 'flex',
+        alignItems: 'center'
+      } : {}}>
         <span className='section__task-icon'>
           <GrDrag className='section__task-icon__grdrag' />
         </span>
@@ -220,14 +228,20 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
             className='section__task-label'
             htmlFor="section__task-name"
             onClick={handleTaskNameChange}
-            style={{
+            style={{ 
               lineHeight: 'normal',
               backgroundColor: getPriorityBgColor(taskPriority),
               padding: '6px 12px',
               borderRadius: '6px',
-              display: 'inline-block',
+              display: 'block',
+              width: '100%',
+              boxSizing: 'border-box',
               transition: 'background-color 0.2s ease',
-              cursor: 'grab'
+              cursor: 'grab',
+              whiteSpace: taskNameWrap === 'wrap' ? 'normal' : 'nowrap',
+              textOverflow: taskNameWrap === 'wrap' ? 'clip' : 'ellipsis',
+              wordBreak: taskNameWrap === 'wrap' ? 'break-word' : 'normal',
+              overflow: taskNameWrap === 'wrap' ? 'visible' : 'hidden'
             }}
             {...provided?.dragHandleProps}
           >

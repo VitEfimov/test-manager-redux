@@ -27,7 +27,8 @@ const initialState = {
   },
   defaultTaskLimit: loaded?.defaultTaskLimit !== undefined ? loaded.defaultTaskLimit : 10,
   isSettingsOpen: loaded?.isSettingsOpen || false,
-  dateFormat: loaded?.dateFormat || 'full'
+  dateFormat: loaded?.dateFormat || 'full',
+  taskNameWrap: loaded?.taskNameWrap || 'ellipsis'
 };
 
 const themeSlice = createSlice({
@@ -69,6 +70,7 @@ const themeSlice = createSlice({
       };
       state.defaultTaskLimit = 10;
       state.dateFormat = 'full';
+      state.taskNameWrap = 'ellipsis';
       localStorage.removeItem('customTheme');
     },
     setDefaultTaskLimit: (state, action) => {
@@ -78,9 +80,13 @@ const themeSlice = createSlice({
     setDateFormat: (state, action) => {
       state.dateFormat = action.payload;
       localStorage.setItem('customTheme', JSON.stringify(state));
+    },
+    setTaskNameWrap: (state, action) => {
+      state.taskNameWrap = action.payload;
+      localStorage.setItem('customTheme', JSON.stringify(state));
     }
   }
 });
 
-export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, resetTheme, setDefaultTaskLimit, setDateFormat } = themeSlice.actions;
+export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap } = themeSlice.actions;
 export default themeSlice.reducer;

@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks } from './features/taskSlice';
-import { checkAuth } from './features/userSlice';
+import { checkAuth, updateShowWeather } from './features/userSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header'
 import Pomodoro from './components/Pomodoro';
@@ -23,9 +23,8 @@ function App() {
   const [sidebarView, setSidebarView] = useState(true);
 
   const dispatch = useDispatch();
-  const { isAuthenticated, loading, theme: userTheme } = useSelector((state) => state.userReducer);
+  const { isAuthenticated, loading, theme: userTheme, showWeather } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer);
-  const [showWeather, setShowWeather] = useState(false);
 
 
   useEffect(() => {
@@ -87,7 +86,7 @@ function App() {
         return <Settings
           setCurrentPage={setCurrentPage}
           showWeather={showWeather}
-          setShowWeather={setShowWeather} />;
+          setShowWeather={(val) => dispatch(updateShowWeather(val))} />;
       default:
         return <Dashboard />;
     }
@@ -131,7 +130,7 @@ function App() {
         timeRemaining={timeRemaining}
         isTimeOver={isTimeOver}
         showWeather={showWeather}
-        setShowWeather={setShowWeather}
+        setShowWeather={(val) => dispatch(updateShowWeather(val))}
       />
       <div className='main-content'>
         {sidebarView ?
