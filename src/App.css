@@ -39,7 +39,7 @@ body {
   --dark-background-color-sidebar: light-dark(rgb(105, 155, 105), rgb(0, 0, 0));
   --dark-font-color-white: light-dark(rgb(0, 0, 0), rgb(241, 231, 231));
   --dark-font-color-grey: light-dark(rgb(0, 0, 0), rgb(205, 205, 205));
-  --dark-font-color-black: light-dark(rgb(0, 0, 0), rgb(0, 0, 0), );
+  --dark-font-color-black: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));
   --dark-btn-color: #727171;
   --dark-background-color-main: light-dark(rgba(231, 226, 226, 0.951), rgb(28, 28, 28));
   --dark-background-color-main-priority: color-mix(in srgb,
@@ -55,7 +55,7 @@ body {
   --col-due-width: 10dvw;
   --col-priority-width: 10dvw;
   --btn-border-radius-base: 10px;
-  --btn-border-radius-hover: 5px
+  --btn-border-radius-hover: 5px;
   background-color: var(--dark-background-color-main);
   font-size: calc(7px + 1vmin);
   /* overflow-x: hidden; */
@@ -944,12 +944,13 @@ textarea {
   z-index: 1000;
   color: var(--dark-font-color-black);
 
-} 
+}
 
-.description__input-description-field{
+.description__input-description-field {
   height: 50dvh;
 }
-.description__input-task-name{
+
+.description__input-task-name {
   height: 5dvh;
 }
 
@@ -1278,10 +1279,11 @@ button[type='submit']:hover {
     color: var(--red_color);
   } */
 }
- .section__task-delete-btn,
- .dropdown-content-row-title-delete-btn {
-    color: var(--red_color);
-  }
+
+.section__task-delete-btn,
+.dropdown-content-row-title-delete-btn {
+  color: var(--red_color);
+}
 
 .add__task {
   border-bottom: 1px solid #727171;
@@ -1708,7 +1710,8 @@ padding: 5dvh;
   /* left: 500px; */
   /* position: relative; */
 }
-.header__weather-info{
+
+.header__weather-info {
   justify-content: center;
 }
 
@@ -1806,7 +1809,9 @@ padding: 5dvh;
 
 @media only screen and (max-width: 1250px) {
 
-  .weather-settings,.user-settings,.pomodoro-settings{
+  .weather-settings,
+  .user-settings,
+  .pomodoro-settings {
     display: none;
   }
 
@@ -1849,7 +1854,7 @@ padding: 5dvh;
 
   }
 
-  .description__input-description-field{
+  .description__input-description-field {
     height: 30dvh;
 
   }
@@ -2221,11 +2226,11 @@ padding: 5dvh;
 
     /* & .description__close{
       margin-top: 150px;
-    } */
+    
     & textarea {
       /* height:calc(45vh + 1vmin ); */
-      /* height: 30dvh; */
-    }
+      /* height: 30dvh; 
+    }*/
   }
 
   .description__modal-content {
@@ -2480,6 +2485,7 @@ padding: 5dvh;
 }
 
 @media (max-width: 768px) {
+
   .section__task-delete-btn,
   .section__task-priority,
   .section__task-icon {
