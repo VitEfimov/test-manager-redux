@@ -1043,18 +1043,59 @@ button[type='submit']:hover {
   z-index: 2;
 }
 
+
+/*
 .date-picker-set-btn,
 .date-picker-cancel-btn {
   padding: 3px 10px;
   border: none;
   border-radius: var(--btn-border-radius-base);
   cursor: pointer;
-  /* font-size: calc(7px + 1vmin); */
   font-weight: 500;
   transition: all 0.2s ease;
   min-height: 20px;
   min-width: 50px;
   margin: -3px;
+}
+
+.date-picker-set-btn {
+  background-color: #007bff;
+  color: var(--dark-font-color-white);
+}
+
+.date-picker-set-btn:hover {
+  border-radius: var(--btn-border-radius-hover);
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.date-picker-cancel-btn {
+  background-color: #6c757d;
+  color: var(--dark-font-color-white);
+}
+
+.date-picker-cancel-btn:hover {
+  border-radius: var(--btn-border-radius-hover);
+  background-color: #545b62;
+  transform: translateY(-1px);
+}
+
+*/
+.date-picker-set-btn,
+.date-picker-cancel-btn {
+  padding: 3px 10px;
+  border: none;
+  border-radius: var(--btn-border-radius-base);
+  cursor: pointer;
+  font-weight: 500;
+  min-height: 20px;
+  min-width: 50px;
+  margin: -3px;
+
+  transition:
+    border-radius 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .date-picker-set-btn {
@@ -1145,8 +1186,6 @@ button[type='submit']:hover {
 .section__task-priority-btn-media-option {
   width: fit-content;
   height: calc(10px + 1vmin);
-  /* font-size: calc(7px + 1vmin); */
-
   padding: 0 3px 0 3px;
   align-self: center;
   margin: 5px;
@@ -1155,7 +1194,6 @@ button[type='submit']:hover {
   border-radius: var(--btn-border-radius-base);
   color: var(--dark-font-color-white);
   background-color: transparent;
-
 }
 
 .section__task-priority-btn-media,
