@@ -1236,10 +1236,14 @@ button[type='submit']:hover {
   /* padding-right: 0.5dvw; */
   /* border-left: 1px solid var(--dark-font-color-grey);
   border-right: 1px solid var(--dark-font-color-grey); */
-  &:hover {
+  /* &:hover {
+    color: var(--red_color);
+  } */
+}
+ .section__task-delete-btn,
+ .dropdown-content-row-title-delete-btn {
     color: var(--red_color);
   }
-}
 
 .add__task {
   border-bottom: 1px solid #727171;
