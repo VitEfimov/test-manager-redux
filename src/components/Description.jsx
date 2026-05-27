@@ -142,7 +142,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
           ></textarea>
 
           <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
-            <button type="submit" style={{ flex: 1 }}>Submit</button>
+            {/* <button type="submit" style={{ flex: 1 }}>Submit</button> */}
             <button
               type="button"
               onClick={handleDelete}
@@ -160,6 +160,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
             >
               Delete Task
             </button>
+            <button type="submit" style={{ flex: 1 }}>Submit</button>
           </div>
         </form>
       </div>

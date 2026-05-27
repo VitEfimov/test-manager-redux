@@ -137,7 +137,7 @@ border-radius: 10px;}
 }
 
 .sidebar.closed {
-  transform: translateX(5px);
+  display: none;
 }
 
 .sidebar.open {
@@ -1881,18 +1881,12 @@ padding: 5dvh;
     overflow: hidden;
   }
 
-  .section {
+  .section, .section.open, .section.close {
     height: calc(100vh - 15vh);
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    /* padding-bottom: 20px;  */
-    /* padding-bottom: 5dvh; */
-
-  }
-
-  .section.close {
-    overflow-y: auto;
+    padding-bottom: 80px; 
     padding-left: 5%;
     max-width: 100%;
     justify-items: auto;
@@ -1934,27 +1928,49 @@ padding: 5dvh;
     display: none;
   }
 
-  .sidebar {
-    width: calc(10vw + 1vmin);
-    ;
-    /* align-items: center; */
-    /* height: 100vh; */
-    /* position: fixed; */
-    top: 0;
+  .sidebar, .sidebar.closed {
+    display: flex;
+    width: 100vw;
+    height: 60px;
+    bottom: 0;
+    top: auto;
     left: 0;
+    flex-direction: row;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 0;
+    border-top: 1px solid var(--dark-background-color-sidebar);
+  }
+
+  .sidebar-main {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sidebar-main-btnopen, .sidebar-main-btnclosed {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    align-items: center;
   }
 
   .nav-button {
-    padding-top: 3vh;
-    width: 100%;
+    padding: 10px;
+    width: auto;
     min-height: 44px;
-    /* Touch target size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
   }
 
   .nav-button-icon {
     display: block;
     width: 100%;
-    height: 20px;
+    height: 24px;
+    font-size: 24px;
   }
 
   .nav-button-name {
@@ -1992,7 +2008,7 @@ padding: 5dvh;
     display: none;
   }
 
-  .header__title-sidebar-view-btn-open {
+  .header__title-sidebar-view-btn-open, .header__title-sidebar-view-btn-close {
     /* margin: 0dvh 0 1dvh 3dvh; */
     /* position: absolute;
 
@@ -2003,6 +2019,8 @@ padding: 5dvh;
     font-size: calc(8vw + 1vmin);
     cursor: pointer;
     width: calc(10vw + 1vmin);
+    display: none;
+
 
   }
 

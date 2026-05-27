@@ -36,47 +36,42 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
                     null
                 }
             </button> */}
-            {sidebarView
-                ?
-                (<div className='sidebar-main'>
-                    <header className='sidebar__header'>
+            <div className='sidebar-main'>
+                <header className='sidebar__header'>
 
-                        {/* <section className='sidebar__header-userinfo'>
-                            <h2>{user[0].name}</h2>
-                            <p>{user[0].email}</p>
-                        </section>
-                        <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
-                            {sidebarView ?
-                                <ImMenu4 />
-                                :
-                                null
-                            }
-                        </button> */}
-                    </header>
-                    <div className={`sidebar-main-btn${sidebarView ? 'open' : 'closed'}`}>
-                    <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
-                        <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
-                    </button>
-                    <button className="nav-button board" onClick={() => handleNavigation('Board')}>
-                        <i className='nav-button-icon'><FaTasks /></i><span className='nav-button-name'>Board</span>
-                    </button>
-                    <button className="nav-button pomodoro" onClick={() => handleNavigation('Pomodoro')}>
-                        <i className='nav-button-icon'><IoTimerOutline /></i><span className='nav-button-name'>Pomodoro </span>
-                    </button>
-                    <button className="nav-button about" onClick={() => handleNavigation('About')}>
-                        <i className='nav-button-icon'><IoInformationCircle /></i><span className='nav-button-name'>About</span>
-                    </button>
-                    <button className="nav-button settings" onClick={() => handleNavigation('Settings')}>
-                        <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
-                    </button>
-                    <button className="nav-button " onClick={() => dispatch(logoutUser())}>
-                        <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span>
-                    </button>
-                    </div>
-                    </div>)
-                :
-                (null)
-            }
+                    {/* <section className='sidebar__header-userinfo'>
+                        <h2>{user[0].name}</h2>
+                        <p>{user[0].email}</p>
+                    </section>
+                    <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
+                        {sidebarView ?
+                            <ImMenu4 />
+                            :
+                            null
+                        }
+                    </button> */}
+                </header>
+                <div className={`sidebar-main-btn${sidebarView ? 'open' : 'closed'}`}>
+                <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
+                    <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
+                </button>
+                <button className="nav-button board" onClick={() => handleNavigation('Board')}>
+                    <i className='nav-button-icon'><FaTasks /></i><span className='nav-button-name'>Board</span>
+                </button>
+                <button className="nav-button pomodoro" onClick={() => handleNavigation('Pomodoro')}>
+                    <i className='nav-button-icon'><IoTimerOutline /></i><span className='nav-button-name'>Pomodoro </span>
+                </button>
+                <button className="nav-button about" onClick={() => handleNavigation('About')}>
+                    <i className='nav-button-icon'><IoInformationCircle /></i><span className='nav-button-name'>About</span>
+                </button>
+                <button className="nav-button settings" onClick={() => handleNavigation('Settings')}>
+                    <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
+                </button>
+                <button className="nav-button " onClick={() => dispatch(logoutUser())}>
+                    <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span>
+                </button>
+                </div>
+            </div>
         </nav>
     )
 }

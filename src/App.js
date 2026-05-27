@@ -133,14 +133,12 @@ function App() {
         setShowWeather={(val) => dispatch(updateShowWeather(val))}
       />
       <div className='main-content'>
-        {sidebarView ?
-          <Sidebar setCurrentPage={setCurrentPage}
-            setTitle={setTitle}
-            sidebarView={sidebarView}
-            setSidebarView={setSidebarView} />
-          :
-          null}
+        <Sidebar setCurrentPage={setCurrentPage}
+          setTitle={setTitle}
+          sidebarView={sidebarView}
+          setSidebarView={setSidebarView} />
         {renderPage(sidebarView)}
+        
       </div>
       <ThemeSettingsSidebar />
     </main>

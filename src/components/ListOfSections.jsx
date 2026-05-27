@@ -8,7 +8,7 @@ import FILTERS from '../list-view/filters';
 import HeaderListOfSection from './HeaderListOfSection';
 import Sidebar from './Sidebar';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
-import { updateTask } from '../features/taskSlice';
+import { updateTask, deleteTask } from '../features/taskSlice';
 import ColumnResizer from './ColumnResizer';
 
 
@@ -366,7 +366,21 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>Completed</h3>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--dark-font-color-grey)' }}>
+                                    <h3 style={{ borderBottom: 'none', margin: 0, paddingBottom: '5px' }}>Completed</h3>
+                                    {completedFiltered.length > 0 && (
+                                        <button 
+                                            onClick={() => {
+                                                if(window.confirm('Are you sure you want to delete all completed tasks?')) {
+                                                    completedFiltered.forEach(task => dispatch(deleteTask({ taskId: task.id })));
+                                                }
+                                            }}
+                                            style={{ backgroundColor: 'transparent', color: 'rgb(241, 81, 81)', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', paddingBottom: '5px' }}
+                                        >
+                                            Delete All
+                                        </button>
+                                    )}
+                                </div>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(completedFiltered, 'completed')}
                                 {provided.placeholder}
