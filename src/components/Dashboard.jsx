@@ -59,7 +59,7 @@ const Dashboard = () => {
                     <h2>Total tasks</h2>
                      {missedTasks.length !== 0 ? (
                         
-                        <div style={{ color: 'crimson' }}>{totalTasks - completedTasks}</div>
+                        <div style={{ color: 'var(--danger-color)' }}>{totalTasks - completedTasks}</div>
                     ) : (
                         <div>{totalTasks - completedTasks}</div>
                     )}
@@ -91,7 +91,7 @@ const Dashboard = () => {
                 <section className='dashboard__section'>
                     <h2>Missed tasks</h2>
                     {missedTasks.length !== 0 ? (
-                        <div style={{ color: 'crimson' }}>{missedTasks.length}</div>
+                        <div style={{ color: 'var(--danger-color)' }}>{missedTasks.length}</div>
                     ) : (
                         <div>{missedTasks.length}</div>
                     )}
