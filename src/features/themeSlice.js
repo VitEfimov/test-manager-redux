@@ -28,7 +28,9 @@ const initialState = {
   defaultTaskLimit: loaded?.defaultTaskLimit !== undefined ? loaded.defaultTaskLimit : 10,
   isSettingsOpen: loaded?.isSettingsOpen || false,
   dateFormat: loaded?.dateFormat || 'full',
-  taskNameWrap: loaded?.taskNameWrap || 'ellipsis'
+  taskNameWrap: loaded?.taskNameWrap || 'wrap',
+  timeFormat: loaded?.timeFormat || '12h',
+  userPicture: loaded?.userPicture || null
 };
 
 const themeSlice = createSlice({
