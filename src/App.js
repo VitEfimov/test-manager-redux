@@ -1,17 +1,18 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks } from './features/taskSlice';
 import { checkAuth, updateShowWeather } from './features/userSlice';
 import Sidebar from './components/Sidebar';
-import Header from './components/Header'
-import Pomodoro from './components/Pomodoro';
-import ListOfSections from './components/ListOfSections';
-import Dashboard from './components/Dashboard';
-import Settings from './components/Settings';
-import About from './components/About';
+import Header from './components/Header';
 import Login from './components/Login';
 import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
+
+const Pomodoro = lazy(() => import('./components/Pomodoro'));
+const ListOfSections = lazy(() => import('./components/ListOfSections'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const Settings = lazy(() => import('./components/Settings'));
+const About = lazy(() => import('./components/About'));
 
 function App() {
 
@@ -137,8 +138,9 @@ function App() {
           setTitle={setTitle}
           sidebarView={sidebarView}
           setSidebarView={setSidebarView} />
-        {renderPage(sidebarView)}
-        
+        <Suspense fallback={<div style={{ padding: '20px', color: 'var(--dark-font-color-white)' }}>Loading page...</div>}>
+          {renderPage(sidebarView)}
+        </Suspense>
       </div>
       <ThemeSettingsSidebar />
     </main>

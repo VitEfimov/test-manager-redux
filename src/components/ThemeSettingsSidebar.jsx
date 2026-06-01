@@ -31,8 +31,9 @@ const ThemeSettingsSidebar = () => {
 
       <div className="theme-settings-body">
         <div className="theme-settings-group">
-          <label>Sidebar Background</label>
+          <label htmlFor="sidebarBg">Sidebar Background</label>
           <input 
+            id="sidebarBg"
             type="color" 
             value={theme.colors.sidebarBg ?? '#699b69'} 
             onChange={(e) => handleColorChange(e, 'sidebarBg')} 
@@ -40,8 +41,9 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-group">
-          <label>Main Background</label>
+          <label htmlFor="mainBg">Main Background</label>
           <input 
+            id="mainBg"
             type="color" 
             value={theme.colors.mainBg ?? '#e7e2e2'} 
             onChange={(e) => handleColorChange(e, 'mainBg')} 
@@ -49,8 +51,9 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-group">
-          <label>Header Background</label>
+          <label htmlFor="headerBg">Header Background</label>
           <input 
+            id="headerBg"
             type="color" 
             value={theme.colors.headerBg ?? theme.colors.mainBg ?? '#e7e2e2'} 
             onChange={(e) => handleColorChange(e, 'headerBg')} 
@@ -58,8 +61,9 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-group">
-          <label>Text Color</label>
+          <label htmlFor="textColor">Text Color</label>
           <input 
+            id="textColor"
             type="color" 
             value={theme.colors.textColor ?? '#000000'} 
             onChange={(e) => handleColorChange(e, 'textColor')} 
@@ -67,8 +71,8 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-group">
-          <label>Font Size</label>
-          <select value={theme.fontSize} onChange={handleFontSizeChange}>
+          <label htmlFor="fontSize">Font Size</label>
+          <select id="fontSize" value={theme.fontSize} onChange={handleFontSizeChange}>
             <option value="small">Small</option>
             <option value="normal">Normal</option>
             <option value="big">Big</option>
@@ -76,8 +80,9 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-group">
-          <label>Task Display Limit</label>
+          <label htmlFor="taskDisplayLimit">Task Display Limit</label>
           <input 
+            id="taskDisplayLimit"
             type="number" 
             min="1"
             value={theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10} 

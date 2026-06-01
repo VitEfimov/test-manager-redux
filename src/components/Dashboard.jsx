@@ -1,7 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import FILTERS from '../list-view/filters';
+
+dayjs.extend(isSameOrBefore);
 const Dashboard = () => {
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);

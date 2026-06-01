@@ -52,22 +52,22 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
                     </button> */}
                 </header>
                 <div className={`sidebar-main-btn${sidebarView ? 'open' : 'closed'}`}>
-                <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')}>
+                <button className="nav-button dashboard" onClick={() => handleNavigation('Dashboard')} aria-label="Dashboard">
                     <i className='nav-button-icon'><RxDashboard /></i><span className='nav-button-name'>Dashboard </span>
                 </button>
-                <button className="nav-button board" onClick={() => handleNavigation('Board')}>
+                <button className="nav-button board" onClick={() => handleNavigation('Board')} aria-label="Board">
                     <i className='nav-button-icon'><FaTasks /></i><span className='nav-button-name'>Board</span>
                 </button>
-                <button className="nav-button pomodoro" onClick={() => handleNavigation('Pomodoro')}>
+                <button className="nav-button pomodoro" onClick={() => handleNavigation('Pomodoro')} aria-label="Pomodoro">
                     <i className='nav-button-icon'><IoTimerOutline /></i><span className='nav-button-name'>Pomodoro </span>
                 </button>
-                <button className="nav-button about" onClick={() => handleNavigation('About')}>
+                <button className="nav-button about" onClick={() => handleNavigation('About')} aria-label="About">
                     <i className='nav-button-icon'><IoInformationCircle /></i><span className='nav-button-name'>About</span>
                 </button>
-                <button className="nav-button settings" onClick={() => handleNavigation('Settings')}>
+                <button className="nav-button settings" onClick={() => handleNavigation('Settings')} aria-label="Settings">
                     <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
                 </button>
-                <button className="nav-button " onClick={() => dispatch(logoutUser())}>
+                <button className="nav-button " onClick={() => dispatch(logoutUser())} aria-label="Logout">
                     <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span>
                 </button>
                 </div>

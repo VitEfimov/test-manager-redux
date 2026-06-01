@@ -405,15 +405,15 @@ const Pomodoro = () => {
 
         <div className="pomodoro__container__controls">
           {!localIsActive ? (
-            <button onClick={handleStartTimer}>
+            <button onClick={handleStartTimer} aria-label="Start Timer">
               <FaPlay />
             </button>
           ) : (
-            <button onClick={handlePauseTimer}>
+            <button onClick={handlePauseTimer} aria-label="Pause Timer">
               <FaPause />
             </button>
           )}
-          <button onClick={handleResetTimer}>
+          <button onClick={handleResetTimer} aria-label="Reset Timer">
             <GrPowerReset />
           </button>
         </div>

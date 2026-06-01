@@ -275,10 +275,10 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
           </label>
         )} */}
         {task.description.text ? (
-          <button className='section__task-name-description' onClick={handleModal}><FcAcceptDatabase />
+          <button className='section__task-name-description' onClick={handleModal} aria-label="Task Description"><FcAcceptDatabase />
           </button>
         ) : (
-          <button className='section__task-name-description' onClick={handleModal}><FcDatabase />
+          <button className='section__task-name-description' onClick={handleModal} aria-label="Task Description"><FcDatabase />
 
           </button>
         )}
@@ -371,7 +371,13 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
         )}
       </div>
       <div className='section__task-delete-btn'>
-        <MdDelete onClick={handleDeleteTask} />
+        <button 
+          onClick={handleDeleteTask} 
+          aria-label="Delete Task" 
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <MdDelete />
+        </button>
       </div>
     </li>
   );
