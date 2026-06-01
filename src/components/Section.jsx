@@ -29,6 +29,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   const theme = useSelector((state) => state.themeReducer);
   const dateFormat = theme.dateFormat || 'full';
   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
+  const timeFormat = theme.timeFormat || '12h';
   const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
   const [taskPriority, setTaskPriority] = useState(task.priority || '');
@@ -113,6 +114,28 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   const handleInputBlur = () => {
     setEditingTaskName(false);
     handleSaveChanges();
+  };
+
+  const textAreaRef = useRef(null);
+
+  const adjustTextareaHeight = (element) => {
+    if (element) {
+      element.style.height = 'auto';
+      element.style.height = element.scrollHeight + 'px';
+    }
+  };
+
+  useEffect(() => {
+    if (editingTaskName) {
+      adjustTextareaHeight(textAreaRef.current);
+    }
+  }, [editingTaskName, taskName]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleInputBlur();
+    }
   };
 
   const handleDatePicker = () => {
@@ -215,14 +238,22 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
           onChange={handleCheckbox}
         />
         {editingTaskName && !task.completed ? (
-          <input
+          <textarea
+            ref={textAreaRef}
             className='section__task-input'
             value={taskName ?? ""}
             onChange={handleInputChange}
+            onInput={(e) => adjustTextareaHeight(e.target)}
             onBlur={handleInputBlur}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyDown}
             autoFocus
-            style={{ verticalAlign: 'middle' }} />
+            rows={1}
+            style={{ 
+              verticalAlign: 'middle', 
+              overflow: 'hidden', 
+              resize: 'none' 
+            }} 
+          />
         ) : (
           <label
             className='section__task-label'
@@ -325,7 +356,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
                   marginTop: '4px',
                   fontWeight: '500'
                 }}>
-                  {task.time}
+                  {timeFormat === '12h' ? dayjs(`1970-01-01T${task.time}`).format('h:mm A') : task.time}
                 </span>
               )}
             </>

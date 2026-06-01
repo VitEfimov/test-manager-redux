@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addTask } from '../features/taskSlice';
 import { PriorotyDropdown } from './ui-components/PriorotyDropdown';
 import DatePicker from './DatePicker';
+import ReactDatePicker from './ReactDatePicker';
 import { useClickOutside } from '../custom-hooks/ClickOut';
 import { SiTrueup } from 'react-icons/si';
 
@@ -15,7 +16,8 @@ const AddTask = ({ date }) => {
     const [addTaskForm, setAddTaskForm] = useState(false);
     const [taskName, setTaskName] = useState('');
     const [taskPriority, setTaskPriority] = useState('');
-    const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
+    const [taskPrioritySelect, setTaskPrioritySelect] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const handleAddTaskForm = () => {
         setAddTaskForm(!addTaskForm);
@@ -129,7 +131,21 @@ const AddTask = ({ date }) => {
                         />
                     </div>
                     <div className='section__task-date add-task'>
-                        <p>{getCompletionDate(date)}</p>
+                        {showDatePicker ? (
+                            <div style={{ position: 'absolute', zIndex: 10 }}>
+                                <DatePicker
+                                    handleDateSelection={(selectedDate) => {
+                                        setCompletionDate(dayjs(selectedDate).format('MMMM D, YYYY'));
+                                    }}
+                                    setShowDatePicker={setShowDatePicker}
+                                    currentDate={completionDate}
+                                />
+                            </div>
+                        ) : (
+                            <p onClick={() => setShowDatePicker(true)} style={{ cursor: 'pointer' }}>
+                                {completionDate}
+                            </p>
+                        )}
                     </div>
 
                     <div className='section__task-priority add-task'>

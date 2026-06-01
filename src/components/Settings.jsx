@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
 import { setBreakInterval, setIntervalCount, updateTime, setTime } from '../features/pomodoroSlice';
 import { logout } from '../features/userSlice';
-import { toggleSettingsOpen, setDateFormat, setTaskNameWrap } from '../features/themeSlice';
+import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
 
@@ -14,6 +14,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const theme = useSelector(state => state.themeReducer);
   const dateFormat = theme.dateFormat || 'full';
   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
+  const timeFormat = theme.timeFormat || '12h';
   
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
@@ -27,6 +28,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
   const [newDateFormat, setNewDateFormat] = useState(dateFormat);
   const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
+  const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
+  const [newFontSize, setNewFontSize] = useState(theme.fontSize || 'normal');
+  const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
 
   const handleCityChange = (e) => {
     setNewCity(e.target.value);
@@ -59,6 +63,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setIntervalCount(newIntervalCount))
     dispatch(setDateFormat(newDateFormat));
     dispatch(setTaskNameWrap(newTaskNameWrap));
+    dispatch(setTimeFormat(newTimeFormat));
+    dispatch(setFontSize(newFontSize));
+    dispatch(setDefaultTaskLimit(newTaskLimit));
     setCurrentPage('Board');
   };
 
@@ -188,6 +195,68 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
               <option value="ellipsis">Ellipsis (Short)</option>
               <option value="wrap">Wrap (Full)</option>
             </select>
+          </div>
+          <div className='settings__item' style={{ marginTop: '1dvh' }}>
+            <label className='settings__item-label'>Time Format:</label>
+            <select
+              style={{
+                padding: '8px',
+                borderRadius: '6px',
+                border: '1px solid var(--dark-font-color-grey)',
+                backgroundColor: 'var(--dark-background-color-sidebar)',
+                color: 'var(--dark-font-color-white)',
+                cursor: 'pointer',
+                outline: 'none',
+                width: '180px',
+                textAlign: 'center'
+              }}
+              value={newTimeFormat}
+              onChange={(e) => setNewTimeFormat(e.target.value)}
+            >
+              <option value="12h">12-hour (AM/PM)</option>
+              <option value="24h">24-hour (International)</option>
+            </select>
+          </div>
+          <div className='settings__item' style={{ marginTop: '1dvh' }}>
+            <label className='settings__item-label'>Font Size:</label>
+            <select
+              style={{
+                padding: '8px',
+                borderRadius: '6px',
+                border: '1px solid var(--dark-font-color-grey)',
+                backgroundColor: 'var(--dark-background-color-sidebar)',
+                color: 'var(--dark-font-color-white)',
+                cursor: 'pointer',
+                outline: 'none',
+                width: '180px',
+                textAlign: 'center'
+              }}
+              value={newFontSize}
+              onChange={(e) => setNewFontSize(e.target.value)}
+            >
+              <option value="small">Small</option>
+              <option value="normal">Normal</option>
+              <option value="big">Big</option>
+            </select>
+          </div>
+          <div className='settings__item' style={{ marginTop: '1dvh' }}>
+            <label className='settings__item-label'>Task Display Limit:</label>
+            <input
+              type="number"
+              min="1"
+              value={newTaskLimit}
+              onChange={(e) => setNewTaskLimit(e.target.value)}
+              style={{
+                padding: '8px',
+                borderRadius: '6px',
+                border: '1px solid var(--dark-font-color-grey)',
+                backgroundColor: 'var(--dark-background-color-sidebar)',
+                color: 'var(--dark-font-color-white)',
+                outline: 'none',
+                width: '180px',
+                textAlign: 'center'
+              }}
+            />
           </div>
           <div className='settings__item' style={{ marginTop: '1dvh' }}>
             <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(toggleSettingsOpen(true))}>Customize Theme</button>

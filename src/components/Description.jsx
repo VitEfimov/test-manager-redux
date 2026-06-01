@@ -36,6 +36,19 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const textAreaRef = useRef(null);
+
+  const adjustTextareaHeight = (element) => {
+    if (element) {
+      element.style.height = 'auto';
+      element.style.height = element.scrollHeight + 'px';
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight(textAreaRef.current);
+  }, [formData.name]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedTask = {
@@ -96,11 +109,15 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
         <form onSubmit={handleSubmit}>
           <label>Task:</label>
           <textarea
+            ref={textAreaRef}
             className="description__input-task-name"
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
+            onInput={(e) => adjustTextareaHeight(e.target)}
+            rows={1}
+            style={{ overflow: 'hidden', resize: 'none' }}
           />
           <label>Priority:</label>
           <select

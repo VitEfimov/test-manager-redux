@@ -57,9 +57,9 @@ function App() {
     setOrReset('--dark-font-color-white', theme.colors.textColor);
 
     // Font size
-    let fontCalc = 'calc(7px + 1vmin)';
-    if (theme.fontSize === 'small') fontCalc = 'calc(5px + 1vmin)';
-    if (theme.fontSize === 'big') fontCalc = 'calc(10px + 1vmin)';
+    let fontCalc = 'calc(10px + 1vmin)';
+    if (theme.fontSize === 'small') fontCalc = 'calc(7px + 1vmin)';
+    if (theme.fontSize === 'big') fontCalc = 'calc(15px + 1vmin)';
     root.style.setProperty('font-size', fontCalc);
 
     // Columns

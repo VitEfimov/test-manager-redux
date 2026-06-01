@@ -318,7 +318,7 @@ const Pomodoro = () => {
   const handlePeriodEnd = () => {
     if (localIsBreak) {
       dispatch(completeBreakInterval());
-      playStart();
+      try { playStart(); } catch(e) { console.warn('Audio play failed:', e); }
       // console.log("localIsBreak",localIsBreak);
       // console.log("localCompletedIntervals",localCompletedIntervals);
       // console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
@@ -328,7 +328,7 @@ const Pomodoro = () => {
       }
     } else {
       dispatch(completeWorkInterval());
-      playEnd();
+      try { playEnd(); } catch(e) { console.warn('Audio play failed:', e); }
     }
   };
 
@@ -366,17 +366,25 @@ const Pomodoro = () => {
 
 
   const showNotification = () => {
-    if (Notification.permission === 'granted') {
-      new Notification('Pomodoro Timer', {
-        body: localIsBreak ? 'Break over! Time to work!' : 'Work done! Take a break!',
-        icon: '/task_manager_icon.png'
-      });
+    try {
+      if ('Notification' in window && window.Notification && Notification.permission === 'granted') {
+        new Notification('Pomodoro Timer', {
+          body: localIsBreak ? 'Break over! Time to work!' : 'Work done! Take a break!',
+          icon: '/task_manager_icon.png'
+        });
+      }
+    } catch (e) {
+      console.error('Notification error:', e);
     }
   };
 
   useEffect(() => {
-    if (Notification.permission !== 'granted') {
-      Notification.requestPermission();
+    try {
+      if ('Notification' in window && window.Notification && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    } catch (e) {
+      console.error('Notification permission error:', e);
     }
   }, []);
 

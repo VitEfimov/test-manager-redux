@@ -14,13 +14,25 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
   const theme = useSelector(state => state.userReducer.theme);
+  const themeReducer = useSelector(state => state.themeReducer);
+  const userPicture = themeReducer?.userPicture;
 
   const handleToggle = () => {
     dispatch(updateUserTheme(!theme));
   };
 
+  const headerStyle = {};
+  if (userPicture) {
+    headerStyle.backgroundImage = `url(${userPicture})`;
+    headerStyle.backgroundSize = themeReducer?.headerBackgroundFit || 'cover';
+    headerStyle.backgroundPosition = 'center';
+    if (themeReducer?.headerBackgroundFit === 'contain' || themeReducer?.headerBackgroundFit === 'auto') {
+      headerStyle.backgroundRepeat = 'no-repeat';
+    }
+  }
+
   return (
-    <header className={`header ${showWeather ? 'weather-active' : 'weather-inactive'}`}>
+    <header className={`header ${showWeather ? 'weather-active' : 'weather-inactive'}`} style={headerStyle}>
       {showWeather ?
         <Weather />
         : null}

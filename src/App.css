@@ -19,31 +19,23 @@ body {
 :root {
   color-scheme: light dark;
 
-  --dark-button-hover-color: light-dark(
-    rgba(255, 255, 255, 0.267),
-    rgb(32, 32, 32)
-  );
+  --dark-button-hover-color: light-dark(rgba(255, 255, 255, 0.267),
+      rgb(32, 32, 32));
   --dark-background-color-sidebar: light-dark(rgb(105, 155, 105), rgb(0, 0, 0));
   --dark-font-color-white: light-dark(rgb(0, 0, 0), rgb(241, 231, 231));
   --dark-font-color-grey: light-dark(rgb(0, 0, 0), rgb(205, 205, 205));
   --dark-font-color-black: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));
   --dark-btn-color: #727171;
-  --dark-background-color-main: light-dark(
-    rgba(231, 226, 226, 0.951),
-    rgb(28, 28, 28)
-  );
-  --dark-background-color-main-priority: color-mix(
-    in srgb,
-    var(--dark-background-color-main),
-    green 5%
-  );
+  --dark-background-color-main: light-dark(rgba(231, 226, 226, 0.951),
+      rgb(28, 28, 28));
+  --dark-background-color-main-priority: color-mix(in srgb,
+      var(--dark-background-color-main),
+      green 5%);
 
   --background-color-main: white;
-  --background-color-main-priority: color-mix(
-    in srgb,
-    var(--background-color-main),
-    green 3%
-  );
+  --background-color-main-priority: color-mix(in srgb,
+      var(--background-color-main),
+      green 3%);
   --red_color: rgb(241, 81, 81);
   --col-task-width: 55dvw;
   --col-due-width: 10dvw;
@@ -337,16 +329,6 @@ body {
   user-select: none;
 }
 
-/* .dashboard-component {
-  display: flex;
-  flex-direction: column;
-  gap: 1dvh;
-
-  padding: 5dvh;
-  background: var(--dark-background-color-main);
-  color: var(--dark-font-color-black);
-  user-select: none;
-} */
 .dashboard__section {
   border: 1px solid var(--dark-background-color-sidebar);
   text-align: center;
@@ -356,8 +338,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 15dvh;
-  min-height: 200px;
+  height: 250px;
 
   & div {
     color: var(--dark-font-color-white);
@@ -381,11 +362,6 @@ body {
 }
 
 /* ///////////////////////////// section /////////////////////////////*/
-.section {
-}
-
-.section {
-}
 
 .section {
   flex: 1;
@@ -947,7 +923,7 @@ input[type="checkbox"] {
   animation: slideInRight 0.5s ease-in-out forwards;
 }
 
-.section__task-priority > .add__task-btn {
+.section__task-priority>.add__task-btn {
   border: 0;
   width: 150px;
   margin: 0;
@@ -1112,8 +1088,6 @@ input[type="checkbox"] {
   border-radius: var(--btn-border-radius-base);
 }
 
-.pomodoro__container-interval-fill {
-}
 
 .fill-full {
   width: 100%;
@@ -1359,6 +1333,7 @@ input[type="checkbox"] {
 /* //////////     Media       ////////////////// */
 
 @media only screen and (max-width: 1250px) {
+
   .weather-settings,
   .user-settings,
   .pomodoro-settings {
@@ -1391,7 +1366,7 @@ input[type="checkbox"] {
     height: 75%;
   }
 
-  .nav-button > .pomodoro {
+  .nav-button>.pomodoro {
     display: none;
   }
 
@@ -1409,6 +1384,7 @@ input[type="checkbox"] {
 }
 
 @media only screen and (max-width: 800px) {
+
   html,
   body {
     position: fixed;
@@ -1448,9 +1424,6 @@ input[type="checkbox"] {
     align-items: center;
 
     min-height: 40px;
-  }
-
-  .section-without-sidebar {
   }
 
   .section__task-name-description {
@@ -1608,11 +1581,13 @@ input[type="checkbox"] {
 
   .dashboard__section {
     width: min-content;
-    min-width: 250px;
-    min-height: auto;
+    min-width: 150px;
+    max-height: 100px;
+
     & h2 {
       font-size: calc(15px + 1vw);
     }
+
     & div {
       padding: 5px;
       font-size: calc(12px + 1vw);
@@ -1635,17 +1610,6 @@ input[type="checkbox"] {
     color: var(--dark-font-color-black);
     user-select: none;
   }
-
-  .dashboard-component {
-  display: flex;
-  flex-direction: column;
-  gap: 1dvh;
-
-  padding: 5dvh;
-  background: var(--dark-background-color-main);
-  color: var(--dark-font-color-black);
-  user-select: none;
-}
 
   .header__board {
     padding-right: 3vw;
@@ -1791,11 +1755,8 @@ input[type="checkbox"] {
     height: calc(100vh - 10vh);
   }
 
-  .sidebar {
-  }
 
-  .nav-button {
-  }
+
 }
 
 @media only screen and (max-height: 700px) {
@@ -1803,8 +1764,6 @@ input[type="checkbox"] {
     flex-direction: column;
   }
 
-  .section__task-label {
-  }
 
   .section__task-name {
     margin-right: 5px;
@@ -1816,8 +1775,6 @@ input[type="checkbox"] {
     padding: 1px 1px;
   }
 
-  .header__title {
-  }
 
   .section__task-name {
     padding: 0;
@@ -1831,15 +1788,11 @@ input[type="checkbox"] {
   .section__task-icon,
   .section_task-label {
     padding: 5px;
-
     display: none;
   }
 
   .section__task-input {
     margin-left: 5px;
-  }
-
-  .section__task-priority-btn {
   }
 
   .pomodoro__container {
@@ -1956,6 +1909,7 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
+
   .section__task-delete-btn,
   .section__task-priority,
   .section__task-icon {

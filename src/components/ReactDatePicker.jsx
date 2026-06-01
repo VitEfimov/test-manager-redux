@@ -28,6 +28,7 @@ const ReactDatePicker = ({ handleDateSelection, setShowDatePicker }) => {
           fromYear={2024}
           toYear={2090}
           mode='single'
+          portalId="root-portal"
         />
       </div>
     );

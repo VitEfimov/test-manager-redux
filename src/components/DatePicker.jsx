@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { useClickOutside } from '../custom-hooks/ClickOut';
@@ -24,6 +24,20 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
   };
 
   const dayPickerRef = useRef(null)
+
+  useEffect(() => {
+    if (dayPickerRef.current) {
+      const rect = dayPickerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      // If the datepicker goes below the visible screen area
+      if (rect.bottom > windowHeight) {
+        dayPickerRef.current.style.top = 'auto';
+        dayPickerRef.current.style.bottom = '100%';
+        dayPickerRef.current.style.marginBottom = '5px';
+        dayPickerRef.current.style.zIndex = '1000';
+      }
+    }
+  }, []);
 
   useClickOutside(dayPickerRef, () => setShowDatePicker(false))
 
