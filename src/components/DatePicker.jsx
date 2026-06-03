@@ -29,13 +29,22 @@ const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => 
     if (dayPickerRef.current) {
       const rect = dayPickerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      // If the datepicker goes below the visible screen area
-      if (rect.bottom > windowHeight) {
+      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
+      // If the datepicker goes below the visible screen area (60px buffer for bottom nav)
+      if (rect.bottom > windowHeight - 60) {
         dayPickerRef.current.style.top = 'auto';
         dayPickerRef.current.style.bottom = '100%';
         dayPickerRef.current.style.marginBottom = '5px';
-        dayPickerRef.current.style.zIndex = '1000';
       }
+
+      // If the datepicker goes beyond the right edge
+      if (rect.right > windowWidth - 10) {
+        dayPickerRef.current.style.right = '0';
+        dayPickerRef.current.style.left = 'auto';
+      }
+
+      dayPickerRef.current.style.zIndex = '1000';
     }
   }, []);
 

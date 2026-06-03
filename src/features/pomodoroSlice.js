@@ -15,6 +15,8 @@ const loadFromLocalStoragePomodoro = () => {
       progress: 0,
       passed: 0,
     },
+    workSound: 'default',
+    breakSound: 'default',
   }];
 
   try {
@@ -60,6 +62,10 @@ const loadFromLocalStoragePomodoro = () => {
       pomodoro.passed = 0;
       pomodoro.isActive = false;
       pomodoro.isBreak = false;
+
+      // Ensure sound settings exist
+      if (!pomodoro.workSound) pomodoro.workSound = 'default';
+      if (!pomodoro.breakSound) pomodoro.breakSound = 'default';
 
       // Save the corrected data back to localStorage
       localStorage.setItem('pomodoro', JSON.stringify(savedData));
@@ -186,6 +192,14 @@ export const pomodoroSlice = createSlice({
       state.pomodoro[0].time = state.pomodoro[0].initialTime;
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
     },
+    setWorkSound: (state, action) => {
+      state.pomodoro[0].workSound = action.payload;
+      localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
+    },
+    setBreakSound: (state, action) => {
+      state.pomodoro[0].breakSound = action.payload;
+      localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
+    },
   },
 });
 
@@ -201,6 +215,8 @@ export const {
   setInitialTime,
   completeWorkInterval,
   completeBreakInterval,
+  setWorkSound,
+  setBreakSound,
 } = pomodoroSlice.actions;
 
 export default pomodoroSlice.reducer;

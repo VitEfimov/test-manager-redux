@@ -229,7 +229,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
         display: 'flex',
         alignItems: 'center'
       } : {}}>
-        <span className='section__task-icon'>
+        <span className='section__task-icon' {...provided?.dragHandleProps}>
           <GrDrag className='section__task-icon__grdrag' />
         </span>
         <input className='section_task-checkbox'
@@ -246,12 +246,23 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
             onInput={(e) => adjustTextareaHeight(e.target)}
             onBlur={handleInputBlur}
             onKeyDown={handleKeyDown}
+            onFocus={(e) => {
+              const val = e.target.value;
+              e.target.value = '';
+              e.target.value = val;
+              adjustTextareaHeight(e.target);
+            }}
             autoFocus
             rows={1}
             style={{ 
               verticalAlign: 'middle', 
               overflow: 'hidden', 
-              resize: 'none' 
+              resize: 'none',
+              lineHeight: 'normal',
+              margin: '5px',
+              padding: '6px 12px',
+              boxSizing: 'border-box',
+              width: '100%'
             }} 
           />
         ) : (
@@ -268,13 +279,12 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
               width: '100%',
               boxSizing: 'border-box',
               transition: 'background-color 0.2s ease',
-              cursor: 'grab',
+              cursor: 'pointer',
               whiteSpace: taskNameWrap === 'wrap' ? 'normal' : 'nowrap',
               textOverflow: taskNameWrap === 'wrap' ? 'clip' : 'ellipsis',
               wordBreak: taskNameWrap === 'wrap' ? 'break-word' : 'normal',
               overflow: taskNameWrap === 'wrap' ? 'visible' : 'hidden'
             }}
-            {...provided?.dragHandleProps}
           >
             {task.name || taskName}
           </label>

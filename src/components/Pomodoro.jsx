@@ -262,8 +262,16 @@ const Pomodoro = () => {
     }
   }, []);
 
-  const [playEnd] = useSound(endSound);
-  const [playStart] = useSound(startSound);
+  const workSoundSrc = pomodoro.workSound && pomodoro.workSound !== 'default' && pomodoro.workSound !== 'none' 
+    ? pomodoro.workSound 
+    : endSound;
+
+  const breakSoundSrc = pomodoro.breakSound && pomodoro.breakSound !== 'default' && pomodoro.breakSound !== 'none'
+    ? pomodoro.breakSound
+    : startSound;
+
+  const [playEnd] = useSound(workSoundSrc);
+  const [playStart] = useSound(breakSoundSrc);
 
   useEffect(() => {
     setLocalTime(pomodoro.time);
@@ -318,7 +326,9 @@ const Pomodoro = () => {
   const handlePeriodEnd = () => {
     if (localIsBreak) {
       dispatch(completeBreakInterval());
-      try { playStart(); } catch(e) { console.warn('Audio play failed:', e); }
+      if (pomodoro.breakSound !== 'none') {
+        try { playStart(); } catch(e) { console.warn('Audio play failed:', e); }
+      }
       // console.log("localIsBreak",localIsBreak);
       // console.log("localCompletedIntervals",localCompletedIntervals);
       // console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
@@ -328,7 +338,9 @@ const Pomodoro = () => {
       }
     } else {
       dispatch(completeWorkInterval());
-      try { playEnd(); } catch(e) { console.warn('Audio play failed:', e); }
+      if (pomodoro.workSound !== 'none') {
+        try { playEnd(); } catch(e) { console.warn('Audio play failed:', e); }
+      }
     }
   };
 

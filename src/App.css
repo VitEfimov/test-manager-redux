@@ -324,7 +324,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-gap: 35px;
 
-  padding: 3dvh;
+  padding: 1dvh;
   background: var(--dark-background-color-main);
   color: var(--dark-font-color-black);
   user-select: none;
@@ -1336,8 +1336,7 @@ input[type="checkbox"] {
 @media only screen and (max-width: 1250px) {
 
   .weather-settings,
-  .user-settings,
-  .pomodoro-settings {
+  .user-settings {
     display: none;
   }
 
@@ -1582,9 +1581,9 @@ input[type="checkbox"] {
 
   .dashboard__section {
     width: min-content;
-    min-width: 80dvw;
+    min-width: 75dvw;
     max-height: fit-content;
-    padding: 1dvh 0 0 0;
+    padding: 0.7dvh 0 0 0;
     
 
     & h2 {

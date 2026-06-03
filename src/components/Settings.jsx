@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
-import { setBreakInterval, setIntervalCount, updateTime, setTime } from '../features/pomodoroSlice';
+import { setBreakInterval, setIntervalCount, updateTime, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
 import { logout } from '../features/userSlice';
 import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
@@ -26,6 +26,13 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newWorkInterval, setNewWorkInterval] = useState(time);
   const [newBreakInterval, setNewBreakInterval] = useState(breakInterval);
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
+
+  const workSound = pomodoro[0].workSound || 'default';
+  const breakSound = pomodoro[0].breakSound || 'default';
+  const [newWorkSound, setNewWorkSound] = useState(workSound);
+  const [newBreakSound, setNewBreakSound] = useState(breakSound);
+  const [workSoundType, setWorkSoundType] = useState(workSound === 'default' || workSound === 'none' ? workSound : 'custom');
+  const [breakSoundType, setBreakSoundType] = useState(breakSound === 'default' || breakSound === 'none' ? breakSound : 'custom');
   const [newDateFormat, setNewDateFormat] = useState(dateFormat);
   const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
   const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
@@ -61,6 +68,8 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setTime(newWorkInterval))
     dispatch(setBreakInterval(newBreakInterval))
     dispatch(setIntervalCount(newIntervalCount))
+    dispatch(setWorkSound(newWorkSound));
+    dispatch(setBreakSound(newBreakSound));
     dispatch(setDateFormat(newDateFormat));
     dispatch(setTaskNameWrap(newTaskNameWrap));
     dispatch(setTimeFormat(newTimeFormat));
@@ -144,6 +153,92 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
           <div className='settings__item'>
             <label className='settings__item-label'>Interval count:</label>
             <input type="number" value={newIntervalCount} onChange={handleSetIntervalCount} />
+          </div>
+
+          <div className='settings__item' style={{ marginTop: '1dvh', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+              <label className='settings__item-label'>Work Over Sound:</label>
+              <select
+                style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--dark-font-color-grey)', backgroundColor: 'var(--dark-background-color-sidebar)', color: 'var(--dark-font-color-white)', cursor: 'pointer', outline: 'none', width: '180px', textAlign: 'center' }}
+                value={workSoundType}
+                onChange={(e) => {
+                  setWorkSoundType(e.target.value);
+                  if (e.target.value === 'default' || e.target.value === 'none') {
+                    setNewWorkSound(e.target.value);
+                  }
+                }}
+              >
+                <option value="default">Default</option>
+                <option value="none">None</option>
+                <option value="custom">Custom (Upload)</option>
+              </select>
+            </div>
+            {workSoundType === 'custom' && (
+              <div style={{ marginTop: '10px', width: '100%' }}>
+                <input 
+                  type="file" 
+                  accept="audio/*" 
+                  style={{ color: 'var(--dark-font-color-white)', width: '100%' }}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      if (file.size > 2 * 1024 * 1024) {
+                        alert("File size exceeds 2MB limit.");
+                        e.target.value = '';
+                        return;
+                      }
+                      const reader = new FileReader();
+                      reader.onload = (event) => setNewWorkSound(event.target.result);
+                      reader.readAsDataURL(file);
+                    }
+                  }} 
+                />
+                {newWorkSound !== 'default' && newWorkSound !== 'none' && <p style={{ fontSize: '0.8rem', color: 'green', margin: '5px 0' }}>Custom sound loaded.</p>}
+              </div>
+            )}
+          </div>
+
+          <div className='settings__item' style={{ marginTop: '1dvh', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+              <label className='settings__item-label'>Break Over Sound:</label>
+              <select
+                style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--dark-font-color-grey)', backgroundColor: 'var(--dark-background-color-sidebar)', color: 'var(--dark-font-color-white)', cursor: 'pointer', outline: 'none', width: '180px', textAlign: 'center' }}
+                value={breakSoundType}
+                onChange={(e) => {
+                  setBreakSoundType(e.target.value);
+                  if (e.target.value === 'default' || e.target.value === 'none') {
+                    setNewBreakSound(e.target.value);
+                  }
+                }}
+              >
+                <option value="default">Default</option>
+                <option value="none">None</option>
+                <option value="custom">Custom (Upload)</option>
+              </select>
+            </div>
+            {breakSoundType === 'custom' && (
+              <div style={{ marginTop: '10px', width: '100%' }}>
+                <input 
+                  type="file" 
+                  accept="audio/*" 
+                  style={{ color: 'var(--dark-font-color-white)', width: '100%' }}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      if (file.size > 2 * 1024 * 1024) {
+                        alert("File size exceeds 2MB limit.");
+                        e.target.value = '';
+                        return;
+                      }
+                      const reader = new FileReader();
+                      reader.onload = (event) => setNewBreakSound(event.target.result);
+                      reader.readAsDataURL(file);
+                    }
+                  }} 
+                />
+                {newBreakSound !== 'default' && newBreakSound !== 'none' && <p style={{ fontSize: '0.8rem', color: 'green', margin: '5px 0' }}>Custom sound loaded.</p>}
+              </div>
+            )}
           </div>
 
         </div>

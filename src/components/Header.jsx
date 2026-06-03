@@ -43,7 +43,7 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
             <span><CgToggleSquare /></span>
           </section> */}
           {sidebarView ? (
-            <button className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
+            <button aria-label='Close sidebar' className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
               <CiSquareChevUp />
             </button>
           ) : null}
@@ -51,7 +51,7 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
           {/* <h1>{title}</h1> */}
           {/* {currentPage=='Board'? */}
           {!sidebarView ?
-            <button className='header__title-sidebar-view-btn-close' onClick={() => setSidebarView(!sidebarView)}>
+            <button aria-label='Open sidebar' className='header__title-sidebar-view-btn-close' onClick={() => setSidebarView(!sidebarView)}>
               {/* <ImMenu3 /> */}
               <CiSquareChevDown />
 
@@ -61,9 +61,9 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSideba
         <div className='header__title-sidebar-theme-toggle'>
           {/* <Weather /> */}
           {theme === true ?
-            <span className='header__title-sidebar-theme-toggle dark' onClick={() => handleToggle()}><CgToggleSquare /></span>
+            <span aria-label='Toggle light theme' role="button" tabIndex={0} className='header__title-sidebar-theme-toggle dark' onClick={() => handleToggle()} onKeyDown={(e) => { if (e.key === 'Enter') handleToggle(); }}><CgToggleSquare /></span>
             :
-            <span className='header__title-sidebar-theme-toggle light' onClick={() => handleToggle()}><CgToggleSquareOff /></span>
+            <span aria-label='Toggle dark theme' role="button" tabIndex={0} className='header__title-sidebar-theme-toggle light' onClick={() => handleToggle()} onKeyDown={(e) => { if (e.key === 'Enter') handleToggle(); }}><CgToggleSquareOff /></span>
           }
 
         </div>
