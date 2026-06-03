@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, registerUser } from '../features/userSlice';
+import { loginUser, registerUser, continueAsGuest } from '../features/userSlice';
 import './Login.css';
 
 const Login = () => {
@@ -62,6 +62,14 @@ const Login = () => {
 
                 <button type="submit" disabled={loading}>
                     {loading ? 'Processing...' : (isLogin ? 'Login' : 'Register')}
+                </button>
+
+                <button 
+                    type="button" 
+                    onClick={() => dispatch(continueAsGuest())} 
+                    style={{ marginTop: '10px', backgroundColor: 'var(--dark-background-color-sidebar)', border: '1px solid var(--dark-font-color-grey)', color: 'var(--dark-font-color-white)' }}
+                >
+                    Continue without login
                 </button>
 
                 <p onClick={() => setIsLogin(!isLogin)} className="toggle-auth">

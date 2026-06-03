@@ -12,6 +12,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const weather = useSelector((state) => state.weatherReducer.weather);
   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
   const theme = useSelector(state => state.themeReducer);
+  const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
   const dateFormat = theme.dateFormat || 'full';
   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
   const timeFormat = theme.timeFormat || '12h';
@@ -108,11 +109,30 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
               <InfomationIcon field={fields[0]} />
             </i>
           </h3>
+          {!isAuthenticated && (
+            <div className='settings__item' style={{ paddingBottom: '1rem' }}>
+              <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0', backgroundColor: '#4CAF50' }} onClick={() => dispatch(logout())}>Login to Sync</button>
+            </div>
+          )}
           <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-            <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(logout())}>Logout</button>
+            <button 
+              className='settings__save-btn' 
+              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }} 
+              onClick={() => isAuthenticated && dispatch(logout())}
+              disabled={!isAuthenticated}
+            >
+              Logout
+            </button>
           </div>
           <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-            <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(logout())}>Change password</button>
+            <button 
+              className='settings__save-btn' 
+              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }} 
+              onClick={() => isAuthenticated && console.log('Change password clicked')}
+              disabled={!isAuthenticated}
+            >
+              Change password
+            </button>
           </div>
         </div>
         <div className='settings__block weather-settings'>

@@ -19,6 +19,7 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const user = useSelector(state => state.userReducer.user || []);
+    const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const handleNavigation = (page) => {
         setCurrentPage(page);
         setTitle(page);
@@ -67,7 +68,13 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
                 <button className="nav-button settings" onClick={() => handleNavigation('Settings')} aria-label="Settings">
                     <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
                 </button>
-                <button className="nav-button " onClick={() => dispatch(logoutUser())} aria-label="Logout">
+                <button 
+                  className="nav-button " 
+                  onClick={() => isAuthenticated && dispatch(logoutUser())} 
+                  aria-label="Logout"
+                  style={{ opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
+                  disabled={!isAuthenticated}
+                >
                     <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span>
                 </button>
                 </div>

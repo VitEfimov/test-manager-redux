@@ -24,7 +24,7 @@ function App() {
   const [sidebarView, setSidebarView] = useState(true);
 
   const dispatch = useDispatch();
-  const { isAuthenticated, loading, theme: userTheme, showWeather } = useSelector((state) => state.userReducer);
+  const { isAuthenticated, loading, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer);
 
 
@@ -108,11 +108,11 @@ function App() {
   }, [isPomodoroActive, timeRemaining]);
 
 
-  if (loading && !isAuthenticated) {
+  if (loading && !isAuthenticated && !isGuest) {
     return <div>Loading...</div>; // Prevent flash of login screen while checking auth
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isGuest) {
     return <Login />;
   }
 

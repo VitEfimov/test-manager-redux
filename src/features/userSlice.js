@@ -10,6 +10,10 @@ const loadShowWeatherFromLocalStorage = () => {
     return localStorage.getItem('showWeather') === 'true';
 };
 
+const loadIsGuestFromLocalStorage = () => {
+    return localStorage.getItem('isGuest') === 'true';
+};
+
 export const checkAuth = createAsyncThunk('user/checkAuth', async (_, thunkAPI) => {
     try {
         const response = await axios.get('/api/auth/me', { withCredentials: true });
@@ -51,6 +55,7 @@ const initialState = {
     error: null,
     theme: loadThemeFromLocalStorage(),
     showWeather: loadShowWeatherFromLocalStorage(),
+    isGuest: loadIsGuestFromLocalStorage(),
 };
 
 const userSlice = createSlice({
@@ -59,6 +64,12 @@ const userSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.isAuthenticated = false;
+            state.isGuest = false;
+            localStorage.removeItem('isGuest');
+        },
+        continueAsGuest: (state) => {
+            state.isGuest = true;
+            localStorage.setItem('isGuest', 'true');
         },
         updateUserTheme: (state, action) => {
             state.theme = action.payload;
@@ -100,9 +111,11 @@ const userSlice = createSlice({
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isAuthenticated = false;
+                state.isGuest = false;
+                localStorage.removeItem('isGuest');
             });
     }
 });
 
-export const { logout, updateUserTheme, updateShowWeather } = userSlice.actions;
+export const { logout, continueAsGuest, updateUserTheme, updateShowWeather } = userSlice.actions;
 export default userSlice.reducer;
