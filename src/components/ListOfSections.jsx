@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Section from './Section';
 import AddTask from './AddTask';
@@ -114,36 +114,40 @@ const ListOfSections = ({ sidebarView }) => {
 
 
 
-    const sortedTasks = [...tasks].sort((a, b) => {
-        const dateA = dayjs(a.completionDate);
-        const dateB = dayjs(b.completionDate);
-        if (dateA.isSame(dateB, 'day')) {
-            const timeA = a.time || '';
-            const timeB = b.time || '';
-            if (timeA === timeB) return 0;
-            return timeA.localeCompare(timeB)
-        }
-        return dateA - dateB;
-    });
+    const sortedTasks = useMemo(() => {
+        return [...tasks].sort((a, b) => {
+            const dateA = dayjs(a.completionDate);
+            const dateB = dayjs(b.completionDate);
+            if (dateA.isSame(dateB, 'day')) {
+                const timeA = a.time || '';
+                const timeB = b.time || '';
+                if (timeA === timeB) return 0;
+                return timeA.localeCompare(timeB)
+            }
+            return dateA - dateB;
+        });
+    }, [tasks]);
 
-    const missedFiltered = sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
-    const todayFiltered = sortedTasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
-    const tomorrowFiltered = sortedTasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day') && !task.completed);
-    const onThisWeekFiltered = sortedTasks.filter(task =>
-        dayjs(task.completionDate).isAfter(dayjs().add(1, 'day'), 'day') &&
-        dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day')
-        && !task.completed
-    );
-    const onNextWeekFiltered = sortedTasks.filter(task =>
-        !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
-        dayjs(task.completionDate).isAfter(FILTERS['on-this-week'], 'day')
-        && dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day')
-        && !task.completed
-    );
-    const laterFiltered = sortedTasks.filter(task =>
-        dayjs(task.completionDate).isAfter(FILTERS['on-next-week'], 'day') && !task.completed
-    );
-    const completedFiltered = sortedTasks.filter(task => task.completed);
+    const { missedFiltered, todayFiltered, tomorrowFiltered, onThisWeekFiltered, onNextWeekFiltered, laterFiltered, completedFiltered } = useMemo(() => {
+        return {
+            missedFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed),
+            todayFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed),
+            tomorrowFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day') && !task.completed),
+            onThisWeekFiltered: sortedTasks.filter(task =>
+                dayjs(task.completionDate).isAfter(dayjs().add(1, 'day'), 'day') &&
+                dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day') && !task.completed
+            ),
+            onNextWeekFiltered: sortedTasks.filter(task =>
+                !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
+                dayjs(task.completionDate).isAfter(FILTERS['on-this-week'], 'day') &&
+                dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day') && !task.completed
+            ),
+            laterFiltered: sortedTasks.filter(task =>
+                dayjs(task.completionDate).isAfter(FILTERS['on-next-week'], 'day') && !task.completed
+            ),
+            completedFiltered: sortedTasks.filter(task => task.completed)
+        };
+    }, [sortedTasks]);
 
     const onDragEnd = (result) => {
         const { destination, source, draggableId } = result;

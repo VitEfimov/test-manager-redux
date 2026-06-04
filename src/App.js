@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks } from './features/taskSlice';
 import { checkAuth, updateShowWeather } from './features/userSlice';
@@ -8,11 +8,11 @@ import Header from './components/Header';
 import Login from './components/Login';
 import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
 
-const Pomodoro = lazy(() => import('./components/Pomodoro'));
-const ListOfSections = lazy(() => import('./components/ListOfSections'));
-const Dashboard = lazy(() => import('./components/Dashboard'));
-const Settings = lazy(() => import('./components/Settings'));
-const About = lazy(() => import('./components/About'));
+import Pomodoro from './components/Pomodoro';
+import ListOfSections from './components/ListOfSections';
+import Dashboard from './components/Dashboard';
+import Settings from './components/Settings';
+import About from './components/About';
 
 function App() {
 
@@ -28,15 +28,29 @@ function App() {
   const theme = useSelector((state) => state.themeReducer);
 
 
+  const [appReady, setAppReady] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [tasksChecked, setTasksChecked] = useState(false);
+
   useEffect(() => {
-    dispatch(checkAuth());
+    dispatch(checkAuth()).finally(() => setAuthChecked(true));
   }, [dispatch]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(fetchTasks());
+    if (authChecked) {
+      if (isAuthenticated) {
+        dispatch(fetchTasks()).finally(() => setTasksChecked(true));
+      } else {
+        setTasksChecked(true);
+      }
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, authChecked, isAuthenticated]);
+
+  useEffect(() => {
+    if (authChecked && tasksChecked) {
+      setTimeout(() => setAppReady(true), 800); // 800ms minimum visual display
+    }
+  }, [authChecked, tasksChecked]);
 
   useEffect(() => {
     document.documentElement.style.colorScheme = userTheme ? 'dark' : 'light';
@@ -108,8 +122,13 @@ function App() {
   }, [isPomodoroActive, timeRemaining]);
 
 
-  if (loading && !isAuthenticated && !isGuest) {
-    return <div>Loading...</div>; // Prevent flash of login screen while checking auth
+  if (!appReady) {
+    return (
+      <div className="global-loader">
+        <div className="spinner"></div>
+        <h2 className="global-loader-title">TaskManager</h2>
+      </div>
+    );
   }
 
   if (!isAuthenticated && !isGuest) {
@@ -138,9 +157,7 @@ function App() {
           setTitle={setTitle}
           sidebarView={sidebarView}
           setSidebarView={setSidebarView} />
-        <Suspense fallback={<div style={{ padding: '20px', color: 'var(--dark-font-color-white)' }}>Loading page...</div>}>
           {renderPage(sidebarView)}
-        </Suspense>
       </div>
       <ThemeSettingsSidebar />
     </main>

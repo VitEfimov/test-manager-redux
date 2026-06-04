@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
 import { setBreakInterval, setIntervalCount, updateTime, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
-import { logout } from '../features/userSlice';
+import { logout, changePassword } from '../features/userSlice';
 import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
@@ -39,6 +39,36 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
   const [newFontSize, setNewFontSize] = useState(theme.fontSize || 'normal');
   const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
+
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+
+  const handleChangePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New passwords do not match!");
+      return;
+    }
+    setPasswordError('');
+    setPasswordSuccess('');
+    const resultAction = await dispatch(changePassword({ currentPassword, newPassword }));
+    if (changePassword.fulfilled.match(resultAction)) {
+      setPasswordSuccess("Password successfully changed!");
+      setTimeout(() => {
+        setShowPasswordModal(false);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setPasswordSuccess('');
+      }, 2000);
+    } else {
+      setPasswordError(resultAction.payload || "Failed to change password.");
+    }
+  };
 
   const handleCityChange = (e) => {
     setNewCity(e.target.value);
@@ -134,11 +164,27 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             <button
               className='settings__save-btn'
               style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
-              onClick={() => isAuthenticated && console.log('Change password clicked')}
+              onClick={() => isAuthenticated && setShowPasswordModal(true)}
               disabled={!isAuthenticated}
             >
               Change password
             </button>
+            {showPasswordModal && (
+              <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000 }}>
+                <div style={{ backgroundColor: 'var(--dark-background-color-main)', padding: '2rem', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '1rem', width: '300px' }}>
+                  <h3 style={{ color: 'var(--dark-font-color-white)', textAlign: 'center', margin: 0 }}>Change Password</h3>
+                  {passwordError && <p style={{ color: 'var(--red_color)', margin: 0, fontSize: '0.9rem', textAlign: 'center' }}>{passwordError}</p>}
+                  {passwordSuccess && <p style={{ color: 'green', margin: 0, fontSize: '0.9rem', textAlign: 'center' }}>{passwordSuccess}</p>}
+                  <input type="password" placeholder="Current Password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }} />
+                  <input type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }} />
+                  <input type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                    <button className='settings__save-btn' style={{ position: 'relative', width: '45%' }} onClick={handleChangePasswordSubmit}>Submit</button>
+                    <button className='settings__save-btn' style={{ position: 'relative', width: '45%', backgroundColor: 'var(--dark-btn-color)' }} onClick={() => setShowPasswordModal(false)}>Cancel</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className='settings__block weather-settings'>

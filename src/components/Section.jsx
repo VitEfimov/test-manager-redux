@@ -434,6 +434,6 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   )
 }
 
-export default Section;
+export default React.memo(Section);
 
 

@@ -49,6 +49,15 @@ export const logoutUser = createAsyncThunk('user/logout', async (_, thunkAPI) =>
     }
 });
 
+export const changePassword = createAsyncThunk('user/changePassword', async ({ currentPassword, newPassword }, thunkAPI) => {
+    try {
+        const response = await axios.post('/api/auth/change-password', { currentPassword, newPassword }, { withCredentials: true });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+    }
+});
+
 const initialState = {
     isAuthenticated: false,
     loading: false,
@@ -106,6 +115,15 @@ const userSlice = createSlice({
                 state.isAuthenticated = true;
             })
             .addCase(registerUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(changePassword.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(changePassword.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(changePassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

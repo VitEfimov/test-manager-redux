@@ -20,6 +20,11 @@ export default async function handler(req, res) {
   const result = await db.collection('users').insertOne({
     email,
     password: hashed,
+    isPremium: true,                  // Default to TRUE for now
+    subscriptionStatus: 'active',     // 'active', 'inactive', 'canceled', 'trial'
+    subscriptionProvider: null,       // 'google_play', 'stripe', or 'apple'
+    subscriptionId: null,             
+    subscriptionEndDate: null         
   });
 
   const user = { _id: result.insertedId, email };

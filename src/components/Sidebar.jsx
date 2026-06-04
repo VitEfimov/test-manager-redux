@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, startTransition } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask, deleteTask } from '../features/taskSlice';
 import { logoutUser } from '../features/userSlice';
@@ -21,8 +21,10 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
     const user = useSelector(state => state.userReducer.user || []);
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const handleNavigation = (page) => {
-        setCurrentPage(page);
-        setTitle(page);
+        startTransition(() => {
+            setCurrentPage(page);
+            setTitle(page);
+        });
     };
 
 

@@ -134,7 +134,7 @@ body {
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 0.5px var(--dark-font-color-grey);
+    /* Removed box-shadow to get rid of the grey border on click */
     background-color: var(--dark-background-color-main);
   }
 
@@ -1357,6 +1357,7 @@ input[type="checkbox"] {
   .nav-button:focus {
     background-color: transparent;
     border-right: none;
+    border: none;
   }
   .settings__conteiner {
     flex-direction: column;
@@ -1932,5 +1933,40 @@ input[type="checkbox"] {
   .section__task-priority,
   .section__task-icon {
     display: none !important;
+  }
+}
+
+/* ===== Global Loader ===== */
+.global-loader {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dark-background-color-main);
+  z-index: 9999;
+}
+
+.global-loader-title {
+  color: var(--dark-font-color-white);
+  font-size: 2rem;
+  margin-top: 20px;
+  font-family: inherit;
+  letter-spacing: 2px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--dark-font-color-white);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
