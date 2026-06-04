@@ -137,9 +137,9 @@ const ThemeSettingsSidebar = () => {
           <button className="settings__save-btn" onClick={handleReset} style={{ width: '100%', marginTop: '20px' }}>
             Reset to Default
           </button>
-          <button className="settings__save-btn" onClick={handleReset} style={{ width: '100%', marginTop: '20px' }}>
+          {/* <button className="settings__save-btn" onClick={handleReset} style={{ width: '100%', marginTop: '20px' }}>
             Save
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

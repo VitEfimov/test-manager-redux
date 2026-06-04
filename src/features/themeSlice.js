@@ -26,7 +26,7 @@ const initialState = {
     priority: 10
   },
   defaultTaskLimit: loaded?.defaultTaskLimit !== undefined ? loaded.defaultTaskLimit : 10,
-  isSettingsOpen: loaded?.isSettingsOpen || false,
+  isSettingsOpen: false,
   dateFormat: loaded?.dateFormat || 'short',
   taskNameWrap: loaded?.taskNameWrap || 'wrap',
   timeFormat: loaded?.timeFormat || '12h',

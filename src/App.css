@@ -1,4 +1,4 @@
-﻿* {
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -130,7 +130,7 @@ body {
   &:hover {
     background-color: var(--dark-button-hover-color);
     border-right: var(--dark-font-color-white) solid 3px;
-  }
+  } 
 
   &:focus {
     outline: none;
@@ -1013,9 +1013,12 @@ input[type="checkbox"] {
   justify-content: center;
   text-align: center;
   margin: 20px auto;
-  margin-top: 10dvh;
+  /* margin-top: 10dvh; */
   width: 100%;
   height: 50dvh;
+  overflow: hidden;
+  position: relative;
+
 }
 
 .pomodoro__container-timer {
@@ -1138,12 +1141,13 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 
-  margin-top: 10vh;
+  /* margin-top: 10vh; */
 }
 
 .pomodoro__container-timer {
-  font-size: 8vh;
+  font-size: 8dvh;
   padding: 20px;
 }
 
@@ -1162,7 +1166,7 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 30px 0;
+  margin: 10px 0;
   width: 300px;
 }
 
@@ -1224,6 +1228,8 @@ input[type="checkbox"] {
 .settings__item-label {
   margin: 5px;
 }
+
+
 
 .settings__item-checkbox {
   appearance: none;
@@ -1347,7 +1353,11 @@ input[type="checkbox"] {
   .nav-button-name {
     display: none;
   }
-
+  .nav-button:hover,
+  .nav-button:focus {
+    background-color: transparent;
+    border-right: none;
+  }
   .settings__conteiner {
     flex-direction: column;
     height: auto;
@@ -1673,16 +1683,17 @@ input[type="checkbox"] {
   }
 
   .pomodoro__container {
-    margin-top: 5dvh;
+    margin: 0 auto;
     padding: 10px;
-    height: calc(100vh - 15vh);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    /* 15vh for header, 60px for bottom sidebar */
+    height: calc(100dvh - 15vh - 60px); 
+    position: relative;
+    overflow: hidden;
   }
 
   .pomodoro__container-timer {
     font-size: calc(20px + 2vmin);
-    margin: 20px 0;
+    margin: 5px 0;
   }
 
   .pomodoro__container__controls button {
@@ -1705,7 +1716,7 @@ input[type="checkbox"] {
   }
 
   .pomodoro__container-status {
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 10px;
     background: rgba(0, 0, 0, 0.05);
     border-radius: 8px;
@@ -1802,12 +1813,13 @@ input[type="checkbox"] {
   }
 
   .pomodoro__container {
+    overflow: hidden;
     padding: 5px;
   }
 
   .pomodoro__container-timer {
     font-size: calc(18px + 1.5vmin);
-    margin: 10px 0;
+    margin: 5px 0;
   }
 }
 

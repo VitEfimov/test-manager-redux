@@ -36,8 +36,17 @@ export const deleteTaskAsync = createAsyncThunk('task/deleteTaskAsync', async (t
     return taskId;
 });
 
+const loadTasksFromLocalStorage = () => {
+    try {
+        const serialized = localStorage.getItem('localTasks');
+        return serialized ? JSON.parse(serialized) : [];
+    } catch(e) {
+        return [];
+    }
+};
+
 const initialState = {
-    tasks: [],
+    tasks: loadTasksFromLocalStorage(),
     loading: false,
     error: null,
 };
@@ -49,10 +58,12 @@ const taskSlice = createSlice({
         addTaskSync(state, action) {
             const { task } = action.payload;
             state.tasks.push(task); 
+            localStorage.setItem('localTasks', JSON.stringify(state.tasks));
         },
         deleteTaskSync(state, action) {
              const { taskId } = action.payload;
              state.tasks = state.tasks.filter(t => t.id !== taskId);
+             localStorage.setItem('localTasks', JSON.stringify(state.tasks));
         },
         updateTaskSync(state, action) {
             const { taskId, name, priority, completed, description, completionDate, time } = action.payload;
@@ -71,6 +82,7 @@ const taskSlice = createSlice({
                     };
                 }
                 task.lastUpdatedDate = new Date().toISOString();
+                localStorage.setItem('localTasks', JSON.stringify(state.tasks));
             }
         }
     },
@@ -80,6 +92,7 @@ const taskSlice = createSlice({
             .addCase(fetchTasks.fulfilled, (state, action) => {
                 state.loading = false;
                 state.tasks = action.payload; 
+                localStorage.setItem('localTasks', JSON.stringify(state.tasks));
             })
             .addCase(fetchTasks.rejected, (state, action) => { state.loading = false; state.error = action.error.message; });
     }

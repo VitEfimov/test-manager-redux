@@ -16,7 +16,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dateFormat = theme.dateFormat || 'full';
   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
   const timeFormat = theme.timeFormat || '12h';
-  
+
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
   const time = pomodoro[0].initialTime / 60; // Use initialTime instead of time
@@ -59,7 +59,13 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     setNewBreakInterval(parseFloat(e.target.value));
   };
   const handleSetIntervalCount = (e) => {
-    setNewIntervalCount(parseInt(e.target.value));
+    if (parseInt(e.target.value)>10) {
+      alert("10 intervals maximum")
+
+    } else {
+      setNewIntervalCount(parseInt(e.target.value));
+    }
+    // setNewIntervalCount(parseInt(e.target.value));
   };
 
   const handleSave = () => {
@@ -115,9 +121,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             </div>
           )}
           <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-            <button 
-              className='settings__save-btn' 
-              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }} 
+            <button
+              className='settings__save-btn'
+              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
               onClick={() => isAuthenticated && dispatch(logout())}
               disabled={!isAuthenticated}
             >
@@ -125,9 +131,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             </button>
           </div>
           <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-            <button 
-              className='settings__save-btn' 
-              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }} 
+            <button
+              className='settings__save-btn'
+              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
               onClick={() => isAuthenticated && console.log('Change password clicked')}
               disabled={!isAuthenticated}
             >
@@ -172,7 +178,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
           </div>
           <div className='settings__item'>
             <label className='settings__item-label'>Interval count:</label>
-            <input type="number" value={newIntervalCount} onChange={handleSetIntervalCount} />
+            <input type="number" min="1" max="10" value={newIntervalCount} onChange={handleSetIntervalCount} />
           </div>
 
           <div className='settings__item' style={{ marginTop: '1dvh', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -195,9 +201,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             </div>
             {workSoundType === 'custom' && (
               <div style={{ marginTop: '10px', width: '100%' }}>
-                <input 
-                  type="file" 
-                  accept="audio/*" 
+                <input
+                  type="file"
+                  accept="audio/*"
                   style={{ color: 'var(--dark-font-color-white)', width: '100%' }}
                   onChange={(e) => {
                     const file = e.target.files[0];
@@ -211,7 +217,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                       reader.onload = (event) => setNewWorkSound(event.target.result);
                       reader.readAsDataURL(file);
                     }
-                  }} 
+                  }}
                 />
                 {newWorkSound !== 'default' && newWorkSound !== 'none' && <p style={{ fontSize: '0.8rem', color: 'green', margin: '5px 0' }}>Custom sound loaded.</p>}
               </div>
@@ -238,9 +244,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             </div>
             {breakSoundType === 'custom' && (
               <div style={{ marginTop: '10px', width: '100%' }}>
-                <input 
-                  type="file" 
-                  accept="audio/*" 
+                <input
+                  type="file"
+                  accept="audio/*"
                   style={{ color: 'var(--dark-font-color-white)', width: '100%' }}
                   onChange={(e) => {
                     const file = e.target.files[0];
@@ -254,7 +260,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                       reader.onload = (event) => setNewBreakSound(event.target.result);
                       reader.readAsDataURL(file);
                     }
-                  }} 
+                  }}
                 />
                 {newBreakSound !== 'default' && newBreakSound !== 'none' && <p style={{ fontSize: '0.8rem', color: 'green', margin: '5px 0' }}>Custom sound loaded.</p>}
               </div>
