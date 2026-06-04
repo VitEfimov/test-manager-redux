@@ -82,7 +82,7 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-group">
-          <label htmlFor="userPictureUpload">Header Background Image (Max 1MB)</label>
+          <label htmlFor="userPictureUpload">Header Banner (Max 1MB)</label>
           <input 
             id="userPictureUpload"
             type="file"

@@ -519,7 +519,7 @@ input {
 }
 
 .description__modal {
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
@@ -539,13 +539,27 @@ input {
 
   & label {
     color: var(--dark-font-color-grey);
-  }
+  } */
+     position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+
+  height: 100%;
+  background-color: var(--dark-background-color-main);
+  border-left: 2px solid var(--dark-background-color-sidebar);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: var(--dark-font-color-white);
 }
 
 .description__modal-content {
   background-color: var(--dark-background-color-main);
   padding: 20px;
-  border-radius: var(--btn-border-radius-base);
+  /* border-radius: var(--btn-border-radius-base); */
   box-shadow: 0 0 10px rgba(0, 0, 0);
   width: 100%;
   height: 110%;
@@ -587,7 +601,7 @@ input {
 .description__modal-content {
   background-color: var(--dark-background-color-main);
   padding: 20px;
-  border-radius: 12px 12px 0 0;
+  /* border-radius: 12px 12px 0 0; */
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -624,7 +638,7 @@ input {
 
   background-color: var(--dark-background-color-main);
   padding: 20px;
-  border-radius: 12px 12px 0 0;
+  /* border-radius: 12px 12px 0 0; */
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -641,8 +655,8 @@ input {
 
   bottom: 0;
   right: 0;
-  width: 55%;
-  height: 95%;
+  width: 100%;
+  height: 100%;
   z-index: 1000;
   display: flex;
   justify-content: flex-end;
@@ -653,7 +667,7 @@ input {
 .description__modal-content {
   background: var(--dark-background-color-main);
   padding: 20px;
-  border-radius: 12px 12px 0 0;
+  /* border-radius: 12px 12px 0 0; */
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -1371,10 +1385,10 @@ input[type="checkbox"] {
     display: none;
   }
 
-  .description__modal {
+  /* .description__modal {
     width: 85%;
     height: 75%;
-  }
+  } */
 
   .nav-button>.pomodoro {
     display: none;
@@ -1425,7 +1439,6 @@ input[type="checkbox"] {
     padding-left: 5%;
     max-width: 100%;
     justify-items: auto;
-    transform: translateX(0px);
   }
 
   .section__task {
@@ -1555,27 +1568,33 @@ input[type="checkbox"] {
   }
 
   .date__picker {
-    position: absolute;
-    right: 1;
-    animation: slideInLeft 0.5s ease-in-out forwards;
-    z-index: 1000;
+    position: static;
     background-color: var(--dark-background-color-main);
   }
 
   .date-picker-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -50%);
+    z-index: 10000 !important;
     max-width: 90vw;
-    position: relative;
     background-color: var(--dark-background-color-main);
+    border: 1px solid var(--dark-font-color-grey);
     border-radius: 10px;
-    padding: 8px;
+    padding: 10px;
+    padding-bottom: 50px; /* Space for buttons */
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
   }
 
   .date-picker-controls {
     flex-direction: row;
-    gap: 8px;
+    gap: 15px;
     margin-top: 8px;
     position: absolute;
-    bottom: 8px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
@@ -1734,10 +1753,10 @@ input[type="checkbox"] {
     font-size: 14px;
   }
 
-  .description__modal {
+  /* .description__modal {
     width: 85%;
     height: 85%;
-  }
+  } */
 }
 
 @media only screen and (max-width: 480px) {
@@ -1745,10 +1764,10 @@ input[type="checkbox"] {
     display: none;
   }
 
-  .description__modal {
+  /* .description__modal {
     width: 85%;
     height: 85%;
-  }
+  } */
 
   .description__modal-content {
     padding-top: 5dvh;
@@ -1828,6 +1847,7 @@ input[type="checkbox"] {
   position: fixed;
   top: 0;
   right: 0;
+  width: 80%;
 
   height: 100vh;
   background-color: var(--dark-background-color-main);
