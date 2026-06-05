@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "task__manager_icon.png",
+      "src": "task__manager_icon_black.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "task__manager_icon.png",
+      "src": "task__manager_icon_black.png",
       "type": "image/png",
       "sizes": "512x512"
     }
