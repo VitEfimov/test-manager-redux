@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
-import { setBreakInterval, setIntervalCount, updateTime, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
+import { setBreakInterval, setIntervalCount, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
 import { logout, changePassword } from '../features/userSlice';
 import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
@@ -19,21 +19,28 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
 
   const weatherCity = weather[0].city;
   const weatherApi = weather[0].apiKey;
-  const time = pomodoro[0].initialTime / 60; // Use initialTime instead of time
-  const breakInterval = pomodoro[0].breakInterval / 60; // Convert to minutes
-  const intervalCount = pomodoro[0].intervalCount.count; // Get the count value
+  const workMinutes = Math.floor(pomodoro[0].initialTime / 60);
+  const workSeconds = pomodoro[0].initialTime % 60;
+  const breakMinutes = Math.floor(pomodoro[0].breakInterval / 60);
+  const breakSeconds = pomodoro[0].breakInterval % 60;
+  const intervalCount = pomodoro[0].intervalCount.count;
+
   const [newCity, setNewCity] = useState(weatherCity);
   const [newApiKey, setNewApiKey] = useState(weatherApi)
-  const [newWorkInterval, setNewWorkInterval] = useState(time);
-  const [newBreakInterval, setNewBreakInterval] = useState(breakInterval);
+  
+  const [newWorkMin, setNewWorkMin] = useState(workMinutes);
+  const [newWorkSec, setNewWorkSec] = useState(workSeconds);
+  const [newBreakMin, setNewBreakMin] = useState(breakMinutes);
+  const [newBreakSec, setNewBreakSec] = useState(breakSeconds);
   const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
 
   const workSound = pomodoro[0].workSound || 'default';
   const breakSound = pomodoro[0].breakSound || 'default';
   const [newWorkSound, setNewWorkSound] = useState(workSound);
   const [newBreakSound, setNewBreakSound] = useState(breakSound);
-  const [workSoundType, setWorkSoundType] = useState(workSound === 'default' || workSound === 'none' ? workSound : 'custom');
-  const [breakSoundType, setBreakSoundType] = useState(breakSound === 'default' || breakSound === 'none' ? breakSound : 'custom');
+  const predefinedSounds = ['default', 'none', 'chime.wav', 'light ping.wav', 'notification.wav', 'end_sound.ogg', 'start_sound.mp3'];
+  const [workSoundType, setWorkSoundType] = useState(predefinedSounds.includes(workSound) ? workSound : 'custom');
+  const [breakSoundType, setBreakSoundType] = useState(predefinedSounds.includes(breakSound) ? breakSound : 'custom');
   const [newDateFormat, setNewDateFormat] = useState(dateFormat);
   const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
   const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
@@ -82,12 +89,11 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     setShowWeather(e.target.checked);
   };
 
-  const handleSetWorkInterval = (e) => {
-    setNewWorkInterval(parseFloat(e.target.value));
-  };
-  const handleSetBreakInterval = (e) => {
-    setNewBreakInterval(parseFloat(e.target.value));
-  };
+  const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
+  const handleSetWorkSec = (e) => setNewWorkSec(parseInt(e.target.value) || 0);
+  
+  const handleSetBreakMin = (e) => setNewBreakMin(parseInt(e.target.value) || 0);
+  const handleSetBreakSec = (e) => setNewBreakSec(parseInt(e.target.value) || 0);
   const handleSetIntervalCount = (e) => {
     if (parseInt(e.target.value)>10) {
       alert("10 intervals maximum")
@@ -101,9 +107,10 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const handleSave = () => {
     dispatch(updateWeatherCity(newCity));
     dispatch(updateWeatherApi(newApiKey))
-    // Use setTime instead of updateTime to properly save both time and initialTime
-    dispatch(setTime(newWorkInterval))
-    dispatch(setBreakInterval(newBreakInterval))
+    const totalWorkSeconds = newWorkMin * 60 + newWorkSec;
+    const totalBreakSeconds = newBreakMin * 60 + newBreakSec;
+    dispatch(setTime(totalWorkSeconds))
+    dispatch(setBreakInterval(totalBreakSeconds))
     dispatch(setIntervalCount(newIntervalCount))
     dispatch(setWorkSound(newWorkSound));
     dispatch(setBreakSound(newBreakSound));
@@ -215,12 +222,18 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             </i>
           </h3>
           <div className='settings__item'>
-            <label className='settings__item-label'>Work Interval time (minutes):</label>
-            <input type="number" step="0.1" min="0.1" value={newWorkInterval} onChange={handleSetWorkInterval} />
+            <label className='settings__item-label'>Work Interval time:</label>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              <input type="number" style={{ width: '60px' }} min="0" max="120" value={newWorkMin} onChange={handleSetWorkMin} placeholder="Min" /> min
+              <input type="number" style={{ width: '60px' }} min="0" max="59" value={newWorkSec} onChange={handleSetWorkSec} placeholder="Sec" /> sec
+            </div>
           </div>
           <div className='settings__item'>
-            <label className='settings__item-label'>Break Interval time (minutes):</label>
-            <input type="number" step="0.1" min="0.1" value={newBreakInterval} onChange={handleSetBreakInterval} />
+            <label className='settings__item-label'>Break Interval time:</label>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              <input type="number" style={{ width: '60px' }} min="0" max="120" value={newBreakMin} onChange={handleSetBreakMin} placeholder="Min" /> min
+              <input type="number" style={{ width: '60px' }} min="0" max="59" value={newBreakSec} onChange={handleSetBreakSec} placeholder="Sec" /> sec
+            </div>
           </div>
           <div className='settings__item'>
             <label className='settings__item-label'>Interval count:</label>
@@ -235,13 +248,18 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                 value={workSoundType}
                 onChange={(e) => {
                   setWorkSoundType(e.target.value);
-                  if (e.target.value === 'default' || e.target.value === 'none') {
+                  if (e.target.value !== 'custom') {
                     setNewWorkSound(e.target.value);
                   }
                 }}
               >
                 <option value="default">Default</option>
                 <option value="none">None</option>
+                <option value="chime.wav">Chime</option>
+                <option value="light ping.wav">Light Ping</option>
+                <option value="notification.wav">Notification</option>
+                <option value="end_sound.ogg">End Sound (Ogg)</option>
+                <option value="start_sound.mp3">Start Sound (Mp3)</option>
                 <option value="custom">Custom (Upload)</option>
               </select>
             </div>
@@ -278,13 +296,18 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                 value={breakSoundType}
                 onChange={(e) => {
                   setBreakSoundType(e.target.value);
-                  if (e.target.value === 'default' || e.target.value === 'none') {
+                  if (e.target.value !== 'custom') {
                     setNewBreakSound(e.target.value);
                   }
                 }}
               >
                 <option value="default">Default</option>
                 <option value="none">None</option>
+                <option value="chime.wav">Chime</option>
+                <option value="light ping.wav">Light Ping</option>
+                <option value="notification.wav">Notification</option>
+                <option value="end_sound.ogg">End Sound (Ogg)</option>
+                <option value="start_sound.mp3">Start Sound (Mp3)</option>
                 <option value="custom">Custom (Upload)</option>
               </select>
             </div>

@@ -37,7 +37,7 @@ const ThemeSettingsSidebar = () => {
     <div className="theme-settings-sidebar">
       <div className="theme-settings-header">
         <h3>Theme Settings</h3>
-        <button className="theme-settings-close-btn" onClick={onClose}>X</button>
+        <button className="theme-settings-close-btn" onClick={onClose}>&times;</button>
       </div>
 
       <div className="theme-settings-body">

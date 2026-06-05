@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { updateTask } from '../../features/taskSlice';
+import React from 'react'
 
-export const PriorotyDropdown = ({ task,checked }) => {
+export const PriorotyDropdown = () => {
 
   //   const dispatch = useDispatch();
 

@@ -2,17 +2,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import axios from 'axios';
 
-export const fetchTasks = createAsyncThunk('task/fetchTasks', async (_, thunkAPI) => {
+export const fetchTasks = createAsyncThunk('task/fetchTasks', async (_) => {
     const response = await axios.get('/api/tasks', { withCredentials: true });
     return response.data;
 });
 
-export const addTaskAsync = createAsyncThunk('task/addTaskAsync', async (task, thunkAPI) => {
+export const addTaskAsync = createAsyncThunk('task/addTaskAsync', async (task) => {
     const response = await axios.post('/api/tasks', task, { withCredentials: true });
     return response.data;
 });
 
-export const updateTaskAsync = createAsyncThunk('task/updateTaskAsync', async (updateData, thunkAPI) => {
+export const updateTaskAsync = createAsyncThunk('task/updateTaskAsync', async (updateData) => {
     const { taskId, name, priority, completed, description, completionDate, time } = updateData;
 
     const payload = {};
@@ -31,14 +31,21 @@ export const updateTaskAsync = createAsyncThunk('task/updateTaskAsync', async (u
     return { taskId, payload };
 });
 
-export const deleteTaskAsync = createAsyncThunk('task/deleteTaskAsync', async (taskId, thunkAPI) => {
+export const deleteTaskAsync = createAsyncThunk('task/deleteTaskAsync', async (taskId) => {
     await axios.delete(`/api/tasks/${taskId}`, { withCredentials: true });
     return taskId;
 });
 
-const loadTasksFromLocalStorage = () => {
+const loadGuestTasksFromLocalStorage = () => {
     try {
-        const serialized = localStorage.getItem('localTasks');
+        // Migration: If old localTasks exists but guestTasks doesn't, migrate them.
+        const oldTasks = localStorage.getItem('localTasks');
+        if (oldTasks && !localStorage.getItem('guestTasks')) {
+            localStorage.setItem('guestTasks', oldTasks);
+            localStorage.removeItem('localTasks');
+        }
+        
+        const serialized = localStorage.getItem('guestTasks');
         return serialized ? JSON.parse(serialized) : [];
     } catch(e) {
         return [];
@@ -46,7 +53,7 @@ const loadTasksFromLocalStorage = () => {
 };
 
 const initialState = {
-    tasks: loadTasksFromLocalStorage(),
+    tasks: [], // Initially empty, will be loaded on boot based on auth state
     loading: false,
     error: null,
 };
@@ -58,12 +65,10 @@ const taskSlice = createSlice({
         addTaskSync(state, action) {
             const { task } = action.payload;
             state.tasks.push(task); 
-            localStorage.setItem('localTasks', JSON.stringify(state.tasks));
         },
         deleteTaskSync(state, action) {
              const { taskId } = action.payload;
              state.tasks = state.tasks.filter(t => t.id !== taskId);
-             localStorage.setItem('localTasks', JSON.stringify(state.tasks));
         },
         updateTaskSync(state, action) {
             const { taskId, name, priority, completed, description, completionDate, time } = action.payload;
@@ -82,8 +87,13 @@ const taskSlice = createSlice({
                     };
                 }
                 task.lastUpdatedDate = new Date().toISOString();
-                localStorage.setItem('localTasks', JSON.stringify(state.tasks));
             }
+        },
+        clearTasks(state) {
+            state.tasks = [];
+        },
+        loadGuestTasks(state) {
+            state.tasks = loadGuestTasksFromLocalStorage();
         }
     },
     extraReducers: (builder) => {
@@ -91,14 +101,13 @@ const taskSlice = createSlice({
             .addCase(fetchTasks.pending, (state) => { state.loading = true; })
             .addCase(fetchTasks.fulfilled, (state, action) => {
                 state.loading = false;
-                state.tasks = action.payload; 
-                localStorage.setItem('localTasks', JSON.stringify(state.tasks));
+                state.tasks = action.payload;
             })
             .addCase(fetchTasks.rejected, (state, action) => { state.loading = false; state.error = action.error.message; });
     }
 });
 
-export const { addTaskSync, deleteTaskSync, updateTaskSync } = taskSlice.actions;
+export const { addTaskSync, deleteTaskSync, updateTaskSync, clearTasks, loadGuestTasks } = taskSlice.actions;
 
 export const addTask = (payload) => (dispatch) => {
     dispatch(addTaskSync(payload)); 

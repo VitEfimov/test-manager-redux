@@ -1,18 +1,13 @@
 import React from 'react';
 import Weather from './Weather';
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { ImMenu4, ImMenu3 } from "react-icons/im";
 import { useDispatch, useSelector } from 'react-redux';
 import { CgToggleSquare, CgToggleSquareOff } from "react-icons/cg";
-import { use } from 'react';
-import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
 import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
 import { updateUserTheme } from '../features/userSlice';
 
 
-const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, title, setSidebarView, sidebarView, currentPage, showWeather }) => {
+const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, setSidebarView, sidebarView, showWeather }) => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
   const theme = useSelector(state => state.userReducer.theme);
   const themeReducer = useSelector(state => state.themeReducer);
   const userPicture = themeReducer?.userPicture;

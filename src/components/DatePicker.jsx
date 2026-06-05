@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { useClickOutside } from '../custom-hooks/ClickOut';
-import dayjs from 'dayjs';
 
 const DatePicker = ({ handleDateSelection, setShowDatePicker, currentDate }) => {
   const [previewDate, setPreviewDate] = useState(currentDate ? new Date(currentDate) : new Date());

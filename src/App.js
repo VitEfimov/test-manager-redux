@@ -1,7 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTasks } from './features/taskSlice';
+import { fetchTasks, loadGuestTasks } from './features/taskSlice';
 import { checkAuth, updateShowWeather } from './features/userSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -24,8 +24,9 @@ function App() {
   const [sidebarView, setSidebarView] = useState(true);
 
   const dispatch = useDispatch();
-  const { isAuthenticated, loading, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer);
+  const { isAuthenticated, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer);
+  const tasks = useSelector((state) => state.taskReducer.tasks);
 
 
   const [appReady, setAppReady] = useState(false);
@@ -40,11 +41,21 @@ function App() {
     if (authChecked) {
       if (isAuthenticated) {
         dispatch(fetchTasks()).finally(() => setTasksChecked(true));
+      } else if (isGuest) {
+        dispatch(loadGuestTasks());
+        setTasksChecked(true);
       } else {
         setTasksChecked(true);
       }
     }
-  }, [dispatch, authChecked, isAuthenticated]);
+  }, [dispatch, authChecked, isAuthenticated, isGuest]);
+
+  // Continuously save guest tasks to local storage whenever tasks array changes
+  useEffect(() => {
+    if (isGuest && tasks.length >= 0) {
+      localStorage.setItem('guestTasks', JSON.stringify(tasks));
+    }
+  }, [tasks, isGuest]);
 
   useEffect(() => {
     if (authChecked && tasksChecked) {

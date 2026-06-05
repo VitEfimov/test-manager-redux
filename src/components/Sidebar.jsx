@@ -1,24 +1,17 @@
-import React, { useState, startTransition } from 'react';
+import React, { startTransition } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTask, deleteTask } from '../features/taskSlice';
 import { logoutUser } from '../features/userSlice';
-import { MdDelete } from "react-icons/md";
-import { IoIosArrowBack } from "react-icons/io";
 import { FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { IoTimerOutline } from "react-icons/io5";
 import { IoInformationCircle } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import { IoLogOutSharp } from "react-icons/io5";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { ImMenu4, ImMenu3 } from "react-icons/im";
 
 
 
-const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
+const Sidebar = ({ setCurrentPage, setTitle, sidebarView }) => {
     const dispatch = useDispatch();
-    const tasks = useSelector(state => state.taskReducer.tasks || []);
-    const user = useSelector(state => state.userReducer.user || []);
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const handleNavigation = (page) => {
         startTransition(() => {

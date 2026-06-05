@@ -4,11 +4,8 @@ import { MdDelete } from "react-icons/md";
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTask } from '../features/taskSlice';
-import { PriorotyDropdown } from './ui-components/PriorotyDropdown';
 import DatePicker from './DatePicker';
-import ReactDatePicker from './ReactDatePicker';
 import { useClickOutside } from '../custom-hooks/ClickOut';
-import { SiTrueup } from 'react-icons/si';
 
 
 const AddTask = ({ date }) => {

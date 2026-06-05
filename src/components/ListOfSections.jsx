@@ -5,8 +5,6 @@ import AddTask from './AddTask';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import FILTERS from '../list-view/filters';
-import HeaderListOfSection from './HeaderListOfSection';
-import Sidebar from './Sidebar';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { updateTask, deleteTask } from '../features/taskSlice';
 import ColumnResizer from './ColumnResizer';
@@ -71,9 +69,7 @@ const ListOfSections = ({ sidebarView }) => {
     };
 
 
-    const [open, setOpen] = useState(false);
-    let openRef = useRef();
-
+    // Unused variables removed
     // useEffect(() => {
     //     const handler = (e) => {
     //         if (openRef.current && !openRef.current.contains(e.target)) {

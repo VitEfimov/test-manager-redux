@@ -1,7 +1,5 @@
 import DatePicker from "react-datepicker";
 import React, {useState} from 'react';
-import LocalizedFormat from 'dayjs/plugin/localizedFormat';
-import dayjs from 'dayjs';
 import "react-datepicker/dist/react-datepicker.css";
 
 const ReactDatePicker = ({ handleDateSelection, setShowDatePicker }) => {

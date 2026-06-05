@@ -231,6 +231,9 @@ import { GrPowerReset } from "react-icons/gr";
 import useSound from 'use-sound';
 import endSound from '../assets/audio/end_sound.ogg';
 import startSound from '../assets/audio/start_sound.mp3';
+import chimeSound from '../assets/audio/chime.wav';
+import lightPingSound from '../assets/audio/light ping.wav';
+import notificationSound from '../assets/audio/notification.wav';
 import {
   startTimer,
   pauseTimer,
@@ -239,6 +242,14 @@ import {
   completeWorkInterval,
   completeBreakInterval
 } from '../features/pomodoroSlice';
+
+const SOUND_MAP = {
+  'chime.wav': chimeSound,
+  'light ping.wav': lightPingSound,
+  'notification.wav': notificationSound,
+  'end_sound.ogg': endSound,
+  'start_sound.mp3': startSound
+};
 
 const Pomodoro = () => {
   const dispatch = useDispatch();
@@ -263,11 +274,11 @@ const Pomodoro = () => {
   }, []);
 
   const workSoundSrc = pomodoro.workSound && pomodoro.workSound !== 'default' && pomodoro.workSound !== 'none' 
-    ? pomodoro.workSound 
+    ? (SOUND_MAP[pomodoro.workSound] || pomodoro.workSound)
     : endSound;
 
   const breakSoundSrc = pomodoro.breakSound && pomodoro.breakSound !== 'default' && pomodoro.breakSound !== 'none'
-    ? pomodoro.breakSound
+    ? (SOUND_MAP[pomodoro.breakSound] || pomodoro.breakSound)
     : startSound;
 
   const [playEnd] = useSound(workSoundSrc);

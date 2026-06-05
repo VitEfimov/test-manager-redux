@@ -4,11 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FcAcceptDatabase, FcDataRecovery, FcDatabase } from "react-icons/fc";
-import { ImMenu } from "react-icons/im";
+import { FcAcceptDatabase, FcDatabase } from "react-icons/fc";
 import { useClickOutside } from '../custom-hooks/ClickOut';
-import { MdDragIndicator } from "react-icons/md";
 
 import { Draggable } from '@hello-pangea/dnd';
 
@@ -17,8 +14,6 @@ import { GrDrag } from "react-icons/gr";
 import { updateTask, deleteTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
 import Description from './Description';
-import { TfiLayoutMenuV } from "react-icons/tfi";
-import ReactDatePicker from './ReactDatePicker';
 
 
 

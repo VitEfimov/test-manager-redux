@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
-    "@types/node": "^25.0.9"
+    "@types/node": "^25.0.9",
+    "eslint-plugin-unused-imports": "^4.4.1"
   }
 }

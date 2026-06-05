@@ -1870,11 +1870,14 @@ input[type="checkbox"] {
 }
 
 .theme-settings-close-btn {
-  background: transparent;
-  color: var(--dark-font-color-white);
-  border: none;
-  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
   cursor: pointer;
+  font-size: calc(20px + 1vmin);
+  color: var(--dark-font-color-grey);
+  background: transparent;
+  border: none;
 }
 
 .theme-settings-group {
@@ -1988,5 +1991,14 @@ input[type="checkbox"] {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 769px) {
+  .description__modal {
+    width: 60%;
+  }
+  .theme-settings-sidebar {
+    width: 60%;
   }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import UseSound from './ui-components/UseSound';
 
 const About = () => {
   return (

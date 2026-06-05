@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import axios from 'axios';
+import { clearTasks } from './taskSlice';
 
 const loadThemeFromLocalStorage = () => {
     return localStorage.getItem('theme') === 'dark' || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -44,6 +45,7 @@ export const registerUser = createAsyncThunk('user/register', async ({ email, pa
 export const logoutUser = createAsyncThunk('user/logout', async (_, thunkAPI) => {
     try {
         await axios.post('/api/auth/logout', {}, { withCredentials: true });
+        thunkAPI.dispatch(clearTasks());
     } catch (err) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
     }

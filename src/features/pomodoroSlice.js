@@ -138,8 +138,8 @@ export const pomodoroSlice = createSlice({
     },
     setBreakInterval: (state, action) => {
       // Convert minutes to seconds for consistency
-      const breakTimeInSeconds = action.payload * 60;
-      console.log('Setting break time:', action.payload, 'minutes =', breakTimeInSeconds, 'seconds');
+      const breakTimeInSeconds = action.payload;
+      console.log('Setting break time:', action.payload, 'seconds');
       state.pomodoro[0].breakInterval = breakTimeInSeconds;
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
       console.log('Saved Pomodoro state after setBreakInterval:', state.pomodoro);
@@ -160,8 +160,8 @@ export const pomodoroSlice = createSlice({
     },
     setTime: (state, action) => {
       // This is for setting both time and initialTime from settings
-      const workTimeInSeconds = action.payload * 60;
-      console.log('Setting work time:', action.payload, 'minutes =', workTimeInSeconds, 'seconds');
+      const workTimeInSeconds = action.payload;
+      console.log('Setting work time:', action.payload, 'seconds');
       state.pomodoro[0].time = workTimeInSeconds;
       state.pomodoro[0].initialTime = workTimeInSeconds;
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
