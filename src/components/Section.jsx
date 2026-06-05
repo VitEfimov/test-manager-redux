@@ -254,7 +254,7 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
               overflow: 'hidden', 
               resize: 'none',
               lineHeight: 'normal',
-              margin: '5px',
+              margin: '0',
               padding: '6px 12px',
               boxSizing: 'border-box',
               width: '100%'

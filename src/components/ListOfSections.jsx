@@ -7,6 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import FILTERS from '../list-view/filters';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { updateTask, deleteTask } from '../features/taskSlice';
+import { addBoardAsync, renameBoardAsync, deleteBoardAsync, setActiveBoardId } from '../features/userSlice';
 import ColumnResizer from './ColumnResizer';
 
 
@@ -16,6 +17,9 @@ const ListOfSections = ({ sidebarView }) => {
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks || []);
     const theme = useSelector(state => state.themeReducer);
+    const boards = useSelector(state => state.userReducer.boards) || [{ id: 'main', name: 'Main' }];
+    const activeBoardId = useSelector(state => state.userReducer.activeBoardId);
+    const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const [missedTasks, setMissedTasks] = useState(false);
 
     const [expandedSections, setExpandedSections] = useState({});
@@ -25,6 +29,38 @@ const ListOfSections = ({ sidebarView }) => {
             ...prev,
             [id]: !prev[id]
         }));
+    };
+
+    const handleAddBoard = () => {
+        const limit = isAuthenticated ? 6 : 2;
+        if (boards.length >= limit) {
+            alert(`You have reached the maximum number of boards (${limit}) for your current plan. Please ${isAuthenticated ? 'upgrade' : 'login'} to add more.`);
+            return;
+        }
+        const name = prompt('Enter new board name:');
+        if (name && name.trim()) {
+            const id = new Date().getTime().toString();
+            dispatch(addBoardAsync({ id, name: name.trim() }));
+            dispatch(setActiveBoardId(id));
+        }
+    };
+
+    const handleRenameBoard = (id, currentName) => {
+        const name = prompt('Enter new name for the board:', currentName);
+        if (name && name.trim() && name !== currentName) {
+            dispatch(renameBoardAsync({ id, name: name.trim() }));
+        }
+    };
+
+    const handleDeleteBoard = (id) => {
+        if (id === 'main') {
+            alert('Cannot delete the Main board.');
+            return;
+        }
+        if (window.confirm('Are you sure you want to delete this board? ALL tasks in this board will be permanently deleted!')) {
+            dispatch(deleteBoardAsync(id));
+            tasks.filter(t => (t.boardId || 'main') === id).forEach(t => dispatch(deleteTask({ taskId: t.id })));
+        }
     };
 
     const limit = theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10;
@@ -111,7 +147,9 @@ const ListOfSections = ({ sidebarView }) => {
 
 
     const sortedTasks = useMemo(() => {
-        return [...tasks].sort((a, b) => {
+        return [...tasks]
+            .filter(task => (task.boardId || 'main') === activeBoardId)
+            .sort((a, b) => {
             const dateA = dayjs(a.completionDate);
             const dateB = dayjs(b.completionDate);
             if (dateA.isSame(dateB, 'day')) {
@@ -224,6 +262,47 @@ const ListOfSections = ({ sidebarView }) => {
                 {/* <Sidebar
             /> */}
                 <section className={sidebarView ? 'section open' : 'section close'}>
+                    <div className="board-tabs" style={{ display: 'flex', gap: '5px', marginBottom: '10px', overflowX: 'auto', marginTop: '10px', padding: '0 10px' }}>
+                        {boards.map(board => (
+                            <div 
+                                key={board.id} 
+                                className={`board-tab ${activeBoardId === board.id ? 'active' : ''}`}
+                                style={{
+                                    padding: '8px 16px',
+                                    backgroundColor: activeBoardId === board.id ? 'var(--dark-background-color-main)' : 'rgba(0,0,0,0.2)',
+                                    borderTopLeftRadius: '8px',
+                                    borderTopRightRadius: '8px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    borderBottom: activeBoardId === board.id ? '2px solid #DA8F03' : 'none',
+                                    fontWeight: activeBoardId === board.id ? 'bold' : 'normal'
+                                }}
+                                onClick={() => dispatch(setActiveBoardId(board.id))}
+                                onDoubleClick={() => handleRenameBoard(board.id, board.name)}
+                                title="Double-click to rename"
+                            >
+                                <span>{board.name}</span>
+                                {board.id !== 'main' && (
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); handleDeleteBoard(board.id); }}
+                                        style={{ background: 'transparent', border: 'none', color: 'rgb(241, 81, 81)', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}
+                                        title="Delete board"
+                                    >
+                                        &times;
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                        <button 
+                            onClick={handleAddBoard}
+                            style={{ padding: '8px 16px', background: 'rgba(0,0,0,0.2)', border: 'none', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+                            title="Add new board"
+                        >
+                            +
+                        </button>
+                    </div>
 
                     <header className='header__board'>
                         <div className='header__board-view'>

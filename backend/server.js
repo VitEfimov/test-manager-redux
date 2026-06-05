@@ -45,7 +45,11 @@ app.post('/api/auth/register', async (req, res) => {
         if (existing) return res.status(400).json({ message: 'User exists' });
         
         const hashed = await bcrypt.hash(password, 10);
-        const result = await db.collection('users').insertOne({ email, password: hashed });
+        const result = await db.collection('users').insertOne({ 
+            email, 
+            password: hashed,
+            boards: [{ id: 'main', name: 'Main' }]
+        });
         const token = jwt.sign({ userId: result.insertedId, email }, SECRET, { expiresIn: '7d' });
 
         const cookieOptions = {
@@ -84,7 +88,7 @@ app.post('/api/auth/login', async (req, res) => {
         }
 
         res.cookie('token', token, cookieOptions);
-        res.status(200).json({ email: user.email });
+        res.status(200).json({ email: user.email, boards: user.boards || [{ id: 'main', name: 'Main' }] });
     } catch (e) {
         res.status(500).json({ message: 'Database Error' });
     }
@@ -95,8 +99,9 @@ app.post('/api/auth/logout', (req, res) => {
     res.status(200).json({ message: 'Logged out successfully' });
 });
 
-app.get('/api/auth/me', verifyToken, (req, res) => {
-    res.status(200).json({ email: req.user.email });
+app.get('/api/auth/me', verifyToken, async (req, res) => {
+    const user = await db.collection('users').findOne({ email: req.user.email });
+    res.status(200).json({ email: req.user.email, boards: user?.boards || [{ id: 'main', name: 'Main' }] });
 });
 
 app.get('/api/tasks', verifyToken, async (req, res) => {
@@ -127,6 +132,39 @@ app.delete('/api/tasks/:id', verifyToken, async (req, res) => {
         userId: req.user.userId
     });
     res.status(200).json(result);
+});
+
+app.post('/api/boards', verifyToken, async (req, res) => {
+    const { id, name } = req.body;
+    const { ObjectId } = require('mongodb');
+    await db.collection('users').updateOne(
+        { _id: new ObjectId(req.user.userId) },
+        { $push: { boards: { id, name } } }
+    );
+    res.status(201).json({ id, name });
+});
+
+app.put('/api/boards/:id', verifyToken, async (req, res) => {
+    const { name } = req.body;
+    const { ObjectId } = require('mongodb');
+    await db.collection('users').updateOne(
+        { _id: new ObjectId(req.user.userId), "boards.id": req.params.id },
+        { $set: { "boards.$.name": name } }
+    );
+    res.status(200).json({ id: req.params.id, name });
+});
+
+app.delete('/api/boards/:id', verifyToken, async (req, res) => {
+    const { ObjectId } = require('mongodb');
+    await db.collection('users').updateOne(
+        { _id: new ObjectId(req.user.userId) },
+        { $pull: { boards: { id: req.params.id } } }
+    );
+    await db.collection('tasks').deleteMany({
+        userId: req.user.userId,
+        boardId: req.params.id
+    });
+    res.status(200).json({ id: req.params.id });
 });
 
 const PORT = 3001;

@@ -4,8 +4,7 @@ import { updateTask, deleteTask } from '../features/taskSlice';
 import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 import ReactDOM from 'react-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+
 
 const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const dispatch = useDispatch();
@@ -149,19 +148,10 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
           />
 
           <label>Time:</label>
-          <DatePicker
-            className='description__input'
-            selected={formData.time ? new Date(`1970-01-01T${formData.time}`) : null}
-            onChange={(date) => {
-               const timeString = date ? dayjs(date).format('HH:mm') : '';
-               setFormData({ ...formData, time: timeString });
-            }}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat={timeFormat === '24h' ? 'HH:mm' : 'h:mm aa'}
-          />
+          <input className='description__input'
+            type="time" name="time" 
+            value={formData.time} 
+            onChange={handleChange} />
 
           <label>Description:</label>
           <textarea

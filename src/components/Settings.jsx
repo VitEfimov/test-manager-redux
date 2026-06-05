@@ -386,7 +386,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
               <option value="wrap">Wrap (Full)</option>
             </select>
           </div>
-          <div className='settings__item' style={{ marginTop: '1dvh' }}>
+          {/* <div className='settings__item' style={{ marginTop: '1dvh' }}>
             <label className='settings__item-label'>Time Format:</label>
             <select
               style={{
@@ -406,7 +406,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
               <option value="12h">12-hour (AM/PM)</option>
               <option value="24h">24-hour (International)</option>
             </select>
-          </div>
+          </div> */}
           <div className='settings__item' style={{ marginTop: '1dvh' }}>
             <label className='settings__item-label'>Font Size:</label>
             <select

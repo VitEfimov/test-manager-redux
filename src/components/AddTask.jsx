@@ -2,7 +2,7 @@ import React from 'react'
 import dayjs from 'dayjs';
 import { MdDelete } from "react-icons/md";
 import { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
 import { useClickOutside } from '../custom-hooks/ClickOut';
@@ -10,6 +10,7 @@ import { useClickOutside } from '../custom-hooks/ClickOut';
 
 const AddTask = ({ date }) => {
     const dispatch = useDispatch();
+    const activeBoardId = useSelector(state => state.userReducer.activeBoardId);
     const [addTaskForm, setAddTaskForm] = useState(false);
     const [taskName, setTaskName] = useState('');
     const [taskPriority, setTaskPriority] = useState('');
@@ -61,6 +62,7 @@ const AddTask = ({ date }) => {
 
         const newTask = {
             id: new Date().getTime().toString(),
+            boardId: activeBoardId || 'main',
             taskname: taskName,
             creationDate: new Date().toLocaleDateString(),
             lastUpdatedDate: null,

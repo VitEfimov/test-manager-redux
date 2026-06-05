@@ -27,6 +27,7 @@ function App() {
   const { isAuthenticated, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer);
   const tasks = useSelector((state) => state.taskReducer.tasks);
+  const boards = useSelector((state) => state.userReducer.boards);
 
 
   const [appReady, setAppReady] = useState(false);
@@ -56,6 +57,12 @@ function App() {
       localStorage.setItem('guestTasks', JSON.stringify(tasks));
     }
   }, [tasks, isGuest]);
+
+  useEffect(() => {
+    if (isGuest && boards && boards.length > 0) {
+      localStorage.setItem('guestBoards', JSON.stringify(boards));
+    }
+  }, [boards, isGuest]);
 
   useEffect(() => {
     if (authChecked && tasksChecked) {

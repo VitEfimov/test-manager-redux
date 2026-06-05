@@ -15,6 +15,15 @@ const loadIsGuestFromLocalStorage = () => {
     return localStorage.getItem('isGuest') === 'true';
 };
 
+const loadBoardsFromLocalStorage = () => {
+    try {
+        const serialized = localStorage.getItem('guestBoards');
+        return serialized ? JSON.parse(serialized) : [{ id: 'main', name: 'Main' }];
+    } catch(e) {
+        return [{ id: 'main', name: 'Main' }];
+    }
+};
+
 export const checkAuth = createAsyncThunk('user/checkAuth', async (_, thunkAPI) => {
     try {
         const response = await axios.get('/api/auth/me', { withCredentials: true });
@@ -60,6 +69,33 @@ export const changePassword = createAsyncThunk('user/changePassword', async ({ c
     }
 });
 
+export const addBoardAsync = createAsyncThunk('user/addBoard', async ({ id, name }, thunkAPI) => {
+    const state = thunkAPI.getState().userReducer;
+    if (state.isAuthenticated) {
+        const response = await axios.post('/api/boards', { id, name }, { withCredentials: true });
+        return response.data;
+    }
+    return { id, name };
+});
+
+export const renameBoardAsync = createAsyncThunk('user/renameBoard', async ({ id, name }, thunkAPI) => {
+    const state = thunkAPI.getState().userReducer;
+    if (state.isAuthenticated) {
+        const response = await axios.put(`/api/boards/${id}`, { name }, { withCredentials: true });
+        return response.data;
+    }
+    return { id, name };
+});
+
+export const deleteBoardAsync = createAsyncThunk('user/deleteBoard', async (id, thunkAPI) => {
+    const state = thunkAPI.getState().userReducer;
+    if (state.isAuthenticated) {
+        await axios.delete(`/api/boards/${id}`, { withCredentials: true });
+        return id;
+    }
+    return id;
+});
+
 const initialState = {
     isAuthenticated: false,
     loading: false,
@@ -67,6 +103,8 @@ const initialState = {
     theme: loadThemeFromLocalStorage(),
     showWeather: loadShowWeatherFromLocalStorage(),
     isGuest: loadIsGuestFromLocalStorage(),
+    boards: loadBoardsFromLocalStorage(),
+    activeBoardId: 'main',
 };
 
 const userSlice = createSlice({
@@ -76,6 +114,8 @@ const userSlice = createSlice({
         logout: (state) => {
             state.isAuthenticated = false;
             state.isGuest = false;
+            state.boards = loadBoardsFromLocalStorage();
+            state.activeBoardId = 'main';
             localStorage.removeItem('isGuest');
         },
         continueAsGuest: (state) => {
@@ -90,31 +130,43 @@ const userSlice = createSlice({
             state.showWeather = action.payload;
             localStorage.setItem('showWeather', action.payload ? 'true' : 'false');
         },
+        setActiveBoardId: (state, action) => {
+            state.activeBoardId = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(checkAuth.pending, (state) => { state.loading = true; state.error = null; })
-            .addCase(checkAuth.fulfilled, (state) => {
+            .addCase(checkAuth.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
+                if (action.payload?.boards) {
+                    state.boards = action.payload.boards;
+                }
             })
             .addCase(checkAuth.rejected, (state) => {
                 state.loading = false;
                 state.isAuthenticated = false;
             })
             .addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; })
-            .addCase(loginUser.fulfilled, (state) => {
+            .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
+                if (action.payload?.boards) {
+                    state.boards = action.payload.boards;
+                }
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
             .addCase(registerUser.pending, (state) => { state.loading = true; state.error = null; })
-            .addCase(registerUser.fulfilled, (state) => {
+            .addCase(registerUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
+                if (action.payload?.boards) {
+                    state.boards = action.payload.boards;
+                }
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
@@ -132,10 +184,25 @@ const userSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isAuthenticated = false;
                 state.isGuest = false;
+                state.boards = loadBoardsFromLocalStorage();
+                state.activeBoardId = 'main';
                 localStorage.removeItem('isGuest');
+            })
+            .addCase(addBoardAsync.fulfilled, (state, action) => {
+                state.boards.push(action.payload);
+            })
+            .addCase(renameBoardAsync.fulfilled, (state, action) => {
+                const board = state.boards.find(b => b.id === action.payload.id);
+                if (board) board.name = action.payload.name;
+            })
+            .addCase(deleteBoardAsync.fulfilled, (state, action) => {
+                state.boards = state.boards.filter(b => b.id !== action.payload);
+                if (state.activeBoardId === action.payload) {
+                    state.activeBoardId = 'main';
+                }
             });
     }
 });
 
-export const { logout, continueAsGuest, updateUserTheme, updateShowWeather } = userSlice.actions;
+export const { logout, continueAsGuest, updateUserTheme, updateShowWeather, setActiveBoardId } = userSlice.actions;
 export default userSlice.reducer;
