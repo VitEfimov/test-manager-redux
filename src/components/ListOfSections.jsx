@@ -40,8 +40,14 @@ const ListOfSections = ({ sidebarView }) => {
         const name = prompt('Enter new board name:');
         if (name && name.trim()) {
             const id = new Date().getTime().toString();
-            dispatch(addBoardAsync({ id, name: name.trim() }));
-            dispatch(setActiveBoardId(id));
+            dispatch(addBoardAsync({ id, name: name.trim() })).then((action) => {
+                if (action.meta.requestStatus === 'fulfilled') {
+                    dispatch(setActiveBoardId(id));
+                } else {
+                    const errorMsg = action.error?.message || 'Unknown error';
+                    alert('Failed to save the new board. Error: ' + errorMsg + '. Please ensure your backend is restarted. If the issue persists, try logging out and logging back in.');
+                }
+            });
         }
     };
 
@@ -160,7 +166,7 @@ const ListOfSections = ({ sidebarView }) => {
             }
             return dateA - dateB;
         });
-    }, [tasks]);
+    }, [tasks, activeBoardId]);
 
     const { missedFiltered, todayFiltered, tomorrowFiltered, onThisWeekFiltered, onNextWeekFiltered, laterFiltered, completedFiltered } = useMemo(() => {
         return {

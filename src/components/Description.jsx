@@ -4,6 +4,7 @@ import { updateTask, deleteTask } from '../features/taskSlice';
 import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 import ReactDOM from 'react-dom';
+import { addMultipleTasks } from '../features/taskSlice';
 
 
 const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
@@ -19,6 +20,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     descriptionText: task.description?.text || '',
     descriptionImg: task.description?.img || '',
     descriptionUrl: task.description?.url || '',
+    repeat: 'None'
   });
 
   useEffect(() => {
@@ -31,6 +33,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       descriptionText: task.description?.text || '',
       descriptionImg: task.description?.img || '',
       descriptionUrl: task.description?.url || '',
+      repeat: 'None'
     });
   }, [task]);
 
@@ -68,6 +71,40 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       },
     };
     dispatch(updateTask(updatedTask));
+
+    if (formData.repeat && formData.repeat !== 'None') {
+        const tasksToGenerate = [];
+        const endDate = dayjs(formData.completionDate || dayjs()).add(6, 'month');
+        let currentIterDate = dayjs(formData.completionDate || dayjs());
+        
+        while (true) {
+            currentIterDate = formData.repeat === 'Daily' ? currentIterDate.add(1, 'day') : currentIterDate.add(1, 'week');
+            if (currentIterDate.isAfter(endDate)) break;
+            
+            const newTaskId = new Date().getTime().toString() + Math.random().toString(36).substr(2, 9);
+            tasksToGenerate.push({
+                id: newTaskId,
+                boardId: task.boardId || 'main',
+                taskname: formData.name,
+                priority: formData.priority,
+                completed: false,
+                completionDate: currentIterDate.toISOString(),
+                time: formData.time,
+                description: {
+                    text: formData.descriptionText,
+                    img: formData.descriptionImg,
+                    url: formData.descriptionUrl,
+                },
+                lastUpdatedDate: new Date().toISOString()
+            });
+        }
+
+        if (tasksToGenerate.length > 0) {
+            dispatch(addMultipleTasks({ tasks: tasksToGenerate }));
+            alert(`Generated ${tasksToGenerate.length} recurring tasks!`);
+        }
+    }
+
     setTaskName(formData.name);
     setTaskPriority(formData.priority);
     setModal(false);
@@ -95,6 +132,40 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       },
     };
     dispatch(updateTask(updatedTask));
+
+    if (formData.repeat && formData.repeat !== 'None') {
+        const tasksToGenerate = [];
+        const endDate = dayjs(formData.completionDate || dayjs()).add(6, 'month');
+        let currentIterDate = dayjs(formData.completionDate || dayjs());
+        
+        while (true) {
+            currentIterDate = formData.repeat === 'Daily' ? currentIterDate.add(1, 'day') : currentIterDate.add(1, 'week');
+            if (currentIterDate.isAfter(endDate)) break;
+            
+            const newTaskId = new Date().getTime().toString() + Math.random().toString(36).substr(2, 9);
+            tasksToGenerate.push({
+                id: newTaskId,
+                boardId: task.boardId || 'main',
+                taskname: formData.name,
+                priority: formData.priority,
+                completed: false,
+                completionDate: currentIterDate.toISOString(),
+                time: formData.time,
+                description: {
+                    text: formData.descriptionText,
+                    img: formData.descriptionImg,
+                    url: formData.descriptionUrl,
+                },
+                lastUpdatedDate: new Date().toISOString()
+            });
+        }
+
+        if (tasksToGenerate.length > 0) {
+            dispatch(addMultipleTasks({ tasks: tasksToGenerate }));
+            alert(`Generated ${tasksToGenerate.length} recurring tasks!`);
+        }
+    }
+
     setTaskName(formData.name);
     setTaskPriority(formData.priority);
     setModal(false);
@@ -152,6 +223,18 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
             type="time" name="time" 
             value={formData.time} 
             onChange={handleChange} />
+
+          <label>Repeat (Max 6 Months):</label>
+          <select
+            className="description__input"
+            name="repeat"
+            value={formData.repeat}
+            onChange={handleChange}
+          >
+            <option value="None">None</option>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+          </select>
 
           <label>Description:</label>
           <textarea

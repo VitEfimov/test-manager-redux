@@ -87,8 +87,16 @@ app.post('/api/auth/login', async (req, res) => {
             cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000;
         }
 
+        let boards = user.boards;
+        if (!boards || boards.length === 0) {
+            boards = [{ id: 'main', name: 'Main' }];
+        } else if (!boards.find(b => b.id === 'main')) {
+            boards = [{ id: 'main', name: 'Main' }, ...boards];
+            db.collection('users').updateOne({ email }, { $set: { boards } });
+        }
+
         res.cookie('token', token, cookieOptions);
-        res.status(200).json({ email: user.email, boards: user.boards || [{ id: 'main', name: 'Main' }] });
+        res.status(200).json({ email: user.email, boards });
     } catch (e) {
         res.status(500).json({ message: 'Database Error' });
     }
@@ -101,7 +109,14 @@ app.post('/api/auth/logout', (req, res) => {
 
 app.get('/api/auth/me', verifyToken, async (req, res) => {
     const user = await db.collection('users').findOne({ email: req.user.email });
-    res.status(200).json({ email: req.user.email, boards: user?.boards || [{ id: 'main', name: 'Main' }] });
+    let boards = user?.boards;
+    if (!boards || boards.length === 0) {
+        boards = [{ id: 'main', name: 'Main' }];
+    } else if (!boards.find(b => b.id === 'main')) {
+        boards = [{ id: 'main', name: 'Main' }, ...boards];
+        db.collection('users').updateOne({ email: req.user.email }, { $set: { boards } });
+    }
+    res.status(200).json({ email: req.user.email, boards });
 });
 
 app.get('/api/tasks', verifyToken, async (req, res) => {
@@ -113,6 +128,16 @@ app.post('/api/tasks', verifyToken, async (req, res) => {
     const task = req.body;
     const result = await db.collection('tasks').insertOne({ ...task, userId: req.user.userId });
     res.status(201).json({ ...task, _id: result.insertedId, userId: req.user.userId });
+});
+
+app.post('/api/tasks/bulk', verifyToken, async (req, res) => {
+    const tasks = req.body.tasks; // Array of task objects
+    if (!tasks || !Array.isArray(tasks) || tasks.length === 0) {
+        return res.status(400).json({ message: 'Invalid tasks array' });
+    }
+    const tasksWithUserId = tasks.map(task => ({ ...task, userId: req.user.userId }));
+    const result = await db.collection('tasks').insertMany(tasksWithUserId);
+    res.status(201).json({ insertedCount: result.insertedCount });
 });
 
 app.put('/api/tasks/:id', verifyToken, async (req, res) => {
@@ -135,13 +160,31 @@ app.delete('/api/tasks/:id', verifyToken, async (req, res) => {
 });
 
 app.post('/api/boards', verifyToken, async (req, res) => {
-    const { id, name } = req.body;
-    const { ObjectId } = require('mongodb');
-    await db.collection('users').updateOne(
-        { _id: new ObjectId(req.user.userId) },
-        { $push: { boards: { id, name } } }
-    );
-    res.status(201).json({ id, name });
+    try {
+        const { id, name } = req.body;
+        const { ObjectId } = require('mongodb');
+        
+        if (!req.user || !req.user.userId) {
+            return res.status(400).json({ message: "Invalid user token: missing userId. Please log out and log back in." });
+        }
+
+        const user = await db.collection('users').findOne({ _id: new ObjectId(req.user.userId) });
+        if (!user.boards || user.boards.length === 0) {
+            await db.collection('users').updateOne(
+                { _id: new ObjectId(req.user.userId) },
+                { $set: { boards: [{ id: 'main', name: 'Main' }, { id, name }] } }
+            );
+        } else {
+            await db.collection('users').updateOne(
+                { _id: new ObjectId(req.user.userId) },
+                { $push: { boards: { id, name } } }
+            );
+        }
+        res.status(201).json({ id, name });
+    } catch (e) {
+        console.error('Error in POST /api/boards:', e);
+        res.status(500).json({ message: e.message });
+    }
 });
 
 app.put('/api/boards/:id', verifyToken, async (req, res) => {

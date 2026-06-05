@@ -12,6 +12,11 @@ export const addTaskAsync = createAsyncThunk('task/addTaskAsync', async (task) =
     return response.data;
 });
 
+export const addMultipleTasksAsync = createAsyncThunk('task/addMultipleTasksAsync', async (tasks) => {
+    const response = await axios.post('/api/tasks/bulk', { tasks }, { withCredentials: true });
+    return response.data;
+});
+
 export const updateTaskAsync = createAsyncThunk('task/updateTaskAsync', async (updateData) => {
     const { taskId, name, priority, completed, description, completionDate, time } = updateData;
 
@@ -66,6 +71,10 @@ const taskSlice = createSlice({
             const { task } = action.payload;
             state.tasks.push(task); 
         },
+        addMultipleTasksSync(state, action) {
+            const { tasks } = action.payload;
+            state.tasks.push(...tasks);
+        },
         deleteTaskSync(state, action) {
              const { taskId } = action.payload;
              state.tasks = state.tasks.filter(t => t.id !== taskId);
@@ -107,11 +116,16 @@ const taskSlice = createSlice({
     }
 });
 
-export const { addTaskSync, deleteTaskSync, updateTaskSync, clearTasks, loadGuestTasks } = taskSlice.actions;
+export const { addTaskSync, addMultipleTasksSync, deleteTaskSync, updateTaskSync, clearTasks, loadGuestTasks } = taskSlice.actions;
 
 export const addTask = (payload) => (dispatch) => {
     dispatch(addTaskSync(payload)); 
     dispatch(addTaskAsync(payload.task)); 
+};
+
+export const addMultipleTasks = (payload) => (dispatch) => {
+    dispatch(addMultipleTasksSync(payload));
+    dispatch(addMultipleTasksAsync(payload.tasks));
 };
 
 export const deleteTask = (payload) => (dispatch) => {
