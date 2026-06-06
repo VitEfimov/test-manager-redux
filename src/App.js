@@ -71,7 +71,11 @@ function App() {
   }, [authChecked, tasksChecked]);
 
   useEffect(() => {
-    document.documentElement.style.colorScheme = userTheme ? 'dark' : 'light';
+    if (userTheme === 'system') {
+      document.documentElement.style.colorScheme = 'light dark';
+    } else {
+      document.documentElement.style.colorScheme = userTheme === 'dark' ? 'dark' : 'light';
+    }
   }, [userTheme]);
 
   useEffect(() => {

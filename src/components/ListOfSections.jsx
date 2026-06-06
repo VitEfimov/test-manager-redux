@@ -4,7 +4,7 @@ import Section from './Section';
 import AddTask from './AddTask';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import FILTERS from '../list-view/filters';
+import getFilters from '../list-view/filters';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { updateTask, deleteTask } from '../features/taskSlice';
 import { addBoardAsync, renameBoardAsync, deleteBoardAsync, setActiveBoardId } from '../features/userSlice';
@@ -40,12 +40,11 @@ const ListOfSections = ({ sidebarView }) => {
         const name = prompt('Enter new board name:');
         if (name && name.trim()) {
             const id = new Date().getTime().toString();
+            dispatch(setActiveBoardId(id));
             dispatch(addBoardAsync({ id, name: name.trim() })).then((action) => {
-                if (action.meta.requestStatus === 'fulfilled') {
-                    dispatch(setActiveBoardId(id));
-                } else {
+                if (action.meta.requestStatus === 'rejected') {
                     const errorMsg = action.error?.message || 'Unknown error';
-                    alert('Failed to save the new board. Error: ' + errorMsg + '. Please ensure your backend is restarted. If the issue persists, try logging out and logging back in.');
+                    alert('Failed to save the new board. Error: ' + errorMsg);
                 }
             });
         }
@@ -146,6 +145,18 @@ const ListOfSections = ({ sidebarView }) => {
         }
     };
 
+    const [currentTime, setCurrentTime] = useState(Date.now());
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                setCurrentTime(Date.now());
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, []);
+
     useEffect(() => {
         handleMissedTasks();
     }, [tasks]);
@@ -169,16 +180,18 @@ const ListOfSections = ({ sidebarView }) => {
     }, [tasks, activeBoardId]);
 
     const { missedFiltered, todayFiltered, tomorrowFiltered, onThisWeekFiltered, onNextWeekFiltered, laterFiltered, completedFiltered } = useMemo(() => {
+        const FILTERS = getFilters();
+        const now = dayjs();
         return {
-            missedFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed),
-            todayFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed),
+            missedFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isBefore(now, 'day') && !task.completed),
+            todayFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isSame(now, 'day') && !task.completed),
             tomorrowFiltered: sortedTasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day') && !task.completed),
             onThisWeekFiltered: sortedTasks.filter(task =>
-                dayjs(task.completionDate).isAfter(dayjs().add(1, 'day'), 'day') &&
+                dayjs(task.completionDate).isAfter(now.add(1, 'day'), 'day') &&
                 dayjs(task.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day') && !task.completed
             ),
             onNextWeekFiltered: sortedTasks.filter(task =>
-                !dayjs(task.completionDate).isSame(dayjs().add(1, 'day'), 'day') &&
+                !dayjs(task.completionDate).isSame(now.add(1, 'day'), 'day') &&
                 dayjs(task.completionDate).isAfter(FILTERS['on-this-week'], 'day') &&
                 dayjs(task.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day') && !task.completed
             ),
@@ -187,7 +200,7 @@ const ListOfSections = ({ sidebarView }) => {
             ),
             completedFiltered: sortedTasks.filter(task => task.completed)
         };
-    }, [sortedTasks]);
+    }, [sortedTasks, currentTime]);
 
     const onDragEnd = (result) => {
         const { destination, source, draggableId } = result;
@@ -331,7 +344,7 @@ const ListOfSections = ({ sidebarView }) => {
                         </section>
                     </header>
                     {/* <section className='section'> */}
-                    {missedTasks && (
+                    {missedFiltered && missedFiltered.length > 0 && (
                         <Droppable droppableId="missed">
                             {(provided) => (
                                 <ul

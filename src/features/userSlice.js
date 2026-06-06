@@ -4,7 +4,7 @@ import axios from 'axios';
 import { clearTasks } from './taskSlice';
 
 const loadThemeFromLocalStorage = () => {
-    return localStorage.getItem('theme') === 'dark' || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    return localStorage.getItem('theme') || 'light';
 };
 
 const loadShowWeatherFromLocalStorage = () => {
@@ -45,6 +45,15 @@ export const loginUser = createAsyncThunk('user/login', async ({ email, password
 export const registerUser = createAsyncThunk('user/register', async ({ email, password }, thunkAPI) => {
     try {
         const response = await axios.post('/api/auth/register', { email, password }, { withCredentials: true });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+    }
+});
+
+export const updateThemeAsync = createAsyncThunk('user/updateTheme', async (theme, thunkAPI) => {
+    try {
+        const response = await axios.put('/api/user/theme', { theme }, { withCredentials: true });
         return response.data;
     } catch (err) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
@@ -124,7 +133,7 @@ const userSlice = createSlice({
         },
         updateUserTheme: (state, action) => {
             state.theme = action.payload;
-            localStorage.setItem('theme', action.payload ? 'dark' : 'light');
+            localStorage.setItem('theme', action.payload);
         },
         updateShowWeather: (state, action) => {
             state.showWeather = action.payload;
@@ -143,6 +152,10 @@ const userSlice = createSlice({
                 if (action.payload?.boards) {
                     state.boards = action.payload.boards;
                 }
+                if (action.payload?.theme) {
+                    state.theme = action.payload.theme;
+                    localStorage.setItem('theme', action.payload.theme);
+                }
             })
             .addCase(checkAuth.rejected, (state) => {
                 state.loading = false;
@@ -155,6 +168,10 @@ const userSlice = createSlice({
                 if (action.payload?.boards) {
                     state.boards = action.payload.boards;
                 }
+                if (action.payload?.theme) {
+                    state.theme = action.payload.theme;
+                    localStorage.setItem('theme', action.payload.theme);
+                }
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
@@ -166,6 +183,10 @@ const userSlice = createSlice({
                 state.isAuthenticated = true;
                 if (action.payload?.boards) {
                     state.boards = action.payload.boards;
+                }
+                if (action.payload?.theme) {
+                    state.theme = action.payload.theme;
+                    localStorage.setItem('theme', action.payload.theme);
                 }
             })
             .addCase(registerUser.rejected, (state, action) => {
@@ -188,8 +209,19 @@ const userSlice = createSlice({
                 state.activeBoardId = 'main';
                 localStorage.removeItem('isGuest');
             })
+            .addCase(addBoardAsync.pending, (state, action) => {
+                const { id, name } = action.meta.arg;
+                state.boards.push({ id, name });
+            })
             .addCase(addBoardAsync.fulfilled, (state, action) => {
-                state.boards.push(action.payload);
+                // Already added optimistically
+            })
+            .addCase(addBoardAsync.rejected, (state, action) => {
+                const { id } = action.meta.arg;
+                state.boards = state.boards.filter(b => b.id !== id);
+                if (state.activeBoardId === id) {
+                    state.activeBoardId = 'main';
+                }
             })
             .addCase(renameBoardAsync.fulfilled, (state, action) => {
                 const board = state.boards.find(b => b.id === action.payload.id);

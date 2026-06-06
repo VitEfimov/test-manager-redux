@@ -2,8 +2,9 @@ import React from 'react';
 import Weather from './Weather';
 import { useDispatch, useSelector } from 'react-redux';
 import { CgToggleSquare, CgToggleSquareOff } from "react-icons/cg";
+import { MdLightMode, MdDarkMode, MdDevices } from "react-icons/md";
 import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
-import { updateUserTheme } from '../features/userSlice';
+import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
 
 
 const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, setSidebarView, sidebarView, showWeather }) => {
@@ -13,7 +14,12 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, setSidebarView, 
   const userPicture = themeReducer?.userPicture;
 
   const handleToggle = () => {
-    dispatch(updateUserTheme(!theme));
+    let newTheme = 'light';
+    if (theme === 'light') newTheme = 'dark';
+    else if (theme === 'dark') newTheme = 'system';
+    
+    dispatch(updateUserTheme(newTheme));
+    dispatch(updateThemeAsync(newTheme));
   };
 
   const headerStyle = {};
@@ -55,11 +61,16 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, setSidebarView, 
         {/* <span><CgToggleSquare />cdgfvbcv</span> */}
         <div className='header__title-sidebar-theme-toggle'>
           {/* <Weather /> */}
-          {theme === true ?
-            <span aria-label='Toggle light theme' role="button" tabIndex={0} className='header__title-sidebar-theme-toggle dark' onClick={() => handleToggle()} onKeyDown={(e) => { if (e.key === 'Enter') handleToggle(); }}><CgToggleSquare /></span>
-            :
-            <span aria-label='Toggle dark theme' role="button" tabIndex={0} className='header__title-sidebar-theme-toggle light' onClick={() => handleToggle()} onKeyDown={(e) => { if (e.key === 'Enter') handleToggle(); }}><CgToggleSquareOff /></span>
-          }
+          <span 
+            aria-label={`Toggle theme (currently ${theme})`} 
+            role="button" 
+            tabIndex={0} 
+            className={`header__title-sidebar-theme-toggle ${theme}`} 
+            onClick={() => handleToggle()} 
+            onKeyDown={(e) => { if (e.key === 'Enter') handleToggle(); }}
+          >
+            {theme === 'system' ? <MdDevices /> : theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
+          </span>
 
         </div>
       </header>

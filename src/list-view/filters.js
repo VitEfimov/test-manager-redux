@@ -70,15 +70,15 @@ dayjs().calendar(null, {
   sameElse: 'DD/MM/YYYY' // Everything else ( 17/10/2011 )
 })
 
-const FILTERS = {
-    today: dayjs().startOf('day'),
-    tomorrow: dayjs().add(1, 'day').startOf('day'),
-    'on-this-week': dayjs().endOf('isoWeek'),
-    'on-next-week': dayjs().add(1, 'week').startOf('day').endOf('isoWeek'),
-    later: dayjs().add(2, 'week').startOf('day')
-
+export default function getFilters() {
+    return {
+        today: dayjs().startOf('day'),
+        tomorrow: dayjs().add(1, 'day').startOf('day'),
+        'on-this-week': dayjs().endOf('isoWeek'),
+        'on-next-week': dayjs().add(1, 'week').startOf('day').endOf('isoWeek'),
+        later: dayjs().add(2, 'week').startOf('day')
+    };
 }
-export default FILTERS;
 
 
 

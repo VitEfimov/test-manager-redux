@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import FILTERS from '../list-view/filters';
+import getFilters from '../list-view/filters';
 
 dayjs.extend(isSameOrBefore);
 const Dashboard = () => {
@@ -20,6 +20,7 @@ const Dashboard = () => {
 
     const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
     // const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
+    const FILTERS = getFilters();
     const tomorrowTasks = tasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day')
                             && !task.completed)
 
