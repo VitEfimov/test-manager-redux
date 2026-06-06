@@ -38,5 +38,13 @@ export default async function handler(req, res) {
   const { serialize } = require('cookie');
   res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
 
-  res.status(200).json({ email: user.email });
+  let boards = user.boards;
+  if (!boards || boards.length === 0) {
+      boards = [{ id: 'main', name: 'Main' }];
+  } else if (!boards.find(b => b.id === 'main')) {
+      boards = [{ id: 'main', name: 'Main' }, ...boards];
+      await db.collection('users').updateOne({ email }, { $set: { boards } });
+  }
+
+  res.status(200).json({ email: user.email, boards });
 }

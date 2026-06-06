@@ -24,7 +24,8 @@ export default async function handler(req, res) {
     subscriptionStatus: 'active',     // 'active', 'inactive', 'canceled', 'trial'
     subscriptionProvider: null,       // 'google_play', 'stripe', or 'apple'
     subscriptionId: null,             
-    subscriptionEndDate: null         
+    subscriptionEndDate: null,
+    boards: [{ id: 'main', name: 'Main' }]
   });
 
   const user = { _id: result.insertedId, email };

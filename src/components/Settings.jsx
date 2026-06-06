@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
 import { setBreakInterval, setIntervalCount, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
 import { logout, changePassword } from '../features/userSlice';
+import { clearTasks } from '../features/taskSlice';
 import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 
@@ -161,7 +162,12 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             <button
               className='settings__save-btn'
               style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
-              onClick={() => isAuthenticated && dispatch(logout())}
+              onClick={() => {
+                  if (isAuthenticated) {
+                      dispatch(logout());
+                      dispatch(clearTasks());
+                  }
+              }}
               disabled={!isAuthenticated}
             >
               Logout

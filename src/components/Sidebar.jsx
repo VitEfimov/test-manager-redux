@@ -1,6 +1,7 @@
 import React, { startTransition } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../features/userSlice';
+import { clearTasks } from '../features/taskSlice';
 import { FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { IoTimerOutline } from "react-icons/io5";
@@ -65,7 +66,12 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView }) => {
                 </button>
                 <button 
                   className="nav-button " 
-                  onClick={() => isAuthenticated && dispatch(logoutUser())} 
+                  onClick={() => {
+                      if (isAuthenticated) {
+                          dispatch(logoutUser());
+                          dispatch(clearTasks());
+                      }
+                  }} 
                   aria-label="Logout"
                   style={{ opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
                   disabled={!isAuthenticated}

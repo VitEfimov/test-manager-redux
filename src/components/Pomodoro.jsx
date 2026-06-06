@@ -412,7 +412,7 @@ const Pomodoro = () => {
   }, []);
 
   const intervalCount = staticIntervalCountRef.current || 5;
-  const currentFill = 100 - (localTime / pomodoro.initialTime) * 100;
+  const currentFill = Math.max(0, Math.min(100, 100 - (localTime / pomodoro.initialTime) * 100));
 
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
