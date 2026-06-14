@@ -6,7 +6,7 @@ import { logout, changePassword } from '../features/userSlice';
 import { clearTasks } from '../features/taskSlice';
 import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
-
+import '../styles/Settings.css';
 
 const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const workSeconds = pomodoro[0].initialTime % 60;
   const breakMinutes = Math.floor(pomodoro[0].breakInterval / 60);
   const breakSeconds = pomodoro[0].breakInterval % 60;
-  const intervalCount = pomodoro[0].intervalCount.count;
+  const intervalCount = typeof pomodoro[0].intervalCount === 'object' ? pomodoro[0].intervalCount.count : 5;
 
   const [newCity, setNewCity] = useState(weatherCity);
   const [newApiKey, setNewApiKey] = useState(weatherApi)
@@ -92,18 +92,17 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
 
   const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
   const handleSetWorkSec = (e) => setNewWorkSec(parseInt(e.target.value) || 0);
-  
   const handleSetBreakMin = (e) => setNewBreakMin(parseInt(e.target.value) || 0);
   const handleSetBreakSec = (e) => setNewBreakSec(parseInt(e.target.value) || 0);
   const handleSetIntervalCount = (e) => {
     if (parseInt(e.target.value)>10) {
       alert("10 intervals maximum")
-
     } else {
       setNewIntervalCount(parseInt(e.target.value));
     }
-    // setNewIntervalCount(parseInt(e.target.value));
   };
+
+
 
   const handleSave = () => {
     dispatch(updateWeatherCity(newCity));
@@ -143,323 +142,247 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
 
 
   return (
-    <section className='section'>
-      <button className='settings__save-btn' type='submit' onClick={handleSave}>Save</button>
-      <div className='settings__conteiner'>
-        <div className='settings__block user-settings'>
-          <h3 className='settings__block-header'>
-            User information
-            <i>
-              <InfomationIcon field={fields[0]} />
-            </i>
-          </h3>
-          {!isAuthenticated && (
-            <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-              <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0', backgroundColor: '#4CAF50' }} onClick={() => dispatch(logout())}>Login to Sync</button>
+    <section className="section settings-section">
+      <div className="settings__mobile-header">
+        <div>
+          <h1>Settings</h1>
+          <p>App preferences & account</p>
+        </div>
+        <button className='btn-save-settings-header settings-save-btn' onClick={handleSave}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Save changes
+        </button>
+      </div>
+
+      <div className="settings__mobile-body">
+        <div className="settings-col-left">
+
+        {/* CUSTOMIZATION AND OTHERS MOVED */}
+
+        {/* ACCOUNT */}
+        <div className="settings-group">
+          <h4 className="settings-group-title">User information</h4>
+          <div className="settings-card">
+            <div className="setting-row user-profile-row">
+               <div className="setting-label">
+                 <span className="icon large-icon green-bg">👤</span>
+                 <div className="user-info">
+                   <strong>User Profile</strong>
+                   <span className="email">{isAuthenticated ? 'user@example.com' : 'Guest'}</span>
+                 </div>
+               </div>
             </div>
-          )}
-          <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-            <button
-              className='settings__save-btn'
-              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
-              onClick={() => {
-                  if (isAuthenticated) {
-                      dispatch(logout());
-                      dispatch(clearTasks());
-                  }
-              }}
-              disabled={!isAuthenticated}
-            >
-              Logout
-            </button>
-          </div>
-          <div className='settings__item' style={{ paddingBottom: '1rem' }}>
-            <button
-              className='settings__save-btn'
-              style={{ position: 'relative', top: '0', right: '0', opacity: isAuthenticated ? 1 : 0.5, cursor: isAuthenticated ? 'pointer' : 'not-allowed' }}
-              onClick={() => isAuthenticated && setShowPasswordModal(true)}
-              disabled={!isAuthenticated}
-            >
-              Change password
-            </button>
-            {showPasswordModal && (
-              <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000 }}>
-                <div style={{ backgroundColor: 'var(--dark-background-color-main)', padding: '2rem', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '1rem', width: '300px' }}>
-                  <h3 style={{ color: 'var(--dark-font-color-white)', textAlign: 'center', margin: 0 }}>Change Password</h3>
-                  {passwordError && <p style={{ color: 'var(--red_color)', margin: 0, fontSize: '0.9rem', textAlign: 'center' }}>{passwordError}</p>}
-                  {passwordSuccess && <p style={{ color: 'green', margin: 0, fontSize: '0.9rem', textAlign: 'center' }}>{passwordSuccess}</p>}
-                  <input type="password" placeholder="Current Password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }} />
-                  <input type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }} />
-                  <input type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }} />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                    <button className='settings__save-btn' style={{ position: 'relative', width: '45%' }} onClick={handleChangePasswordSubmit}>Submit</button>
-                    <button className='settings__save-btn' style={{ position: 'relative', width: '45%', backgroundColor: 'var(--dark-btn-color)' }} onClick={() => setShowPasswordModal(false)}>Cancel</button>
-                  </div>
+            {isAuthenticated && (
+              <div className="setting-row">
+                <div className="setting-label">
+                  <span>New password</span>
+                </div>
+                <div className="setting-control">
+                  <input type="password" placeholder="........" className="text-input-sleek settings-text-left" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
                 </div>
               </div>
             )}
-          </div>
-        </div>
-        <div className='settings__block weather-settings'>
-          <h3 className='settings__block-header'>
-            Weather
-            <i>
-              <InfomationIcon field={fields[1]} />
-            </i>
-          </h3>
-          <div className='settings__item'>
-            <label className='settings__item-label'>City:</label>
-            <input type="text" value={newCity} onChange={handleCityChange} />
-          </div>
-          <div className='settings__item'>
-            <label className='settings__item-label'>API Key:</label>
-            <input type="password" value={newApiKey} onChange={handleCityApi} />
-          </div>
-          <div className='settings__item'>
-            <label className='settings__item-label'>Show weather on board:</label>
-            <input className='settings__item-checkbox' type="checkbox" checked={showWeather} onChange={handleShowWeather} />
-          </div>
-        </div>
-        <div className='settings__block pomodoro-settings'>
-          <h3 className='settings__block-header'>
-            Promodoro
-            <i>
-              <InfomationIcon field={fields[2]} />
-            </i>
-          </h3>
-          <div className='settings__item'>
-            <label className='settings__item-label'>Work Interval time:</label>
-            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-              <input type="number" style={{ width: '60px' }} min="0" max="120" value={newWorkMin} onChange={handleSetWorkMin} placeholder="Min" /> min
-              <input type="number" style={{ width: '60px' }} min="0" max="59" value={newWorkSec} onChange={handleSetWorkSec} placeholder="Sec" /> sec
-            </div>
-          </div>
-          <div className='settings__item'>
-            <label className='settings__item-label'>Break Interval time:</label>
-            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-              <input type="number" style={{ width: '60px' }} min="0" max="120" value={newBreakMin} onChange={handleSetBreakMin} placeholder="Min" /> min
-              <input type="number" style={{ width: '60px' }} min="0" max="59" value={newBreakSec} onChange={handleSetBreakSec} placeholder="Sec" /> sec
-            </div>
-          </div>
-          <div className='settings__item'>
-            <label className='settings__item-label'>Interval count:</label>
-            <input type="number" min="1" max="10" value={newIntervalCount} onChange={handleSetIntervalCount} />
-          </div>
-
-          <div className='settings__item' style={{ marginTop: '1dvh', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-              <label className='settings__item-label'>Work Over Sound:</label>
-              <select
-                style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--dark-font-color-grey)', backgroundColor: 'var(--dark-background-color-sidebar)', color: 'var(--dark-font-color-white)', cursor: 'pointer', outline: 'none', width: '180px', textAlign: 'center' }}
-                value={workSoundType}
-                onChange={(e) => {
-                  setWorkSoundType(e.target.value);
-                  if (e.target.value !== 'custom') {
-                    setNewWorkSound(e.target.value);
-                  }
-                }}
-              >
-                <option value="default">Default</option>
-                <option value="none">None</option>
-                <option value="chime.wav">Chime</option>
-                <option value="light ping.wav">Light Ping</option>
-                <option value="notification.wav">Notification</option>
-                <option value="end_sound.ogg">End Sound (Ogg)</option>
-                <option value="start_sound.mp3">Start Sound (Mp3)</option>
-                <option value="custom">Custom (Upload)</option>
-              </select>
-            </div>
-            {workSoundType === 'custom' && (
-              <div style={{ marginTop: '10px', width: '100%' }}>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  style={{ color: 'var(--dark-font-color-white)', width: '100%' }}
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      if (file.size > 2 * 1024 * 1024) {
-                        alert("File size exceeds 2MB limit.");
-                        e.target.value = '';
-                        return;
-                      }
-                      const reader = new FileReader();
-                      reader.onload = (event) => setNewWorkSound(event.target.result);
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                />
-                {newWorkSound !== 'default' && newWorkSound !== 'none' && <p style={{ fontSize: '0.8rem', color: 'green', margin: '5px 0' }}>Custom sound loaded.</p>}
+            {isAuthenticated ? (
+              <div className="setting-row settings-btn-group">
+                <button className="btn-log-out-settings" onClick={() => { dispatch(logout()); dispatch(clearTasks()); }}>Log out</button>
+                <button className="btn-change-password-settings" onClick={handleChangePasswordSubmit}>Change password</button>
+              </div>
+            ) : (
+              <div className="setting-row clickable" onClick={() => dispatch(logout())}>
+                <div className="setting-label">
+                  <span className="icon green-bg">🔑</span>
+                  <span>Login to Sync</span>
+                </div>
+                <div className="setting-control"><span className="arrow">{'>'}</span></div>
               </div>
             )}
           </div>
+        </div>
 
-          <div className='settings__item' style={{ marginTop: '1dvh', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-              <label className='settings__item-label'>Break Over Sound:</label>
-              <select
-                style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--dark-font-color-grey)', backgroundColor: 'var(--dark-background-color-sidebar)', color: 'var(--dark-font-color-white)', cursor: 'pointer', outline: 'none', width: '180px', textAlign: 'center' }}
-                value={breakSoundType}
-                onChange={(e) => {
-                  setBreakSoundType(e.target.value);
-                  if (e.target.value !== 'custom') {
-                    setNewBreakSound(e.target.value);
-                  }
-                }}
-              >
-                <option value="default">Default</option>
-                <option value="none">None</option>
-                <option value="chime.wav">Chime</option>
-                <option value="light ping.wav">Light Ping</option>
-                <option value="notification.wav">Notification</option>
-                <option value="end_sound.ogg">End Sound (Ogg)</option>
-                <option value="start_sound.mp3">Start Sound (Mp3)</option>
-                <option value="custom">Custom (Upload)</option>
-              </select>
-            </div>
-            {breakSoundType === 'custom' && (
-              <div style={{ marginTop: '10px', width: '100%' }}>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  style={{ color: 'var(--dark-font-color-white)', width: '100%' }}
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      if (file.size > 2 * 1024 * 1024) {
-                        alert("File size exceeds 2MB limit.");
-                        e.target.value = '';
-                        return;
-                      }
-                      const reader = new FileReader();
-                      reader.onload = (event) => setNewBreakSound(event.target.result);
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                />
-                {newBreakSound !== 'default' && newBreakSound !== 'none' && <p style={{ fontSize: '0.8rem', color: 'green', margin: '5px 0' }}>Custom sound loaded.</p>}
+        {/* POMODORO */}
+        {/* <div className="settings-group">
+          <h4 className="settings-group-title">Pomodoro</h4>
+          <div className="settings-card">
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Work interval</span>
               </div>
-            )}
+              <div className="setting-control flex-inputs sleek-inputs">
+                <input type="number" min="0" max="120" value={newWorkMin} onChange={handleSetWorkMin} className="num-input"/> <span>min</span>
+                <input type="number" min="0" max="59" value={newWorkSec} onChange={handleSetWorkSec} className="num-input"/> <span>sec</span>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Break interval</span>
+              </div>
+              <div className="setting-control flex-inputs sleek-inputs">
+                <input type="number" min="0" max="120" value={newBreakMin} onChange={handleSetBreakMin} className="num-input"/> <span>min</span>
+                <input type="number" min="0" max="59" value={newBreakSec} onChange={handleSetBreakSec} className="num-input"/> <span>sec</span>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Interval count</span>
+              </div>
+              <div className="setting-control">
+                 <input type="number" min="1" max="10" value={newIntervalCount} onChange={handleSetIntervalCount} className="num-input-large"/>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Work over sound</span>
+              </div>
+              <div className="setting-control">
+                <select className="select-sleek" value={workSoundType} onChange={(e) => { setWorkSoundType(e.target.value); if (e.target.value !== 'custom') setNewWorkSound(e.target.value); }}>
+                  <option value="default">Default</option>
+                  <option value="none">None</option>
+                  <option value="chime.wav">Chime</option>
+                  <option value="light ping.wav">Light</option>
+                  <option value="notification.wav">Notif</option>
+                </select>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Break over sound</span>
+              </div>
+              <div className="setting-control">
+                 <select className="select-sleek" value={breakSoundType} onChange={(e) => { setBreakSoundType(e.target.value); if (e.target.value !== 'custom') setNewBreakSound(e.target.value); }}>
+                  <option value="default">Default</option>
+                  <option value="none">None</option>
+                  <option value="chime.wav">Chime</option>
+                  <option value="light ping.wav">Light</option>
+                  <option value="notification.wav">Notif</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>*/} 
+
+        </div> 
+
+        <div className="settings-col-right">
+          {/* WEATHER */}
+          <div className="settings-group">
+            <h4 className="settings-group-title">Weather</h4>
+            <div className="settings-card">
+              <div className="setting-row">
+                <div className="setting-label">
+                  <span>City</span>
+                </div>
+                <div className="setting-control">
+                  <input type="text" className="text-input-sleek" value={newCity} onChange={handleCityChange} placeholder="City name" />
+                </div>
+              </div>
+              <div className="setting-row">
+                <div className="setting-label">
+                  <span>API Key</span>
+                </div>
+                <div className="setting-control">
+                  <input type="password" className="text-input-sleek" value={newApiKey} onChange={handleCityApi} placeholder="OpenWeather API" />
+                </div>
+              </div>
+              <div className="setting-row">
+                <div className="setting-label">
+                  <span>Show on board</span>
+                </div>
+                <div className="setting-control">
+                  <label className="toggle-switch">
+                    <input type="checkbox" checked={showWeather} onChange={handleShowWeather} />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
 
-        </div>
-        <div className='settings__block' >
-          <h3 className='settings__block-header'>
-            Customation
-            <i>
-              <InfomationIcon field={fields[3]} />
-            </i>
-          </h3>
-          <div className='settings__item'>
-            <label className='settings__item-label'>Due Date Format:</label>
-            <select
-              style={{
-                padding: '8px',
-                borderRadius: '6px',
-                border: '1px solid var(--dark-font-color-grey)',
-                backgroundColor: 'var(--dark-background-color-sidebar)',
-                color: 'var(--dark-font-color-white)',
-                cursor: 'pointer',
-                outline: 'none',
-                width: '180px',
-                textAlign: 'center'
-              }}
-              value={newDateFormat}
-              onChange={(e) => setNewDateFormat(e.target.value)}
-            >
-              <option value="full">Full (MMMM D, YYYY)</option>
-              <option value="short">Short (MMM D)</option>
-            </select>
-          </div>
-          <div className='settings__item' style={{ marginTop: '1dvh' }}>
-            <label className='settings__item-label'>Task Name Wrap:</label>
-            <select
-              style={{
-                padding: '8px',
-                borderRadius: '6px',
-                border: '1px solid var(--dark-font-color-grey)',
-                backgroundColor: 'var(--dark-background-color-sidebar)',
-                color: 'var(--dark-font-color-white)',
-                cursor: 'pointer',
-                outline: 'none',
-                width: '180px',
-                textAlign: 'center'
-              }}
-              value={newTaskNameWrap}
-              onChange={(e) => setNewTaskNameWrap(e.target.value)}
-            >
-              <option value="ellipsis">Ellipsis (Short)</option>
-              <option value="wrap">Wrap (Full)</option>
-            </select>
-          </div>
-          {/* <div className='settings__item' style={{ marginTop: '1dvh' }}>
-            <label className='settings__item-label'>Time Format:</label>
-            <select
-              style={{
-                padding: '8px',
-                borderRadius: '6px',
-                border: '1px solid var(--dark-font-color-grey)',
-                backgroundColor: 'var(--dark-background-color-sidebar)',
-                color: 'var(--dark-font-color-white)',
-                cursor: 'pointer',
-                outline: 'none',
-                width: '180px',
-                textAlign: 'center'
-              }}
-              value={newTimeFormat}
-              onChange={(e) => setNewTimeFormat(e.target.value)}
-            >
-              <option value="12h">12-hour (AM/PM)</option>
-              <option value="24h">24-hour (International)</option>
-            </select>
-          </div> */}
-          <div className='settings__item' style={{ marginTop: '1dvh' }}>
-            <label className='settings__item-label'>Font Size:</label>
-            <select
-              style={{
-                padding: '8px',
-                borderRadius: '6px',
-                border: '1px solid var(--dark-font-color-grey)',
-                backgroundColor: 'var(--dark-background-color-sidebar)',
-                color: 'var(--dark-font-color-white)',
-                cursor: 'pointer',
-                outline: 'none',
-                width: '180px',
-                textAlign: 'center'
-              }}
-              value={newFontSize}
-              onChange={(e) => setNewFontSize(e.target.value)}
-            >
-              <option value="small">Small</option>
-              <option value="normal">Normal</option>
-              <option value="big">Big</option>
-            </select>
-          </div>
-          <div className='settings__item' style={{ marginTop: '1dvh' }}>
-            <label className='settings__item-label'>Task Display Limit:</label>
-            <input
-              type="number"
-              min="1"
-              value={newTaskLimit}
-              onChange={(e) => setNewTaskLimit(e.target.value)}
-              style={{
-                padding: '8px',
-                borderRadius: '6px',
-                border: '1px solid var(--dark-font-color-grey)',
-                backgroundColor: 'var(--dark-background-color-sidebar)',
-                color: 'var(--dark-font-color-white)',
-                outline: 'none',
-                width: '180px',
-                textAlign: 'center'
-              }}
-            />
-          </div>
-          <div className='settings__item' style={{ marginTop: '1dvh' }}>
-            <button className='settings__save-btn' style={{ position: 'relative', top: '0', right: '0' }} onClick={() => dispatch(toggleSettingsOpen(true))}>Customize Theme</button>
+        {/* CUSTOMIZATION */}
+        <div className="settings-group">
+          <h4 className="settings-group-title">Customization</h4>
+          <div className="settings-card">
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Due date format</span>
+              </div>
+              <div className="setting-control">
+                <select className="select-sleek" value={newDateFormat} onChange={(e) => setNewDateFormat(e.target.value)}>
+                  <option value="full">Full (MMMM D, YYYY)</option>
+                  <option value="short">Short (MMM D)</option>
+                </select>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Task name wrap</span>
+              </div>
+              <div className="setting-control">
+                <select className="select-sleek" value={newTaskNameWrap} onChange={(e) => setNewTaskNameWrap(e.target.value)}>
+                  <option value="ellipsis">Ellipsis</option>
+                  <option value="wrap">Wrap (Full)</option>
+                </select>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Font size</span>
+              </div>
+              <div className="setting-control">
+                <select className="select-sleek" value={newFontSize} onChange={(e) => setNewFontSize(e.target.value)}>
+                  <option value="small">Small</option>
+                  <option value="normal">Normal</option>
+                  <option value="big">Big</option>
+                </select>
+              </div>
+            </div>
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Task display limit</span>
+              </div>
+              <div className="setting-control">
+                <input type="number" min="5" max="50" className="num-input-large" value={newTaskLimit} onChange={(e) => setNewTaskLimit(e.target.value)} />
+              </div>
+            </div>
+            
+            <div className="settings-theme-wrapper">
+              <button className="btn-customize-theme" onClick={() => dispatch(toggleSettingsOpen(true))}>🎨 Customize theme</button>
+            </div>
           </div>
         </div>
 
+
+        </div>
+
+        {/* <button className='btn-save-settings-mobile settings-save-btn-mobile' onClick={handleSave}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Save Changes
+        </button> */}
       </div>
+
+      {showPasswordModal && (
+        <div className="settings-modal-overlay">
+          <div className="settings-modal-content">
+            <h3 className="settings-modal-title">Change Password</h3>
+            {passwordError && <p className="settings-modal-error">{passwordError}</p>}
+            {passwordSuccess && <p className="settings-modal-success">{passwordSuccess}</p>}
+            <input className="input-field" type="password" placeholder="Current Password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} />
+            <input className="input-field" type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+            <input className="input-field" type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+            <div className="settings-modal-actions">
+              <button className='btn-delete' onClick={() => setShowPasswordModal(false)}>Cancel</button>
+              <button className='btn-save' onClick={handleChangePasswordSubmit}>Submit</button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

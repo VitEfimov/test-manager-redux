@@ -34,112 +34,121 @@ const ThemeSettingsSidebar = () => {
   };
 
   return (
-    <div className="theme-settings-sidebar">
-      <div className="theme-settings-header">
-        <h3>Theme Settings</h3>
-        <button className="theme-settings-close-btn" onClick={onClose}>&times;</button>
-      </div>
-
-      <div className="theme-settings-body">
-        <div className="theme-settings-group">
-          <label htmlFor="sidebarBg">Sidebar Background</label>
-          <input 
-            id="sidebarBg"
-            type="color" 
-            value={theme.colors.sidebarBg ?? '#699b69'} 
-            onChange={(e) => handleColorChange(e, 'sidebarBg')} 
-          />
+    <div className="v2-description-modal theme-modal-overlay">
+      <div className="description__modal-content theme-modal-content">
+        <div className="modal-drag-indicator"></div>
+        <div className="modal-header">
+          <h2>Theme Settings</h2>
+          <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
 
-        <div className="theme-settings-group">
-          <label htmlFor="mainBg">Main Background</label>
-          <input 
-            id="mainBg"
-            type="color" 
-            value={theme.colors.mainBg ?? '#e7e2e2'} 
-            onChange={(e) => handleColorChange(e, 'mainBg')} 
-          />
-        </div>
+        <div className="theme-settings-body">
+          <div className="theme-color-row">
+            <label htmlFor="sidebarBg">SIDEBAR</label>
+            <div className="color-control">
+              <input 
+                id="sidebarBg"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.sidebarBg ?? '#699b69'} 
+                onChange={(e) => handleColorChange(e, 'sidebarBg')} 
+              />
+              <span className="hex-value">{(theme.colors.sidebarBg ?? '#699b69').toUpperCase()}</span>
+            </div>
+          </div>
 
-        <div className="theme-settings-group">
-          <label htmlFor="headerBg">Header Background</label>
-          <input 
-            id="headerBg"
-            type="color" 
-            value={theme.colors.headerBg ?? theme.colors.mainBg ?? '#e7e2e2'} 
-            onChange={(e) => handleColorChange(e, 'headerBg')} 
-          />
-        </div>
+          <div className="theme-color-row">
+            <label htmlFor="mainBg">BACKGROUND</label>
+            <div className="color-control">
+              <input 
+                id="mainBg"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.mainBg ?? '#e7e2e2'} 
+                onChange={(e) => handleColorChange(e, 'mainBg')} 
+              />
+              <span className="hex-value">{(theme.colors.mainBg ?? '#e7e2e2').toUpperCase()}</span>
+            </div>
+          </div>
 
-        <div className="theme-settings-group">
-          <label htmlFor="textColor">Text Color</label>
-          <input 
-            id="textColor"
-            type="color" 
-            value={theme.colors.textColor ?? '#000000'} 
-            onChange={(e) => handleColorChange(e, 'textColor')} 
-          />
-        </div>
+          <div className="theme-color-row">
+            <label htmlFor="headerBg">HEADER</label>
+            <div className="color-control">
+              <input 
+                id="headerBg"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.headerBg ?? theme.colors.mainBg ?? '#e7e2e2'} 
+                onChange={(e) => handleColorChange(e, 'headerBg')} 
+              />
+              <span className="hex-value">{(theme.colors.headerBg ?? theme.colors.mainBg ?? '#e7e2e2').toUpperCase()}</span>
+            </div>
+          </div>
 
-        <div className="theme-settings-group">
-          <label htmlFor="userPictureUpload">Header Banner (Max 1MB)</label>
-          <input 
-            id="userPictureUpload"
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            style={{ 
-              width: '100%', 
-              padding: '5px 0',
-              color: 'inherit',
-              fontSize: '0.85em'
-            }}
-          />
-          {theme.userPicture && (
-            <button 
-              onClick={() => {
-                dispatch(setUserPicture(null));
-                document.getElementById('userPictureUpload').value = '';
-              }}
-              style={{
-                marginTop: '10px',
-                padding: '5px',
-                width: '100%',
-                cursor: 'pointer',
-                backgroundColor: 'rgba(241, 81, 81, 0.2)',
-                border: '1px solid rgba(241, 81, 81, 0.5)',
-                color: 'inherit',
-                borderRadius: '4px'
-              }}
+          <div className="theme-color-row">
+            <label htmlFor="textColor">TEXT</label>
+            <div className="color-control">
+              <input 
+                id="textColor"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.textColor ?? '#000000'} 
+                onChange={(e) => handleColorChange(e, 'textColor')} 
+              />
+              <span className="hex-value">{(theme.colors.textColor ?? '#000000').toUpperCase()}</span>
+            </div>
+          </div>
+
+          <div className="theme-upload-group">
+            <label>Header banner image</label>
+            <div className="upload-box" onClick={() => document.getElementById('userPictureUpload').click()}>
+              <input 
+                id="userPictureUpload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: 'none' }}
+              />
+              <div className="upload-placeholder">
+                <span className="upload-icon">📷</span>
+                <span>Tap to upload (max 1MB)</span>
+              </div>
+            </div>
+            {theme.userPicture && (
+              <button 
+                className="btn-remove-image"
+                onClick={() => {
+                  dispatch(setUserPicture(null));
+                  document.getElementById('userPictureUpload').value = '';
+                }}
+              >
+                Remove Image
+              </button>
+            )}
+          </div>
+
+          <div className="theme-upload-group" style={{ marginTop: '15px' }}>
+            <label>Header Image Fit</label>
+            <select 
+              className="select-sleek full-width"
+              value={theme.headerBackgroundFit || 'cover'} 
+              onChange={(e) => dispatch(setHeaderBackgroundFit(e.target.value))}
             >
-              Remove Image
+              <option value="cover">Cover (Crop to fill)</option>
+              <option value="contain">Contain (Fit entirely)</option>
+              <option value="100% 100%">Fill (Stretch)</option>
+              <option value="auto">Auto (Original Size)</option>
+            </select>
+          </div>
+
+          <div className="modal-actions theme-actions">
+            <button className="btn-delete" onClick={handleReset}>
+              Reset
             </button>
-          )}
-        </div>
-
-        <div className="theme-settings-group">
-          <label htmlFor="headerBackgroundFit">Header Image Fit</label>
-          <select 
-            id="headerBackgroundFit" 
-            value={theme.headerBackgroundFit || 'cover'} 
-            onChange={(e) => dispatch(setHeaderBackgroundFit(e.target.value))}
-          >
-            <option value="cover">Cover (Crop to fill)</option>
-            <option value="contain">Contain (Fit entirely)</option>
-            <option value="100% 100%">Fill (Stretch)</option>
-            <option value="auto">Auto (Original Size)</option>
-          </select>
-        </div>
-
-
-
-        <div className="theme-settings-footer">
-          <button className="settings__save-btn" onClick={handleReset} style={{ width: '100%', marginTop: '20px' }}>
-            Reset to Default
-          </button>
-          {/* <button className="settings__save-btn" onClick={handleReset} style={{ width: '100%', marginTop: '20px' }}>
-            Save
-          </button> */}
+            <button className="btn-save" onClick={onClose}>
+              Save theme
+            </button>
+          </div>
         </div>
       </div>
     </div>

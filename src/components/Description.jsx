@@ -175,100 +175,136 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   useClickOutside(descriptionRef, handleAutoSave);
 
   return ReactDOM.createPortal(
-    <div className="description__modal">
+    <div className="description__modal v2-description-modal">
       <div ref={descriptionRef} className="description__modal-content">
-        <span className="description__close" onClick={handleAutoSave}>
-          &times;
-        </span>
-        <form onSubmit={handleSubmit}>
-          <label>Task:</label>
-          <textarea
-            ref={textAreaRef}
-            className="description__input-task-name"
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            onInput={(e) => adjustTextareaHeight(e.target)}
-            rows={1}
-            style={{ overflow: 'hidden', resize: 'none' }}
-          />
-          <label>Priority:</label>
-          <select
-            className="description__input"
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-          >
-            <option value="null">Priority</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
+        <div className="modal-drag-indicator"></div>
+        
+        <div className="modal-header">
+          <h2>Edit Task</h2>
+          <button type="button" className="close-btn" onClick={handleAutoSave}>
+            &times;
+          </button>
+        </div>
 
-          <label>Completion Date:</label>
-          <input
-            className="description__input"
-            type="date"
-            name="completionDate"
-            value={formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : ''}
-            onChange={(e) => {
-              const newDate = e.target.value ? new Date(e.target.value).toISOString() : '';
-              setFormData({ ...formData, completionDate: newDate });
-            }}
-          />
+        <form onSubmit={handleSubmit} className="modal-form">
+          <div className="form-group">
+            <label>TASK NAME</label>
+            <textarea
+              ref={textAreaRef}
+              className="input-field task-name-input"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              onInput={(e) => adjustTextareaHeight(e.target)}
+              rows={1}
+              style={{ overflow: 'hidden', resize: 'none' }}
+              placeholder="Enter task name"
+            />
+          </div>
 
-          <label>Time:</label>
-          <input className='description__input'
-            type="time" name="time" 
-            value={formData.time} 
-            onChange={handleChange} />
+          <div className="form-group">
+            <label>PRIORITY</label>
+            <div className="priority-pills">
+              <button 
+                type="button" 
+                className={`priority-pill high ${formData.priority === 'High' ? 'active' : ''}`}
+                onClick={() => setFormData({...formData, priority: 'High'})}
+              >
+                High
+              </button>
+              <button 
+                type="button" 
+                className={`priority-pill medium ${formData.priority === 'Medium' ? 'active' : ''}`}
+                onClick={() => setFormData({...formData, priority: 'Medium'})}
+              >
+                Medium
+              </button>
+              <button 
+                type="button" 
+                className={`priority-pill low ${formData.priority === 'Low' ? 'active' : ''}`}
+                onClick={() => setFormData({...formData, priority: 'Low'})}
+              >
+                Low
+              </button>
+            </div>
+          </div>
 
-          <label>Repeat (Max 6 Months):</label>
-          <select
-            className="description__input"
-            name="repeat"
-            value={formData.repeat}
-            onChange={handleChange}
-          >
-            <option value="None">None</option>
-            <option value="Daily">Daily</option>
-            <option value="Weekly">Weekly</option>
-          </select>
+          <div className="form-row">
+            <div className="form-group half">
+              <label>DUE DATE</label>
+              <div className="input-with-icon">
+                <span className="icon">📅</span>
+                <input
+                  className="input-field"
+                  type="date"
+                  name="completionDate"
+                  value={formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : ''}
+                  onChange={(e) => {
+                    const newDate = e.target.value ? new Date(e.target.value).toISOString() : '';
+                    setFormData({ ...formData, completionDate: newDate });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="form-group half">
+              <label>TIME</label>
+              <div className="input-with-icon">
+                <span className="icon">🕒</span>
+                <input 
+                  className="input-field"
+                  type="time" 
+                  name="time" 
+                  value={formData.time} 
+                  onChange={handleChange} 
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Description:</label>
-          <textarea
-            className="description__input-description-field"
-            name="descriptionText"
-            value={formData.descriptionText}
-            onChange={handleChange}
-          ></textarea>
+          <div className="form-group">
+            <label>REPEAT</label>
+            <div className="input-with-icon">
+              <span className="icon">🔁</span>
+              <select
+                className="input-field"
+                name="repeat"
+                value={formData.repeat}
+                onChange={handleChange}
+              >
+                <option value="None">None</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+              </select>
+            </div>
+          </div>
 
-          <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
-            {/* <button type="submit" style={{ flex: 1 }}>Submit</button> */}
+          <div className="form-group">
+            <label>DESCRIPTION</label>
+            <textarea
+              className="input-field description-textarea"
+              name="descriptionText"
+              value={formData.descriptionText}
+              onChange={handleChange}
+              placeholder="Add details..."
+            ></textarea>
+          </div>
+
+          <div className="modal-actions">
             <button
               type="button"
+              className="btn-delete"
               onClick={handleDelete}
-              style={{
-                flex: 1,
-                backgroundColor: 'rgb(241, 81, 81)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '10px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                transition: 'background-color 0.2s ease-in-out'
-              }}
             >
-              Delete Task
+              🗑️ Delete
             </button>
-            <button type="submit" style={{ flex: 1 }}>Submit</button>
+            <button type="submit" className="btn-save">
+              Save Task
+            </button>
           </div>
         </form>
       </div>
     </div>,
-    document.getElementById('modal-root')
+    document.body
   );
 };
 

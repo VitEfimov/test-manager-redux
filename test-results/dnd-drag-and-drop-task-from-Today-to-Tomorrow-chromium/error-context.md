@@ -1,69 +1,23 @@
 # Page snapshot
 
 ```yaml
-- main [ref=e3]:
-  - generic [ref=e4]:
-    - paragraph
-    - generic [ref=e5]:
-      - generic [ref=e6]:
-        - generic [ref=e7]:
-          - heading "New User" [level=2] [ref=e8]
-          - paragraph [ref=e9]: some@gmail.com
-          - img [ref=e11]
-        - img [ref=e15]
-        - button [ref=e18] [cursor=pointer]:
-          - img [ref=e19]
-      - generic [ref=e22]:
-        - generic [ref=e24]:
-          - paragraph [ref=e25]: Add settings
-          - paragraph [ref=e26]: to display weather
-        - img [ref=e28]
-  - generic [ref=e31]:
-    - navigation [ref=e32]:
-      - generic [ref=e34]:
-        - button "Dashboard" [ref=e35] [cursor=pointer]:
-          - generic [ref=e36]: Dashboard
-        - button "Board" [ref=e37] [cursor=pointer]:
-          - generic [ref=e38]: Board
-        - button "Pomodoro" [ref=e39] [cursor=pointer]:
-          - generic [ref=e40]: Pomodoro
-        - button "About" [ref=e41] [cursor=pointer]:
-          - generic [ref=e42]: About
-        - button "Settings" [ref=e43] [cursor=pointer]:
-          - generic [ref=e44]: Settings
-        - button "LogOut" [disabled] [ref=e45]:
-          - generic [ref=e46]: LogOut
-    - generic [ref=e48]:
-      - generic [ref=e50]:
-        - heading "Tasks" [level=2] [ref=e51]
-        - heading "Due date" [level=2] [ref=e52]
-        - heading "Priority" [level=2] [ref=e53]
-      - list [ref=e54]:
-        - heading "Today" [level=3] [ref=e55]
-        - listitem [ref=e56]:
-          - generic [ref=e57]:
-            - button [ref=e58]:
-              - img [ref=e59]
-            - checkbox [ref=e61]
-            - generic [ref=e62]: Add first task...
-            - button [ref=e63] [cursor=pointer]:
-              - img [ref=e64]
-          - paragraph [ref=e70] [cursor=pointer]: January 20, 2026
-          - button "High" [ref=e73] [cursor=pointer]
-          - img [ref=e75] [cursor=pointer]
-        - button "Add task..." [ref=e80] [cursor=pointer]
-      - list [ref=e81]:
-        - heading "Tomorrow" [level=3] [ref=e82]
-        - button "Add task..." [ref=e85] [cursor=pointer]
-      - list [ref=e86]:
-        - heading "On this week" [level=3] [ref=e87]
-        - button "Add task..." [ref=e90] [cursor=pointer]
-      - list [ref=e91]:
-        - heading "On next week" [level=3] [ref=e92]
-        - button "Add task..." [ref=e95] [cursor=pointer]
-      - list [ref=e96]:
-        - heading "Later" [level=3] [ref=e97]
-        - button "Add task..." [ref=e100] [cursor=pointer]
-      - list [ref=e101]:
-        - heading "Completed" [level=3] [ref=e102]
+- iframe [ref=e2]:
+  - generic [ref=f1e2]:
+    - generic [ref=f1e3]: "Compiled with problems:"
+    - button "Dismiss" [ref=f1e4] [cursor=pointer]: ×
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - generic [ref=f1e7] [cursor=pointer]: ERROR in ./src/components/Sidebar.jsx
+        - generic [ref=f1e8]:
+          - text: "Module build failed (from ./node_modules/babel-loader/lib/index.js): SyntaxError: D:\\Папа\\Before Revature\\Desc\\TaskManagerRedux\\test-manager-redux\\src\\components\\Sidebar.jsx: Unexpected token (145:27)"
+          - generic [ref=f1e9]:
+            - text: 143 | <button 144 | className="nav-item"
+            - generic [ref=f1e10]: ">"
+            - text: "145 | if (isAuthenticated) { |"
+            - generic [ref=f1e11]: ^
+            - text: "146 | dispatch(logoutUser()); 147 | dispatch(clearTasks()); 148 | }"
+          - text: at constructor (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:353:19) at FlowParserMixin.raise (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:3277:19) at FlowParserMixin.unexpected (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:3297:16) at FlowParserMixin.jsxParseIdentifier (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6624:12) at FlowParserMixin.jsxParseNamespacedName (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6631:23) at FlowParserMixin.jsxParseAttribute (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6707:22) at FlowParserMixin.jsxParseOpeningElementAfterName (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6722:28) at FlowParserMixin.jsxParseOpeningElementAt (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6717:17) at FlowParserMixin.jsxParseElementAt (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6741:33) at FlowParserMixin.jsxParseElementAt (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6753:32) at FlowParserMixin.jsxParseElementAt (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6753:32) at FlowParserMixin.jsxParseElement (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6804:17) at FlowParserMixin.parseExprAtom (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6816:19) at FlowParserMixin.parseExprSubscripts (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10590:23) at FlowParserMixin.parseUpdate (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10573:21) at FlowParserMixin.parseMaybeUnary (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10551:23) at FlowParserMixin.parseMaybeUnaryOrPrivate (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10405:61) at FlowParserMixin.parseExprOps (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10410:23) at FlowParserMixin.parseMaybeConditional (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10387:23) at FlowParserMixin.parseMaybeAssign (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10348:21) at D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:5635:39 at FlowParserMixin.tryParse (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:3608:20) at FlowParserMixin.parseMaybeAssign (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:5635:18) at D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10318:39 at FlowParserMixin.allowInAnd (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:11936:12) at FlowParserMixin.parseMaybeAssignAllowIn (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10318:17) at FlowParserMixin.parseParenAndDistinguishExpression (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:11199:28) at FlowParserMixin.parseParenAndDistinguishExpression (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:5728:18) at FlowParserMixin.parseExprAtom (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10857:23) at FlowParserMixin.parseExprAtom (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:6821:20) at FlowParserMixin.parseExprSubscripts (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10590:23) at FlowParserMixin.parseUpdate (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10573:21) at FlowParserMixin.parseMaybeUnary (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10551:23) at FlowParserMixin.parseMaybeUnaryOrPrivate (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10405:61) at FlowParserMixin.parseExprOps (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10410:23) at FlowParserMixin.parseMaybeConditional (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10387:23) at FlowParserMixin.parseMaybeAssign (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10348:21) at FlowParserMixin.parseMaybeAssign (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:5686:18) at FlowParserMixin.parseExpressionBase (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10302:23) at D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10298:39 at FlowParserMixin.allowInAnd (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:11931:16) at FlowParserMixin.parseExpression (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:10298:17) at FlowParserMixin.parseReturnStatement (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12619:28) at FlowParserMixin.parseStatementContent (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12270:21) at FlowParserMixin.parseStatementLike (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12239:17) at FlowParserMixin.parseStatementLike (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:5055:24) at FlowParserMixin.parseStatementListItem (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12219:17) at FlowParserMixin.parseBlockOrModuleBlockBody (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12796:61) at FlowParserMixin.parseBlockBody (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12789:10) at FlowParserMixin.parseBlock (D:\Папа\Before Revature\Desc\TaskManagerRedux\test-manager-redux\node_modules\@babel\parser\lib\index.js:12777:10)
+      - generic [ref=f1e12]:
+        - generic [ref=f1e13]: ERROR
+        - generic [ref=f1e14]: "[eslint] src\\components\\Sidebar.jsx Line 145:27: Parsing error: Unexpected token (145:27)"
 ```

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import getFilters from '../list-view/filters';
+import '../styles/Dashboard.css';
 
 dayjs.extend(isSameOrBefore);
 const Dashboard = () => {
@@ -45,61 +46,153 @@ const Dashboard = () => {
 
     
 
-    return (
-        <section className='section'>
-            <section className='dashboard-component'>
-                <section className='dashboard__section'>
-                    <h2>Today date</h2>
-                    <div>{dayjs().format('MMMM D, YYYY')}</div>
-                </section>
-                {/* <section className='dashboard__section'>
-                    <h2>Total tasks</h2>
-                    <div>{totalTasks - completedTasks}</div>
-                </section> */}
-                <section className='dashboard__section'>
-                    <h2>Total tasks</h2>
-                     {missedTasks.length !== 0 ? (
-                        
-                        <div style={{ color: 'var(--danger-color)' }}>{totalTasks - completedTasks}</div>
-                    ) : (
-                        <div>{totalTasks - completedTasks}</div>
-                    )}
-                </section>
-                <section className='dashboard__section'>
-                    <h2>Completed tasks</h2>
-                    <div>{completedTasks}</div>
-                </section>
-                <section className='dashboard__section'>
-                    <h2>Today tasks</h2>
-                    <div>{todayTasks.length}</div>
-                </section>
-                <section className='dashboard__section'>
-                    <h2>Tommorrow tasks</h2>
-                    <div>{tomorrowTasks.length}</div>
-                </section>
-                <section className='dashboard__section'>
-                    <h2>This week tasks</h2>
-                    <div>{thisWeekTasks.length}</div>
-                </section>
-                <section className='dashboard__section'>
-                    <h2>Next week tasks</h2>
-                    <div>{nextWeekTasks.length}</div>
-                </section>
-                <section className='dashboard__section'>
-                    <h2>Later tasks</h2>
-                    <div>{laterTasks.length}</div>
-                </section>
-                <section className='dashboard__section'>
-                    <h2>Missed tasks</h2>
-                    {missedTasks.length !== 0 ? (
-                        <div style={{ color: 'var(--danger-color)' }}>{missedTasks.length}</div>
-                    ) : (
-                        <div>{missedTasks.length}</div>
-                    )}
-                </section>
-            </section>
-        </section>
-    )
+  const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const currentFill = Math.max(0, Math.min(100, 100 - completionPercentage)); // strokeDashoffset for circle
+
+  return (
+    <section className='section dashboard-v2'>
+      <div className="dashboard__header">
+        <div className="dashboard__header-title">
+          <div className="date">{dayjs().format('dddd, MMMM D, YYYY')}</div>
+          <h1>Dashboard</h1>
+        </div>
+        {/* <button className="btn-new-task" onClick={() => {}}>
+          + New task
+        </button> */}
+      </div>
+
+      <div className="dashboard__top-cards">
+        <div className="dash-card progress-card">
+          <div className="progress-circle-container">
+            <svg viewBox="0 0 100 100" className="progress-svg">
+              <circle cx="50" cy="50" r="40" className="circle-track" />
+              <circle 
+                cx="50" cy="50" r="40" 
+                className="circle-progress" 
+                style={{ strokeDashoffset: 251.2 - (251.2 * currentFill) / 100 }} 
+              />
+            </svg>
+            <div className="progress-text-inner">
+              <span className="percent">{completionPercentage}%</span>
+              <span className="label">complete</span>
+            </div>
+          </div>
+          <div className="progress-info">
+            <h3>{completionPercentage === 100 ? 'Perfect!' : completionPercentage >= 50 ? 'Great progress!' : 'Keep going!'}</h3>
+            <p>{completedTasks} of {totalTasks} tasks<br/>completed today</p>
+            <div className="tags">
+              {missedTasks.length > 0 && <span className="tag missed">{missedTasks.length} missed</span>}
+              {todayTasks.length > 0 && <span className="tag today">{todayTasks.length} today</span>}
+            </div>
+          </div>
+        </div>
+
+        <div className="dash-card stat-card">
+          <div className="icon-container color-green">📚</div>
+          <div className="stat-content">
+            <span className="stat-num">{totalTasks}</span>
+            <span className="stat-title">Total tasks</span>
+            <span className="stat-sub">all tasks</span>
+          </div>
+        </div>
+
+        <div className="dash-card stat-card">
+          <div className="icon-container color-green">✅</div>
+          <div className="stat-content">
+            <span className="stat-num">{completedTasks}</span>
+            <span className="stat-title">Completed</span>
+            <span className="stat-sub">done</span>
+          </div>
+        </div>
+
+        <div className="dash-card stat-card">
+          <div className="icon-container color-yellow">☀️</div>
+          <div className="stat-content">
+            <span className="stat-num">{todayTasks.length}</span>
+            <span className="stat-title">Today</span>
+            <span className="stat-sub">due today</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="dashboard__categories">
+        <h4 className="categories-title">ALL CATEGORIES</h4>
+        <div className="categories-grid">
+          <div className="cat-card border-green">
+            <div className="cat-icon color-green">📚</div>
+            <div className="cat-info">
+              <span className="cat-title">Total tasks</span>
+              <span className="cat-sub">all tasks</span>
+            </div>
+            <span className="cat-num color-green">{totalTasks}</span>
+          </div>
+
+          <div className="cat-card border-green">
+            <div className="cat-icon color-green">✅</div>
+            <div className="cat-info">
+              <span className="cat-title">Completed</span>
+              <span className="cat-sub">done</span>
+            </div>
+            <span className="cat-num color-green">{completedTasks}</span>
+          </div>
+
+          <div className="cat-card border-yellow">
+            <div className="cat-icon color-yellow">☀️</div>
+            <div className="cat-info">
+              <span className="cat-title">Today</span>
+              <span className="cat-sub">due today</span>
+            </div>
+            <span className="cat-num color-yellow">{todayTasks.length}</span>
+          </div>
+
+          <div className="cat-card border-blue">
+            <div className="cat-icon color-blue">📅</div>
+            <div className="cat-info">
+              <span className="cat-title">Tomorrow</span>
+              <span className="cat-sub">coming up</span>
+            </div>
+            <span className="cat-num color-blue">{tomorrowTasks.length}</span>
+          </div>
+
+          <div className="cat-card border-purple">
+            <div className="cat-icon color-purple">📈</div>
+            <div className="cat-info">
+              <span className="cat-title">This week</span>
+              <span className="cat-sub">this week</span>
+            </div>
+            <span className="cat-num color-purple">{thisWeekTasks.length}</span>
+          </div>
+
+          <div className="cat-card border-teal">
+            <div className="cat-icon color-teal">🕒</div>
+            <div className="cat-info">
+              <span className="cat-title">Next week</span>
+              <span className="cat-sub">next week</span>
+            </div>
+            <span className="cat-num color-teal">{nextWeekTasks.length}</span>
+          </div>
+
+          <div className="cat-card border-brown">
+            <div className="cat-icon color-brown">⭐</div>
+            <div className="cat-info">
+              <span className="cat-title">Later</span>
+              <span className="cat-sub">future</span>
+            </div>
+            <span className="cat-num color-brown">{laterTasks.length}</span>
+          </div>
+
+          <div className="cat-card border-red">
+            <div className="cat-icon color-red">❗</div>
+            <div className="cat-info">
+              <span className="cat-title">Missed</span>
+              <span className="cat-sub">overdue</span>
+            </div>
+            <span className="cat-num color-red">{missedTasks.length}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
 }
 
 

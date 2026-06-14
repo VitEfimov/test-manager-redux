@@ -1,0 +1,94 @@
+/* Section extracted inline styles */
+
+.task-drag-handle {
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-icon-done {
+  color: #5a8a5a;
+}
+
+.task-title-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.task-title-input {
+  vertical-align: middle;
+  overflow: hidden;
+  resize: none;
+  line-height: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  margin: 0;
+}
+.task-title-input:focus {
+  outline: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+}
+
+.task-title-label {
+  cursor: pointer;
+  display: inline-block;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 1px; /* To match any potential input border/padding */
+}
+
+.wrap-full.task-title, .wrap-full .task-title-label, .wrap-full .task-title-input {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+}
+
+.wrap-ellipsis.task-title, .wrap-ellipsis .task-title-label, .wrap-ellipsis .task-title-input {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.task-due-btn {
+  cursor: pointer;
+}
+
+.task-due-icon {
+  margin-right: 4px;
+}
+
+.task-priority-dropdown {
+  position: absolute;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-priority-btn {
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .col-drag,
+  .col-priority,
+  .col-more {
+    display: none !important;
+  }
+}

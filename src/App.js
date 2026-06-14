@@ -14,6 +14,7 @@ import Dashboard from './components/Dashboard';
 import Settings from './components/Settings';
 import About from './components/About';
 
+
 function App() {
 
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -158,32 +159,34 @@ function App() {
   }
 
   return (
-
-
-    <main className='container'>
-
-      <Header
+    <div className="app-container">
+      <Sidebar 
         setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
-        title={title}
+        setTitle={setTitle}
         sidebarView={sidebarView}
-        setSidebarView={setSidebarView}
-        isPomodoroActive={isPomodoroActive}
-        timeRemaining={timeRemaining}
-        isTimeOver={isTimeOver}
-        showWeather={showWeather}
-        setShowWeather={(val) => dispatch(updateShowWeather(val))}
+        setSidebarView={setSidebarView} 
       />
-      <div className='main-content'>
-        <Sidebar setCurrentPage={setCurrentPage}
-          setTitle={setTitle}
+      
+      <div className="main">
+        <Header
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          title={title}
           sidebarView={sidebarView}
-          setSidebarView={setSidebarView} />
+          setSidebarView={setSidebarView}
+          isPomodoroActive={isPomodoroActive}
+          timeRemaining={timeRemaining}
+          isTimeOver={isTimeOver}
+          showWeather={showWeather}
+          setShowWeather={(val) => dispatch(updateShowWeather(val))}
+        />
+        
+        <div className="content">
           {renderPage(sidebarView)}
+        </div>
       </div>
       <ThemeSettingsSidebar />
-    </main>
-
+    </div>
   );
 }
 

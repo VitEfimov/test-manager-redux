@@ -1,0 +1,165 @@
+.header {
+  border-top-right-radius: 2px solid var(--dark-background-color-sidebar);
+  border-bottom: 2px solid var(--dark-background-color-sidebar);
+  padding-left: 1dvh;
+  color: var(--dark-font-color-grey);
+  background-color: var(--dark-background-color-main);
+  position: inherit;
+  height: calc(6vw + 1vmin);
+  align-content: center;
+  align-items: center;
+
+  & h1 {
+    justify-self: center;
+    align-self: center;
+  }
+
+  & h2 {
+    font-size: calc(10px + 1vmin);
+  }
+}
+
+.header.weather-active {
+  height: 15dvh;
+}
+
+.header.weather-inactive {
+  height: 8dvh;
+}
+
+.header__title {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 1dvw;
+}
+
+.header__title-content {
+  display: flex;
+  flex-direction: column;
+  padding-right: 1dvw;
+
+  color: transparent;
+}
+
+.header__board {
+  border-top-right-radius: 2px solid var(--dark-background-color-sidebar);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--dark-background-color-sidebar);
+  color: var(--dark-font-color-grey);
+  background-color: var(--dark-background-color-main);
+  display: flex;
+  flex-direction: column;
+
+  & h2 {
+    font-size: calc(15px + 1vmin);
+  }
+}
+
+.header__board-sections {
+  padding-right: 3dvw;
+  display: flex;
+}
+
+.header__board-sections-task-name {
+  width: var(--col-task-width);
+}
+
+.header__board-sections-due-date {
+  padding-left: 1dvw;
+  border-right: 1px solid var(--dark-font-color-grey);
+  border-left: 1px solid var(--dark-font-color-grey);
+  width: var(--col-due-width);
+}
+
+.header__board-sections-priority {
+  grid-area: header__board-sections-priority;
+  width: var(--col-priority-width);
+  padding-left: 1dvw;
+}
+
+.header__board-view-btn {
+  display: none;
+  margin: 1dvh 0 1dvh 0;
+  padding: 5px;
+  background-color: grey;
+  color: aquamarine;
+  width: 55px;
+  box-shadow: none;
+  border: none;
+}
+
+.header__title-sidebar-view-btn-open,
+.header__title-sidebar-view-btn-close,
+.sidebar-view-btn,
+.header__title-sidebar-theme-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  font-weight: 900;
+  width: auto;
+  margin-left: 3dvw;
+}
+
+.header__title-sidebar-view-btn-open span,
+.header__title-sidebar-view-btn-close span,
+.sidebar-view-btn span,
+.header__title-sidebar-theme-toggle span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__title-sidebar-view-btn-open svg,
+.header__title-sidebar-view-btn-close svg,
+.sidebar-view-btn svg,
+.header__title-sidebar-theme-toggle svg {
+  font-size: calc(2.1vw + 1vmin);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.header__title-sidebar-theme-toggle {
+  margin-right: 2dvw;
+}
+
+.header__title-sidebar-view-btn-open:hover,
+.header__title-sidebar-view-btn-close:hover,
+.sidebar-view-btn:hover,
+.header__title-sidebar-theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* Newly extracted inline styles */
+.weather-info-gray {
+  color: var(--dark-font-color-grey);
+}
+
+.weather-info-red {
+  color: var(--red_color);
+  font-weight: 500;
+}
+
+.weather-info-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-info-flex-inner {
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.topbar-date-error {
+  color: red;
+  font-weight: bold;
+}

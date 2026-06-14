@@ -58,18 +58,18 @@ const Weather = () => {
   return (
     <div className='weather__container'>
       {loading ? (
-        <div className="header__weather-info" style={{ color: 'var(--dark-font-color-grey)' }}>
+        <div className="header__weather-info weather-info-gray">
           <span>⏳ Loading weather...</span>
         </div>
       ) : error ? (
-        <div className="header__weather-info" style={{ color: 'var(--red_color)', fontWeight: '500' }}>
+        <div className="header__weather-info weather-info-red">
           <span>⚠️ {error}</span>
         </div>
       ) : weatherData && weatherData.name ? (
-        <div className="header__weather-info" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="header__weather-info weather-info-flex">
           <div>
             City: {weatherData.name} | Temperature: {Math.round(weatherData.main?.temp)}&deg;F | Weather: {weatherData.weather?.[0]?.main}
-            <span style={{ marginLeft: '6px', display: 'inline-flex', alignItems: 'center', verticalAlign: 'middle' }}>
+            <span className="weather-info-flex-inner">
               {weatherIcons[weatherData.weather?.[0]?.main] || <FaCloud />}
             </span>
           </div>

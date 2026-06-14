@@ -15,6 +15,10 @@ const loadIsGuestFromLocalStorage = () => {
     return localStorage.getItem('isGuest') === 'true';
 };
 
+const loadLayoutVersionFromLocalStorage = () => {
+    return localStorage.getItem('layoutVersion') || 'v1';
+};
+
 const loadBoardsFromLocalStorage = () => {
     try {
         const serialized = localStorage.getItem('guestBoards');
@@ -114,6 +118,7 @@ const initialState = {
     isGuest: loadIsGuestFromLocalStorage(),
     boards: loadBoardsFromLocalStorage(),
     activeBoardId: 'main',
+    layoutVersion: loadLayoutVersionFromLocalStorage(),
 };
 
 const userSlice = createSlice({
@@ -141,6 +146,10 @@ const userSlice = createSlice({
         },
         setActiveBoardId: (state, action) => {
             state.activeBoardId = action.payload;
+        },
+        toggleLayoutVersion: (state) => {
+            state.layoutVersion = state.layoutVersion === 'v1' ? 'v2' : 'v1';
+            localStorage.setItem('layoutVersion', state.layoutVersion);
         },
     },
     extraReducers: (builder) => {
@@ -236,5 +245,5 @@ const userSlice = createSlice({
     }
 });
 
-export const { logout, continueAsGuest, updateUserTheme, updateShowWeather, setActiveBoardId } = userSlice.actions;
+export const { logout, continueAsGuest, updateUserTheme, updateShowWeather, setActiveBoardId, toggleLayoutVersion } = userSlice.actions;
 export default userSlice.reducer;

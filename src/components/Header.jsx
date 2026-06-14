@@ -1,13 +1,12 @@
 import React from 'react';
-import Weather from './Weather';
 import { useDispatch, useSelector } from 'react-redux';
-import { CgToggleSquare, CgToggleSquareOff } from "react-icons/cg";
 import { MdLightMode, MdDarkMode, MdDevices } from "react-icons/md";
-import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
-import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
+import { updateUserTheme, updateThemeAsync, toggleSidebar } from '../features/userSlice';
+import Weather from './Weather';
+import dayjs from 'dayjs';
+import '../styles/Header.css';
 
-
-const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, setSidebarView, sidebarView, showWeather }) => {
+const Header = ({ isPomodoroActive, timeRemaining, isTimeOver, showWeather }) => {
   const dispatch = useDispatch();
   const theme = useSelector(state => state.userReducer.theme);
   const themeReducer = useSelector(state => state.themeReducer);
@@ -33,62 +32,46 @@ const Header = ({ isPromodoroActive, timeRemaining, isTimeOver, setSidebarView, 
   }
 
   return (
-    <header className={`header ${showWeather ? 'weather-active' : 'weather-inactive'}`} style={headerStyle}>
-      {showWeather ?
-        <Weather />
-        : null}
-      <header className='header__title'>
-        <div className='header__title-content'>
-          {/* <section className='sidebar__header-userinfo'>
-            <h2>My Tasks</h2>
-            <span><CgToggleSquare /></span>
-          </section> */}
-          {sidebarView ? (
-            <button aria-label='Close sidebar' className='header__title-sidebar-view-btn-open' onClick={() => setSidebarView(!sidebarView)}>
-              <CiSquareChevUp />
-            </button>
-          ) : null}
-          {/* <span><CgToggleSquare />cdgfvbcv</span> */}
-          {/* <h1>{title}</h1> */}
-          {/* {currentPage=='Board'? */}
-          {!sidebarView ?
-            <button aria-label='Open sidebar' className='header__title-sidebar-view-btn-close' onClick={() => setSidebarView(!sidebarView)}>
-              {/* <ImMenu3 /> */}
-              <CiSquareChevDown />
+    <header className="topbar" style={headerStyle}>
+      <div className="tabs">
+        {/* <div className="tab active">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <line x1="3" y1="9" x2="21" y2="9" />
+                <line x1="9" y1="21" x2="9" y2="9" />
+            </svg>
+            TaskFlow
+        </div> */}
+      </div>
+      
+      <div className="topbar-right">
+        {showWeather ? <Weather /> : null}
+        
+        {isPomodoroActive && !isTimeOver && (
+          <div className="topbar-date-error">
+            Pomodoro: {timeRemaining}s
+          </div>
+        )}
+        {isTimeOver && (
+          <div className="topbar-date-error">
+            Time's Up!
+          </div>
+        )}
 
-            </button> : null}
+        <div className="topbar-date">
+            {dayjs().format('ddd, MMM D')}
         </div>
-        {/* <span><CgToggleSquare />cdgfvbcv</span> */}
-        <div className='header__title-sidebar-theme-toggle'>
-          {/* <Weather /> */}
-          <span 
-            aria-label={`Toggle theme (currently ${theme})`} 
-            role="button" 
-            tabIndex={0} 
-            className={`header__title-sidebar-theme-toggle ${theme}`} 
-            onClick={() => handleToggle()} 
-            onKeyDown={(e) => { if (e.key === 'Enter') handleToggle(); }}
-          >
+        
+        <button 
+            className="topbar-icon-btn" 
+            onClick={handleToggle}
+            aria-label={`Toggle theme (currently ${theme})`}
+        >
             {theme === 'system' ? <MdDevices /> : theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
-          </span>
-
-        </div>
-      </header>
-
-      {isPromodoroActive && !isTimeOver && (
-        <div className="promodoro-banner" style={{ background: 'red' }}>
-          Time Remaining: {timeRemaining}
-        </div>
-      )}
-      {isTimeOver && (
-        <div className="time-over-banner">
-          Time's Up!
-        </div>
-      )}
-
+        </button>
+      </div>
     </header>
   );
 }
 
 export default Header;
-

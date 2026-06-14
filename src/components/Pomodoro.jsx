@@ -240,8 +240,14 @@ import {
   resetTimer,
   updateTime,
   completeWorkInterval,
-  completeBreakInterval
+  completeBreakInterval,
+  setTime,
+  setBreakInterval,
+  setIntervalCount,
+  setWorkSound,
+  setBreakSound
 } from '../features/pomodoroSlice';
+import '../styles/Pomodoro.css';
 
 const SOUND_MAP = {
   'chime.wav': chimeSound,
@@ -261,6 +267,31 @@ const Pomodoro = () => {
   const [localCompletedIntervals, setLocalCompletedIntervals] = useState(
     typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.passed : 0
   );
+
+  const [workMin, setWorkMin] = useState(Math.floor(pomodoro.initialTime / 60));
+  const [workSec, setWorkSec] = useState(pomodoro.initialTime % 60);
+  const [breakMin, setBreakMin] = useState(Math.floor(pomodoro.breakInterval / 60));
+  const [breakSec, setBreakSec] = useState(pomodoro.breakInterval % 60);
+  const [intervalCountState, setIntervalCountState] = useState(typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.count : 5);
+  const [workSoundType, setWorkSoundType] = useState(pomodoro.workSound || 'default');
+  const [breakSoundType, setBreakSoundType] = useState(pomodoro.breakSound || 'default');
+
+  const handleSaveSettings = () => {
+    dispatch(setTime(workMin * 60 + workSec));
+    dispatch(setBreakInterval(breakMin * 60 + breakSec));
+    dispatch(setIntervalCount(intervalCountState));
+    dispatch(setWorkSound(workSoundType));
+    dispatch(setBreakSound(breakSoundType));
+    
+    // Update active timer if we are not currently running
+    if (!localIsActive) {
+      if (!localIsBreak) {
+        setLocalTime(workMin * 60 + workSec);
+      } else {
+        setLocalTime(breakMin * 60 + breakSec);
+      }
+    }
+  };
 
   const intervalRef = useRef(null);
   const staticIntervalCountRef = useRef(null);
@@ -424,60 +455,130 @@ const Pomodoro = () => {
   };
 
   return (
-    <section className="section">
+    <section className="section pomodoro-section">
       <div className='pomodoro__container'>
-        <h2>{localIsBreak ? 'Break Time' : 'Work Time'}</h2>
-
-        <div className="pomodoro__container-timer">
-          <div className="pomodoro__container-timer-time">
-            {formatTime(localTime).min}:{formatTime(localTime).sec}
-          </div>
+        <div className="pomodoro__header">
+          <h1>Pomodoro</h1>
+          <p>Stay focused, take breaks</p>
         </div>
-
-        <div className="pomodoro__container__controls">
-          {!localIsActive ? (
-            <button onClick={handleStartTimer} aria-label="Start Timer">
-              <FaPlay />
-            </button>
-          ) : (
-            <button onClick={handlePauseTimer} aria-label="Pause Timer">
-              <FaPause />
-            </button>
-          )}
-          <button onClick={handleResetTimer} aria-label="Reset Timer">
-            <GrPowerReset />
-          </button>
-        </div>
-
-        <div className="pomodoro__intervals">
-          {[...Array(intervalCount)].map((_, index) => {
-            let fillWidth = 0;
-
-            if (index < localCompletedIntervals) {
-              fillWidth = 100; // completed intervals fully filled
-            } else if (index === localCompletedIntervals && !localIsBreak) {
-              fillWidth = currentFill; // current interval filling
-            }
-
-            return (
-              <div key={index} className="interval-bar">
-                <div
-                  className="interval-fill"
-                  style={{
-                    width: `${fillWidth}%`,
-                    backgroundColor: localIsBreak ? '#FF9800' : '#2196F3'
-                  }}
-                />
-                <span className="interval-text">{Math.round(fillWidth)}%</span>
+        
+        <div className="pomodoro__body">
+          <div className="pomodoro-col-left">
+            <div className="pomodoro-timer-card">
+              <div className="pomodoro__toggle">
+                <div className={`toggle-btn ${!localIsBreak ? 'active' : ''}`}>Work Time</div>
+                <div className={`toggle-btn ${localIsBreak ? 'active' : ''}`}>Break Time</div>
               </div>
-            );
-          })}
-        </div>
 
-        <div className="pomodoro__container-status">
-          <p>Completed: {localCompletedIntervals}/{intervalCount} intervals</p>
-          <p>Current: {localIsBreak ? 'Break' : 'Work'} session</p>
-          <p>Work: {pomodoro.initialTime / 60} min | Break: {pomodoro.breakInterval / 60} min</p>
+              <div className="pomodoro__circle-timer">
+                <svg viewBox="0 0 100 100" className="pomodoro-svg">
+                  <circle cx="50" cy="50" r="45" className="circle-track" />
+                  <circle 
+                    cx="50" cy="50" r="45" 
+                    className="circle-progress" 
+                    style={{ strokeDashoffset: 283 - (283 * currentFill) / 100 }} 
+                  />
+                </svg>
+                <div className="pomodoro__circle-text">
+                  <div className="time">{formatTime(localTime).min}:{formatTime(localTime).sec}</div>
+                  <div className="session-label">{localIsBreak ? 'Break session' : 'Work session'}</div>
+                </div>
+              </div>
+
+              <div className="pomodoro__controls-mobile">
+                <button className="btn-play-pause" onClick={localIsActive ? handlePauseTimer : handleStartTimer} aria-label={localIsActive ? "Pause Timer" : "Start Timer"}>
+                  {localIsActive ? <FaPause /> : <FaPlay className="pomodoro-play-icon" />}
+                </button>
+                <button className="btn-reset" onClick={handleResetTimer} aria-label="Reset Timer">
+                  <GrPowerReset />
+                </button>
+              </div>
+
+              <div className="pomodoro__dots-container">
+                <div className="pomodoro__dots">
+                  {[...Array(intervalCount)].map((_, index) => {
+                    const isCompleted = index < localCompletedIntervals;
+                    const isCurrent = index === localCompletedIntervals && !localIsBreak;
+                    const isActiveClass = isCompleted || isCurrent ? 'active' : '';
+                    return <span key={index} className={`dot ${isActiveClass}`}></span>;
+                  })}
+                </div>
+                <div className="pomodoro__intervals-text">
+                  {Math.min(localCompletedIntervals + 1, intervalCount)} / {intervalCount} intervals completed
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pomodoro-col-right">
+            <div className="pomodoro__session-settings">
+              <h3>Session settings</h3>
+              <div className="setting-row">
+                <span>Work interval</span>
+                <div className="setting-control flex-inputs sleek-inputs">
+                  <input type="number" min="0" max="120" value={workMin} onChange={(e) => setWorkMin(parseInt(e.target.value) || 0)} className="num-input"/> <span>min</span>
+                  <input type="number" min="0" max="59" value={workSec} onChange={(e) => setWorkSec(parseInt(e.target.value) || 0)} className="num-input"/> <span>sec</span>
+                </div>
+              </div>
+              <div className="setting-row">
+                <span>Break interval</span>
+                <div className="setting-control flex-inputs sleek-inputs">
+                  <input type="number" min="0" max="120" value={breakMin} onChange={(e) => setBreakMin(parseInt(e.target.value) || 0)} className="num-input"/> <span>min</span>
+                  <input type="number" min="0" max="59" value={breakSec} onChange={(e) => setBreakSec(parseInt(e.target.value) || 0)} className="num-input"/> <span>sec</span>
+                </div>
+              </div>
+              <div className="setting-row setting-row-no-border">
+                <span>Interval count</span>
+                <div className="setting-control">
+                  <input type="number" min="1" max="10" value={intervalCountState} onChange={(e) => setIntervalCountState(parseInt(e.target.value) || 1)} className="num-input-large"/>
+                </div>
+              </div>
+            </div>
+
+            <div className="pomodoro__session-settings">
+              <h3>Sounds</h3>
+              <div className="setting-row">
+                <span className="sound-label">🔊 Work over sound</span>
+                <select className="select-sleek" value={workSoundType} onChange={(e) => setWorkSoundType(e.target.value)}>
+                  <option value="default">Default</option>
+                  <option value="none">None</option>
+                  <option value="chime.wav">Chime</option>
+                  <option value="light ping.wav">Light</option>
+                  <option value="notification.wav">Notif</option>
+                </select>
+              </div>
+              <div className="setting-row setting-row-no-border">
+                <span className="sound-label">🔊 Break over sound</span>
+                <select className="select-sleek" value={breakSoundType} onChange={(e) => setBreakSoundType(e.target.value)}>
+                  <option value="default">Default</option>
+                  <option value="none">None</option>
+                  <option value="chime.wav">Chime</option>
+                  <option value="light ping.wav">Light</option>
+                  <option value="notification.wav">Notif</option>
+                </select>
+              </div>
+            </div>
+            
+            <button className="btn-save-settings-header pomodoro-btn-full" onClick={handleSaveSettings}>Save Settings</button>
+
+            <div className="pomodoro__focus-stats">
+              <div className="focus-header">Today's focus</div>
+              <div className="focus-grid">
+                <div className="focus-stat">
+                  <div className="focus-val">0h 0m</div>
+                  <div className="focus-label">Focused</div>
+                </div>
+                <div className="focus-stat">
+                  <div className="focus-val">{localCompletedIntervals}/{intervalCount}</div>
+                  <div className="focus-label">Sessions</div>
+                </div>
+                <div className="focus-stat">
+                  <div className="focus-val">0</div>
+                  <div className="focus-label">Breaks</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

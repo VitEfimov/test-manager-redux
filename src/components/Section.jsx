@@ -14,23 +14,31 @@ import { GrDrag } from "react-icons/gr";
 import { updateTask, deleteTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
 import Description from './Description';
+import '../styles/Section.css';
 
 
 
 dayjs.extend(isoWeek);
-const Section = ({ task, checked, destination, index, isDraggable = true }) => {
+const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, setSelectedTaskId }) => {
 
   const dispatch = useDispatch();
-  const theme = useSelector((state) => state.themeReducer);
-  const dateFormat = theme.dateFormat || 'full';
-  const taskNameWrap = theme.taskNameWrap || 'ellipsis';
-  const timeFormat = theme.timeFormat || '12h';
-  const taskId = task.id;
   const [taskName, setTaskName] = useState(task.taskname);
-  const [taskPriority, setTaskPriority] = useState(task.priority || '');
-  const [taskTime, setTaskTime] = useState(task.time || '')
-  const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
-  // const [selectedDate, setSelectedDate] = useState(dayjs(task.completionDate));
+  const [taskPriority, setTaskPriority] = useState(task.priority);
+  const [taskTime, setTaskTime] = useState(task.time);
+
+  const theme = useSelector(state => state.themeReducer);
+  const timeFormat = theme.timeFormat || '12h';
+  const dateFormat = theme.dateFormat || 'MMMM D, YYYY';
+  const taskNameWrap = theme.taskNameWrap || 'ellipsis';
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [selectedDate, setSelectedDate] = useState(task.completionDate ? new Date(task.completionDate) : new Date());
   const [checkboxChecked, setCheckboxChecked] = useState(task.completed);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -39,15 +47,13 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
 
 
   const handleSaveChanges = () => {
-    dispatch(updateTask({ taskId, name: taskName, completionDate: selectedDate.toISOString(), time: taskTime }));
+    dispatch(updateTask({ taskId: task.id, name: taskName, completionDate: selectedDate.toISOString(), time: taskTime }));
   };
 
   const handleCheckbox = () => {
     const newCheckboxChecked = !checkboxChecked;
-    // console.log("newCheckboxChecked", newCheckboxChecked);
     setCheckboxChecked(newCheckboxChecked);
     if (task.completed === true) {
-      // console.log('task.completed', task.completed);
       dispatch(
         updateTask({
           taskId: task.id,
@@ -98,13 +104,11 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
   };
 
   useEffect(() => {
-    if (taskName !== task.taskname) {
-      dispatch(updateTask({
-        taskId: task.id,
-        name: taskName,
-      }));
-    }
-  }, [taskName, task.taskname, dispatch, task.id]);
+    setTaskName(task.taskname);
+    setTaskPriority(task.priority);
+    setTaskTime(task.time);
+    setSelectedDate(task.completionDate ? new Date(task.completionDate) : new Date());
+  }, [task.taskname, task.priority, task.time, task.completionDate]);
 
   const handleInputBlur = () => {
     setEditingTaskName(false);
@@ -150,46 +154,11 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
     }));
   };
 
-  const handleTimeChange = (e) => {
-    setTaskTime(e.target.value);
-    dispatch(updateTask({ taskId: task.id, time: e.target.value }))
-
-  }
-
-  // const handleDateSelection = (date) => {
-  //   setSelectedDate(dayjs(date));
-  //   dispatch(
-  //     updateTask({
-  //       taskId: task.id,
-  //       completionDate: dayjs(date).toISOString(),
-  //     })
-  //   );
-  // };
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleInputBlur();
-    }
-  };
-
-
-  const [openModalTaskId, setOpenModalTaskId] = useState(null);
-  const [openPopup, setOpenPopup] = useState(null)
+  const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
   const [modal, setModal] = useState(false)
   const handleModal = () => {
-    if (modal === true) {
-      setModal(false)
-      setModal(true)
-    }
     setModal(!modal);
   }
-
-  const handleModalOpt = () => {
-    setOpenModalTaskId(openPopup === 'description' ? null : 'description')
-
-  }
-
-  // console.log("rendering Section:", task.id, task.completionDate);
 
   const priorityRef = useRef(null)
 
@@ -212,209 +181,106 @@ const Section = ({ task, checked, destination, index, isDraggable = true }) => {
 
   const renderContent = (provided) => (
     <li
-      className={`section__task ${task.completed ? 'completed-task' : ''}`}
+      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''}`}
+      onClick={(e) => {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.closest('button') === null && e.target.closest('.section__task-priority-select') === null) {
+          if (!isMobile) {
+            if (setSelectedTaskId) setSelectedTaskId(task.id);
+          }
+        }
+      }}
       ref={provided?.innerRef}
       {...provided?.draggableProps}
     >
-      <div className='section__task-name' style={taskNameWrap === 'wrap' ? {
-        height: 'auto',
-        minHeight: '40px',
-        whiteSpace: 'normal',
-        overflow: 'visible',
-        display: 'flex',
-        alignItems: 'center'
-      } : {}}>
-        <span className='section__task-icon' {...provided?.dragHandleProps}>
-          <GrDrag className='section__task-icon__grdrag' />
-        </span>
-        <input className='section_task-checkbox'
-          type="checkbox"
-          checked={!!task.completed}
-          onChange={handleCheckbox}
-        />
-        {editingTaskName && !task.completed ? (
-          <textarea
-            ref={textAreaRef}
-            className='section__task-input'
-            value={taskName ?? ""}
-            onChange={handleInputChange}
-            onInput={(e) => adjustTextareaHeight(e.target)}
-            onBlur={handleInputBlur}
-            onKeyDown={handleKeyDown}
-            onFocus={(e) => {
-              const val = e.target.value;
-              e.target.value = '';
-              e.target.value = val;
-              adjustTextareaHeight(e.target);
-            }}
-            autoFocus
-            rows={1}
-            style={{ 
-              verticalAlign: 'middle', 
-              overflow: 'hidden', 
-              resize: 'none',
-              lineHeight: 'normal',
-              margin: '5px',
-              padding: '6px 12px',
-              boxSizing: 'border-box',
-              width: '100%'
-            }} 
-          />
-        ) : (
-          <label
-            className='section__task-label'
-            htmlFor="section__task-name"
-            onClick={handleTaskNameChange}
-            style={{ 
-              lineHeight: 'normal',
-              backgroundColor: getPriorityBgColor(taskPriority),
-              padding: '6px 12px',
-              borderRadius: '6px',
-              display: 'block',
-              width: '100%',
-              boxSizing: 'border-box',
-              transition: 'background-color 0.2s ease',
-              cursor: 'pointer',
-              whiteSpace: taskNameWrap === 'wrap' ? 'normal' : 'nowrap',
-              textOverflow: taskNameWrap === 'wrap' ? 'clip' : 'ellipsis',
-              wordBreak: taskNameWrap === 'wrap' ? 'break-word' : 'normal',
-              overflow: taskNameWrap === 'wrap' ? 'visible' : 'hidden'
-            }}
-          >
-            {task.name || taskName}
-          </label>
-        )}
-
-        {/* <span><MdDragIndicator /></span>
-        <input className='section_task-checkbox'
-          type="checkbox"
-          checked={!!task.completed}
-          onChange={handleCheckbox}
-        />
-        {editingTaskName && !task.completed ? (
-          <input
-            className='section__task-input'
-            value={taskName ?? ""}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            onKeyPress={handleKeyPress}
-            autoFocus
-            style={{ verticalAlign: 'middle' }} />
-        ) : (
-          <label draggable
-            className='section__task-label'
-            htmlFor="section__task-name"
-            onClick={handleTaskNameChange}
-            style={{ lineHeight: 'normal' }}
-          >
-            {task.name || taskName}
-          </label>
-        )} */}
-        {task.description.text ? (
-          <button className='section__task-name-description' onClick={handleModal} aria-label="Task Description"><FcAcceptDatabase />
+        {/* DESKTOP V2 STRUCTURE (now used everywhere) */}
+        <>
+          <span className='section__task-icon task-drag-handle col-drag' {...provided?.dragHandleProps}>
+            <GrDrag className='section__task-icon__grdrag' />
+          </span>
+          
+          <button className="task-check" onClick={handleCheckbox}>
+            {task.completed ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="task-icon-done">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+            )}
           </button>
-        ) : (
-          <button className='section__task-name-description' onClick={handleModal} aria-label="Task Description"><FcDatabase />
 
-          </button>
-        )}
+          <div className={`task-title task-title-wrapper wrap-${taskNameWrap} ${task.completed ? 'done' : ''} col-task`}>
+            {editingTaskName && !task.completed ? (
+              <textarea
+                ref={textAreaRef} className='section__task-input task-title-input' value={taskName ?? ""}
+                onChange={handleInputChange} onInput={(e) => adjustTextareaHeight(e.target)} onBlur={handleInputBlur} onKeyDown={handleKeyDown}
+                onFocus={(e) => { const val = e.target.value; e.target.value = ''; e.target.value = val; adjustTextareaHeight(e.target); e.target.selectionStart = e.target.value.length; }}
+                autoFocus rows={1}
+              />
+            ) : (
+              <label className={`section__task-label task-title-label priority-name-${taskPriority?.toLowerCase() || 'none'}`} onClick={handleTaskNameChange}>
+                {task.name || taskName}
+              </label>
+            )}
+          </div>
 
-        {/* <button className='section__task-name-description' onClick={handleModal}><TfiLayoutMenuV />
-        </button> */}
-        {modal && !task.completed
-          ?
-          <Description
-            className="section__task-name-description-icon"
-            key={task.id}
-            task={task}
-            setModal={setModal}
-            setTaskName={setTaskName}
-            setTaskPriority={setTaskPriority}
-          />
-          :
-          null
-        }
-      </div>
-
-      {/* <div className='section__task-date' onClick={handleDatePicker}> */}
-      <div className='section__task-date'>
-
-        {
-          showDatePicker && !task.completed ? (
-            <DatePicker
-              handleDateSelection={handleDateSelection}
-              setShowDatePicker={setShowDatePicker}
-              currentDate={selectedDate}
-            />
-          ) : (
-            <>
-              <p onClick={handleDatePicker}>
-                {dayjs(task.completionDate).format(
-                  dateFormat === 'short' ? 'MMM D' : 'MMMM D, YYYY'
+          <div className="task-due col-due task-due-btn" onClick={(e) => {
+            e.stopPropagation();
+            if (setSelectedTaskId) setSelectedTaskId(task.id);
+          }}>
+            {showDatePicker && !task.completed && !isMobile ? (
+              <DatePicker handleDateSelection={handleDateSelection} setShowDatePicker={setShowDatePicker} currentDate={selectedDate} />
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {!isMobile && (
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="task-due-icon">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  )}
+                  {dayjs(task.completionDate).format(dateFormat === 'short' ? 'MMM D' : 'MMM DD, YYYY')}
+                </div>
+                {task.time && (
+                  <span style={{ fontSize: '10px', color: '#999', marginLeft: isMobile ? '0' : '15px', fontWeight: 'normal' }}>
+                    {timeFormat === '24h' ? task.time : (() => {
+                      const [h, m] = task.time.split(':');
+                      if (!h || !m) return task.time;
+                      const hInt = parseInt(h, 10);
+                      const ampm = hInt >= 12 ? 'PM' : 'AM';
+                      const h12 = hInt % 12 || 12;
+                      return `${h12}:${m} ${ampm}`;
+                    })()}
+                  </span>
                 )}
-              </p>
-              {task.time && (
-                <span className="section__task-time-display" style={{
-                  fontSize: '0.82em',
-                  color: 'var(--dark-font-color-grey)',
-                  display: 'block',
-                  marginTop: '4px',
-                  fontWeight: '500'
-                }}>
-                  {timeFormat === '12h' ? dayjs(`1970-01-01T${task.time}`).format('h:mm A') : task.time}
-                </span>
-              )}
-            </>
-          )
-        }
-      </div>
-
-      <div ref={priorityRef} className='section__task-priority'>
-        {taskPrioritySelect && !task.completed ? (
-          <div className='section__task-priority-select'>
-            {['Low', 'Medium', 'High'].map((option) => (
-              <div key={option}>
-                <button
-                  className={`section__task-priority-btn ${option.toLowerCase()}`}
-                  onClick={() => handleTaskPriorityChange({ value: option })}
-                >
-                  {option}
-                </button>
-                <button
-                  className={`section__task-priority-btn-media-option ${option.toLowerCase()}`}
-                  onClick={() => handleTaskPriorityChange({ value: option })}
-                >
-                  {option}
-                </button>
               </div>
-            ))}
+            )}
           </div>
-        ) : (
-          <div>
-            <button
-              className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
-              onClick={handlePriorityChange}
-              disabled={checked}
-            >{taskPriority || 'Priority'}
-            </button>
-            <button
-              className={`section__task-priority-btn-media ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''}`}
-              onClick={handlePriorityChange}
-              disabled={checked}
-            >{taskPriority.substring(0, 1) || 'Prt'}
+
+          <div className='section__task-priority col-priority' ref={priorityRef}>
+            {taskPrioritySelect && !task.completed ? (
+              <div className='section__task-priority-select task-priority-dropdown'>
+                {['Low', 'Medium', 'High'].map((option) => (
+                  <button key={option} className={`section__task-priority-btn ${option.toLowerCase()}`} onClick={() => handleTaskPriorityChange({ value: option })}>{option}</button>
+                ))}
+              </div>
+            ) : (
+              <span className={`section-badge priority-text-${taskPriority?.toLowerCase() || 'none'} task-priority-btn`} onClick={handlePriorityChange}>
+                {taskPriority || 'Priority'}
+              </span>
+            )}
+          </div>
+
+          <div className='task-more col-more'>
+            <button className='section__task-name-description' onClick={(e) => { e.stopPropagation(); if (setSelectedTaskId) setSelectedTaskId(task.id); }}>
+              {task.description?.text ? <FcAcceptDatabase size={18} /> : <FcDatabase size={18} />}
             </button>
           </div>
-        )}
-      </div>
-      <div className='section__task-delete-btn'>
-        <button 
-          onClick={handleDeleteTask} 
-          aria-label="Delete Task" 
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <MdDelete />
-        </button>
-      </div>
+        </>
     </li>
   );
 

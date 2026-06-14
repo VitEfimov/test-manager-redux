@@ -9,7 +9,8 @@ import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { updateTask, deleteTask } from '../features/taskSlice';
 import { addBoardAsync, renameBoardAsync, deleteBoardAsync, setActiveBoardId } from '../features/userSlice';
 import ColumnResizer from './ColumnResizer';
-
+import DetailPanel from './DetailPanel';
+import Description from './Description';
 
 dayjs.extend(isSameOrBefore);
 
@@ -21,8 +22,16 @@ const ListOfSections = ({ sidebarView }) => {
     const activeBoardId = useSelector(state => state.userReducer.activeBoardId);
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const [missedTasks, setMissedTasks] = useState(false);
-
+    const [selectedTaskId, setSelectedTaskId] = useState(null);
+    const [desktopModalTaskId, setDesktopModalTaskId] = useState(null);
     const [expandedSections, setExpandedSections] = useState({});
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth > 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const toggleSection = (id) => {
         setExpandedSections(prev => ({
@@ -79,6 +88,8 @@ const ListOfSections = ({ sidebarView }) => {
                 task={task} 
                 index={index} 
                 checked={sectionId === 'completed'}
+                selectedTaskId={selectedTaskId}
+                setSelectedTaskId={setSelectedTaskId}
             />
         ));
     };
@@ -274,13 +285,8 @@ const ListOfSections = ({ sidebarView }) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div>
-                {/* <HeaderListOfSection/> */}
-                {/* <section className={sidebarView ? 'section' : 'section-without-sidebar'}> */}
-
-                {/* <Sidebar
-            /> */}
-                <section className={sidebarView ? 'section open' : 'section close'}>
+            <div className="content" style={{ display: 'flex', width: '100%', height: '100%', overflow: 'hidden' }}>
+                <section className={`task-list ${sidebarView ? 'section open' : 'section close'}`} style={{ flex: 1, overflowY: 'auto' }}>
                     <div className="board-tabs" style={{ display: 'flex', gap: '5px', marginBottom: '10px', overflowX: 'auto', marginTop: '10px', padding: '0 10px' }}>
                         {boards.map(board => (
                             <div 
@@ -323,26 +329,23 @@ const ListOfSections = ({ sidebarView }) => {
                         </button>
                     </div>
 
-                    <header className='header__board'>
-                        <div className='header__board-view'>
-                            <button className="header__board-view-btn"><i className="fa-regular fa-rectangle-list"></i>List</button>
-                            <button className="header__board-view-btn">Board</button>
+                    <div className='col-headers'>
+                        <div className="col-drag"></div>
+                        <div className="col-check"></div>
+                        <div className='col-header col-task' style={{ position: 'relative' }}>
+                            Tasks
+                            <ColumnResizer columnKey="taskName" currentWidthDvw={theme.columnWidths.taskName} minWidth={15} />
                         </div>
-                        <section className='header__board-sections'>
-                            <h2 className='header__board-sections-task-name' style={{ position: 'relative' }}>
-                                Tasks
-                                <ColumnResizer columnKey="taskName" currentWidthDvw={theme.columnWidths.taskName} minWidth={15} />
-                            </h2>
-                            <h2 className='header__board-sections-due-date' style={{ position: 'relative' }}>
-                                Due date
-                                <ColumnResizer columnKey="dueDate" currentWidthDvw={theme.columnWidths.dueDate} minWidth={8} />
-                            </h2>
-                            <h2 className='header__board-sections-priority' style={{ position: 'relative' }}>
-                                Priority
-                                <ColumnResizer columnKey="priority" currentWidthDvw={theme.columnWidths.priority} minWidth={5} />
-                            </h2>
-                        </section>
-                    </header>
+                        <div className='col-header col-due' style={{ position: 'relative' }}>
+                            Due date
+                            <ColumnResizer columnKey="dueDate" currentWidthDvw={theme.columnWidths.dueDate} minWidth={8} />
+                        </div>
+                        <div className='col-header col-priority' style={{ position: 'relative' }}>
+                            Priority
+                            <ColumnResizer columnKey="priority" currentWidthDvw={theme.columnWidths.priority} minWidth={5} />
+                        </div>
+                        <div className="col-more"></div>
+                    </div>
                     {/* <section className='section'> */}
                     {missedFiltered && missedFiltered.length > 0 && (
                         <Droppable droppableId="missed">
@@ -352,14 +355,9 @@ const ListOfSections = ({ sidebarView }) => {
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    <div className='section__field-header'>
-                                        {/* <input className='section_task-checkbox'
-                                type="checkbox"
-                                checked={task.completed}
-                                onChange={handleCheckbox}
-                            /> */}
-                                        <h3 style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</h3>
-
+                                    <div className='section__field-header section-header' style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <span className="section-title missed" style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</span>
+                                        <span className="section-badge missed">{missedFiltered.length}</span>
                                     </div>
                                     <div className='section__line-top'></div>
                                     {renderSectionItems(missedFiltered, 'missed')}
@@ -376,7 +374,10 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>Today ({dayjs().format('dddd')})</h3>
+                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                    <span className="section-title today">Today ({dayjs().format('dddd')})</span>
+                                    <span className="section-badge today">{todayFiltered.length}</span>
+                                </div>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(todayFiltered, 'today')}
                                 {provided.placeholder}
@@ -392,7 +393,10 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>Tomorrow ({dayjs().add(1, 'day').format('dddd')})</h3>
+                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                    <span className="section-title today">Tomorrow ({dayjs().add(1, 'day').format('dddd')})</span>
+                                    <span className="section-badge today">{tomorrowFiltered.length}</span>
+                                </div>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(tomorrowFiltered, 'tomorrow')}
                                 {provided.placeholder}
@@ -410,7 +414,10 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>On this week</h3>
+                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                    <span className="section-title today">On this week</span>
+                                    <span className="section-badge today">{onThisWeekFiltered.length}</span>
+                                </div>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(onThisWeekFiltered, 'on-this-week')}
                                 {provided.placeholder}
@@ -428,7 +435,10 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>On next week</h3>
+                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                    <span className="section-title today">On next week</span>
+                                    <span className="section-badge today">{onNextWeekFiltered.length}</span>
+                                </div>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(onNextWeekFiltered, 'on-next-week')}
                                 {provided.placeholder}
@@ -446,7 +456,10 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <h3>Later</h3>
+                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                    <span className="section-title today">Later</span>
+                                    <span className="section-badge today">{laterFiltered.length}</span>
+                                </div>
                                 <div className='section__line-top'></div>
                                 {renderSectionItems(laterFiltered, 'later')}
                                 {provided.placeholder}
@@ -465,7 +478,10 @@ const ListOfSections = ({ sidebarView }) => {
                                 {...provided.droppableProps}
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--dark-font-color-grey)' }}>
-                                    <h3 style={{ borderBottom: 'none', margin: 0, paddingBottom: '5px' }}>Completed</h3>
+                                    <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <span className="section-title today">Completed</span>
+                                        <span className="section-badge today">{completedFiltered.length}</span>
+                                    </div>
                                     {completedFiltered.length > 0 && (
                                         <button 
                                             onClick={() => {
@@ -490,8 +506,32 @@ const ListOfSections = ({ sidebarView }) => {
 
 
                 </section>
-                {/* </section> */}
             </div>
+            
+            {/* Desktop Detail Panel */}
+            {isDesktop && (
+                <DetailPanel 
+                    task={selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null} 
+                    onClose={() => setSelectedTaskId(null)}
+                    onSave={(updatedTask) => dispatch(updateTask(updatedTask))}
+                    onDelete={() => {
+                        if (selectedTaskId && window.confirm('Are you sure you want to delete this task?')) {
+                            dispatch(deleteTask({ taskId: selectedTaskId }));
+                            setSelectedTaskId(null);
+                        }
+                    }}
+                />
+            )}
+            
+            {selectedTaskId && !isDesktop && (
+                <Description
+                    task={tasks.find(t => t.id === selectedTaskId)}
+                    setModal={() => setSelectedTaskId(null)}
+                    setTaskName={() => {}}
+                    setTaskPriority={() => {}}
+                />
+            )}
+            
         </DragDropContext >
     );
 };
