@@ -285,25 +285,13 @@ const ListOfSections = ({ sidebarView }) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="content" style={{ display: 'flex', width: '100%', height: '100%', overflow: 'hidden' }}>
-                <section className={`task-list ${sidebarView ? 'section open' : 'section close'}`} style={{ flex: 1, overflowY: 'auto' }}>
-                    <div className="board-tabs" style={{ display: 'flex', gap: '5px', marginBottom: '10px', overflowX: 'auto', marginTop: '10px', padding: '0 10px' }}>
+            <div className="content list-of-sections-wrapper">
+                <section className={`task-list list-of-sections-task-list ${sidebarView ? 'section open' : 'section close'}`}>
+                    <div className="board-tabs">
                         {boards.map(board => (
                             <div 
                                 key={board.id} 
                                 className={`board-tab ${activeBoardId === board.id ? 'active' : ''}`}
-                                style={{
-                                    padding: '8px 16px',
-                                    backgroundColor: activeBoardId === board.id ? 'var(--dark-background-color-main)' : 'rgba(0,0,0,0.2)',
-                                    borderTopLeftRadius: '8px',
-                                    borderTopRightRadius: '8px',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    borderBottom: activeBoardId === board.id ? '2px solid #DA8F03' : 'none',
-                                    fontWeight: activeBoardId === board.id ? 'bold' : 'normal'
-                                }}
                                 onClick={() => dispatch(setActiveBoardId(board.id))}
                                 onDoubleClick={() => handleRenameBoard(board.id, board.name)}
                                 title="Double-click to rename"
@@ -311,8 +299,8 @@ const ListOfSections = ({ sidebarView }) => {
                                 <span>{board.name}</span>
                                 {board.id !== 'main' && (
                                     <button 
+                                        className="board-tab-btn-delete"
                                         onClick={(e) => { e.stopPropagation(); handleDeleteBoard(board.id); }}
-                                        style={{ background: 'transparent', border: 'none', color: 'rgb(241, 81, 81)', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}
                                         title="Delete board"
                                     >
                                         &times;
@@ -321,8 +309,8 @@ const ListOfSections = ({ sidebarView }) => {
                             </div>
                         ))}
                         <button 
+                            className="board-tab-btn-add"
                             onClick={handleAddBoard}
-                            style={{ padding: '8px 16px', background: 'rgba(0,0,0,0.2)', border: 'none', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
                             title="Add new board"
                         >
                             +
@@ -332,19 +320,18 @@ const ListOfSections = ({ sidebarView }) => {
                     <div className='col-headers'>
                         <div className="col-drag"></div>
                         <div className="col-check"></div>
-                        <div className='col-header col-task' style={{ position: 'relative' }}>
+                        <div className='col-header col-task col-header-relative'>
                             Tasks
                             <ColumnResizer columnKey="taskName" currentWidthDvw={theme.columnWidths.taskName} minWidth={15} />
                         </div>
-                        <div className='col-header col-due' style={{ position: 'relative' }}>
+                        <div className='col-header col-due col-header-relative'>
                             Due date
                             <ColumnResizer columnKey="dueDate" currentWidthDvw={theme.columnWidths.dueDate} minWidth={8} />
                         </div>
-                        <div className='col-header col-priority' style={{ position: 'relative' }}>
+                        <div className='col-header col-priority col-header-relative'>
                             Priority
                             <ColumnResizer columnKey="priority" currentWidthDvw={theme.columnWidths.priority} minWidth={5} />
                         </div>
-                        <div className="col-more"></div>
                     </div>
                     {/* <section className='section'> */}
                     {missedFiltered && missedFiltered.length > 0 && (
@@ -355,7 +342,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    <div className='section__field-header section-header' style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                    <div className='section__field-header section-header section-header-no-padding'>
                                         <span className="section-title missed" style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</span>
                                         <span className="section-badge missed">{missedFiltered.length}</span>
                                     </div>
@@ -374,7 +361,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                <div className="section-header section-header-no-padding">
                                     <span className="section-title today">Today ({dayjs().format('dddd')})</span>
                                     <span className="section-badge today">{todayFiltered.length}</span>
                                 </div>
@@ -393,7 +380,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                <div className="section-header section-header-no-padding">
                                     <span className="section-title today">Tomorrow ({dayjs().add(1, 'day').format('dddd')})</span>
                                     <span className="section-badge today">{tomorrowFiltered.length}</span>
                                 </div>
@@ -414,7 +401,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                <div className="section-header section-header-no-padding">
                                     <span className="section-title today">On this week</span>
                                     <span className="section-badge today">{onThisWeekFiltered.length}</span>
                                 </div>
@@ -435,7 +422,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                <div className="section-header section-header-no-padding">
                                     <span className="section-title today">On next week</span>
                                     <span className="section-badge today">{onNextWeekFiltered.length}</span>
                                 </div>
@@ -456,7 +443,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                <div className="section-header section-header-no-padding">
                                     <span className="section-title today">Later</span>
                                     <span className="section-badge today">{laterFiltered.length}</span>
                                 </div>
@@ -477,19 +464,19 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--dark-font-color-grey)' }}>
-                                    <div className="section-header" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                <div className="completed-section-header">
+                                    <div className="section-header section-header-no-padding">
                                         <span className="section-title today">Completed</span>
                                         <span className="section-badge today">{completedFiltered.length}</span>
                                     </div>
                                     {completedFiltered.length > 0 && (
                                         <button 
+                                            className="btn-delete-all-completed"
                                             onClick={() => {
                                                 if(window.confirm('Are you sure you want to delete all completed tasks?')) {
                                                     completedFiltered.forEach(task => dispatch(deleteTask({ taskId: task.id })));
                                                 }
                                             }}
-                                            style={{ backgroundColor: 'transparent', color: 'rgb(241, 81, 81)', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', paddingBottom: '5px' }}
                                         >
                                             Delete All
                                         </button>

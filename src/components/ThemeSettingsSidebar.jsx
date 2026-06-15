@@ -99,6 +99,62 @@ const ThemeSettingsSidebar = () => {
             </div>
           </div>
 
+          <div className="theme-color-row">
+            <label htmlFor="cardBg">CARD BACKGROUND</label>
+            <div className="color-control">
+              <input 
+                id="cardBg"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.cardBg ?? theme.colors.mainBg ?? '#ffffff'} 
+                onChange={(e) => handleColorChange(e, 'cardBg')} 
+              />
+              <span className="hex-value">{(theme.colors.cardBg ?? theme.colors.mainBg ?? '#ffffff').toUpperCase()}</span>
+            </div>
+          </div>
+
+          <div className="theme-color-row">
+            <label htmlFor="sidebarText">SIDEBAR TEXT</label>
+            <div className="color-control">
+              <input 
+                id="sidebarText"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.sidebarText ?? theme.colors.textColor ?? '#ffffff'} 
+                onChange={(e) => handleColorChange(e, 'sidebarText')} 
+              />
+              <span className="hex-value">{(theme.colors.sidebarText ?? theme.colors.textColor ?? '#ffffff').toUpperCase()}</span>
+            </div>
+          </div>
+
+          <div className="theme-color-row">
+            <label htmlFor="cardText">CARD TEXT</label>
+            <div className="color-control">
+              <input 
+                id="cardText"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.cardText ?? theme.colors.textColor ?? '#000000'} 
+                onChange={(e) => handleColorChange(e, 'cardText')} 
+              />
+              <span className="hex-value">{(theme.colors.cardText ?? theme.colors.textColor ?? '#000000').toUpperCase()}</span>
+            </div>
+          </div>
+
+          <div className="theme-color-row">
+            <label htmlFor="boardText">BOARD TEXT</label>
+            <div className="color-control">
+              <input 
+                id="boardText"
+                type="color" 
+                className="color-picker"
+                value={theme.colors.boardText ?? theme.colors.textColor ?? '#000000'} 
+                onChange={(e) => handleColorChange(e, 'boardText')} 
+              />
+              <span className="hex-value">{(theme.colors.boardText ?? theme.colors.textColor ?? '#000000').toUpperCase()}</span>
+            </div>
+          </div>
+
           <div className="theme-upload-group">
             <label>Header banner image</label>
             <div className="upload-box" onClick={() => document.getElementById('userPictureUpload').click()}>

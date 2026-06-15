@@ -44,10 +44,10 @@
   display: inline-block;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 1px; /* To match any potential input border/padding */
+  padding: 5px; /* To match any potential input border/padding */
 }
 
-.wrap-full.task-title, .wrap-full .task-title-label, .wrap-full .task-title-input {
+.wrap-wrap.task-title, .wrap-wrap .task-title-label, .wrap-wrap .task-title-input {
   white-space: normal !important;
   word-break: break-word !important;
   overflow: visible !important;

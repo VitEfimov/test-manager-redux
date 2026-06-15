@@ -28,8 +28,8 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
 
   const theme = useSelector(state => state.themeReducer);
   const timeFormat = theme.timeFormat || '12h';
-  const dateFormat = theme.dateFormat || 'MMMM D, YYYY';
-  const taskNameWrap = theme.taskNameWrap || 'ellipsis';
+  const dateFormat = theme.dateFormat || 'MMMM D';
+  const taskNameWrap = theme.taskNameWrap || 'wrap';
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -273,12 +273,6 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
                 {taskPriority || 'Priority'}
               </span>
             )}
-          </div>
-
-          <div className='task-more col-more'>
-            <button className='section__task-name-description' onClick={(e) => { e.stopPropagation(); if (setSelectedTaskId) setSelectedTaskId(task.id); }}>
-              {task.description?.text ? <FcAcceptDatabase size={18} /> : <FcDatabase size={18} />}
-            </button>
           </div>
         </>
     </li>

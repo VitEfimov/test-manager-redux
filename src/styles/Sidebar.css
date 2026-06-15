@@ -1,7 +1,7 @@
 .sidebar {
   display: flex;
   background-color: var(--dark-background-color-sidebar);
-  color: var(--dark-font-color-white);
+  color: var(--dark-font-color-sidebar);
   width: calc(10vw + 1vmin);
   position: absolute;
   height: 100vh;
@@ -33,7 +33,7 @@
   gap: 1dvw;
   padding: 3dvh;
   width: 100%;
-  color: var(--dark-font-color-white);
+  color: var(--dark-font-color-sidebar);
   appearance: none;
   background-color: transparent;
   border: none;

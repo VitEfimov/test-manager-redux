@@ -134,7 +134,7 @@ const DetailPanel = ({ task, onClose, onSave, onDelete }) => {
                         className="detail-input-date"
                         value={formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : ''}
                         onChange={(e) => {
-                            const val = e.target.value ? new Date(e.target.value).toISOString() : '';
+                            const val = e.target.value ? dayjs(e.target.value).format('MMMM D, YYYY') : '';
                             handleChangeAndSave('completionDate', val);
                         }}
                     />

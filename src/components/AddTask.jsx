@@ -104,18 +104,20 @@ const AddTask = ({ date }) => {
     return (
         <div className='add-task' ref={addTaskFormRef}>
             {addTaskForm &&
-                <div className='section__task add-task'>
-                    <div className='section__task-name add-task'>
-                        <span className='section__task-icon add-task'>&#8789;</span>
+                <div className='task-row add-task-row'>
+                    <span className='task-drag-handle col-drag' style={{ visibility: 'hidden' }}></span>
+                    
+                    <button className="task-check" disabled>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                    </button>
+
+                    <div className='task-title col-task' style={{ display: 'flex' }}>
                         <input
-                            className='section_task-checkbox add-task'
-                            type="checkbox"
-                            disabled
-                        />
-                        <input
-                            className='section__task-input add-task'
+                            className='task-title-input'
                             id="section__task-name"
-                            contentEditable={true}
+                            style={{ width: '100%', outline: 'none', background: 'transparent', border: '1px solid var(--dark-background-color-main-priority)', padding: '5px', borderRadius: '5px', color: 'inherit' }}
                             placeholder="Enter task name..."
                             value={taskName}
                             onChange={(e) => handleAddTaskName(e)}
@@ -124,12 +126,12 @@ const AddTask = ({ date }) => {
                                 if (e.key === 'Enter') {
                                     handleAddTask();
                                 }
-                            }
-                            }
+                            }}
                             autoFocus
                         />
                     </div>
-                    <div className='section__task-date add-task'>
+                    
+                    <div className='task-due col-due task-due-btn'>
                         {showDatePicker ? (
                             <div style={{ position: 'absolute', zIndex: 10 }}>
                                 <DatePicker
@@ -141,49 +143,55 @@ const AddTask = ({ date }) => {
                                 />
                             </div>
                         ) : (
-                            <p onClick={() => setShowDatePicker(true)} style={{ cursor: 'pointer' }}>
-                                {completionDate}
-                            </p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={() => setShowDatePicker(true)}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="task-due-icon">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                                        <line x1="16" y1="2" x2="16" y2="6" />
+                                        <line x1="8" y1="2" x2="8" y2="6" />
+                                        <line x1="3" y1="10" x2="21" y2="10" />
+                                    </svg>
+                                    {completionDate}
+                                </div>
+                            </div>
                         )}
                     </div>
 
-                    <div className='section__task-priority add-task'>
-                        {taskPrioritySelect
-                            ?
-                            <div className='section__task-priority-select add-task'>
-                                {
-                                    ['High', 'Medium', 'Low'].map((option) => (
-                                        <div className='select add-task'>
-                                            <button
-                                                key={option}
-                                                className={`section__task-priority-btn ${option.toLowerCase()} add-task`}
-                                                onClick={() => handleTaskPriorityChange(option)}>
-                                                {option}
-                                            </button></div>
-                                    ))
-                                }
+                    <div className='task-priority col-priority'>
+                        {taskPrioritySelect ? (
+                            <div className='section__task-priority-select'>
+                                {['High', 'Medium', 'Low'].map((option) => (
+                                    <button
+                                        key={option}
+                                        className={`section__task-priority-btn ${option.toLowerCase()}`}
+                                        onClick={() => handleTaskPriorityChange(option)}>
+                                        {option}
+                                    </button>
+                                ))}
                             </div>
-                            :
-                            <button className='add__task-btn'
-                                onClick={handlePriorityChange}
-                            >
-                                <p className={`section__task-priority-btn ${typeof taskPriority === 'string' ? taskPriority.toLowerCase() : ''} add-task`}>{taskPriority || 'Task priority'}</p>
-                            </button>}
+                        ) : (
+                            <button className={`task-priority-btn priority-name-${taskPriority?.toLowerCase() || 'none'}`} style={{ minWidth: '80px', height: '24px' }} onClick={handlePriorityChange}>
+                                {taskPriority || 'Priority'}
+                            </button>
+                        )}
                     </div>
-                    <div className='section__task-delete-btn add-task'>
-                        <MdDelete onClick={handleDeleteTask} />
+
+                    <div className='task-delete col-delete' style={{ display: 'flex', gap: '5px' }}>
+                        <button className='task-delete-btn' onClick={handleDeleteTask}>
+                            <MdDelete size={18} />
+                        </button>
+                        <button className='task-add-submit-btn' onClick={handleAddTask} style={{ background: '#4a7a4a', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '4px 10px', fontSize: '12px', fontWeight: 'bold' }}>
+                            Add
+                        </button>
                     </div>
                 </div>
             }
             <div className={`add__task ${date}`}>
-                {!addTaskForm ?
+                {!addTaskForm &&
                     <button className='add__task-btn' onClick={handleAddTaskForm}>
                         Add task...
                     </button>
-                    :
-                    <button className='add__task-btn click_to_add_task' onClick={handleAddTask}>
-                        Click to add task
-                    </button>}
+                }
             </div>
             <div className='section__line-bottom add-task'></div>
         </div>
@@ -191,6 +199,3 @@ const AddTask = ({ date }) => {
 };
 
 export default AddTask;
-
-
-

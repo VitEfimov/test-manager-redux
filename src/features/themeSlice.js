@@ -17,7 +17,12 @@ const initialState = {
   colors: loaded?.colors || {
     sidebarBg: null,
     mainBg: null,
-    textColor: null
+    textColor: null,
+    headerBg: null,
+    cardBg: null,
+    sidebarText: null,
+    cardText: null,
+    boardText: null
   },
   fontSize: loaded?.fontSize || 'normal', // 'small', 'normal', 'big'
   columnWidths: loaded?.columnWidths || {
@@ -63,7 +68,12 @@ const themeSlice = createSlice({
       state.colors = {
         sidebarBg: null,
         mainBg: null,
-        textColor: null
+        textColor: null,
+        headerBg: null,
+        cardBg: null,
+        sidebarText: null,
+        cardText: null,
+        boardText: null
       };
       state.fontSize = 'normal';
       state.columnWidths = {

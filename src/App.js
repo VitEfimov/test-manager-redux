@@ -92,6 +92,10 @@ function App() {
     setOrReset('--dark-background-color-main', theme.colors.mainBg);
     setOrReset('--dark-background-color-header', theme.colors.headerBg);
     setOrReset('--dark-font-color-white', theme.colors.textColor);
+    setOrReset('--dark-background-color-card', theme.colors.cardBg);
+    setOrReset('--dark-font-color-sidebar', theme.colors.sidebarText);
+    setOrReset('--dark-font-color-card', theme.colors.cardText);
+    setOrReset('--dark-font-color-board', theme.colors.boardText);
 
     // Font size
     let fontCalc = 'calc(10px + 1vmin)';
