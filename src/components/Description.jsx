@@ -43,6 +43,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   };
 
   const textAreaRef = useRef(null);
+  const descriptionTextAreaRef = useRef(null);
 
   const adjustTextareaHeight = (element) => {
     if (element) {
@@ -53,7 +54,8 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
 
   useEffect(() => {
     adjustTextareaHeight(textAreaRef.current);
-  }, [formData.name]);
+    adjustTextareaHeight(descriptionTextAreaRef.current);
+  }, [formData.name, formData.descriptionText]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -204,29 +206,17 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
 
           <div className="form-group">
             <label>PRIORITY</label>
-            <div className="priority-pills">
-              <button 
-                type="button" 
-                className={`priority-pill high ${formData.priority === 'High' ? 'active' : ''}`}
-                onClick={() => setFormData({...formData, priority: 'High'})}
-              >
-                High
-              </button>
-              <button 
-                type="button" 
-                className={`priority-pill medium ${formData.priority === 'Medium' ? 'active' : ''}`}
-                onClick={() => setFormData({...formData, priority: 'Medium'})}
-              >
-                Medium
-              </button>
-              <button 
-                type="button" 
-                className={`priority-pill low ${formData.priority === 'Low' ? 'active' : ''}`}
-                onClick={() => setFormData({...formData, priority: 'Low'})}
-              >
-                Low
-              </button>
-            </div>
+            <select
+              className="input-field select-sleek"
+              name="priority"
+              value={formData.priority || 'None'}
+              onChange={handleChange}
+            >
+              <option value="None">None</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
           </div>
 
           <div className="form-row">
@@ -240,7 +230,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
                   name="completionDate"
                   value={formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : ''}
                   onChange={(e) => {
-                    const newDate = e.target.value ? new Date(e.target.value).toISOString() : '';
+                    const newDate = e.target.value ? dayjs(e.target.value).toISOString() : '';
                     setFormData({ ...formData, completionDate: newDate });
                   }}
                 />
@@ -281,10 +271,14 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
           <div className="form-group">
             <label>DESCRIPTION</label>
             <textarea
+              ref={descriptionTextAreaRef}
               className="input-field description-textarea"
               name="descriptionText"
               value={formData.descriptionText}
               onChange={handleChange}
+              onInput={(e) => adjustTextareaHeight(e.target)}
+              rows={formData.descriptionText ? 1 : 3}
+              style={{ overflow: 'hidden', resize: 'none' }}
               placeholder="Add details..."
             ></textarea>
           </div>

@@ -41,8 +41,7 @@
 }
 
 .dashboard__top-cards {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  display: flex;
   gap: 20px;
 }
 
@@ -60,8 +59,9 @@
 
 .progress-card {
   justify-content: flex-start;
-  padding: 10dvw;
+  padding: 20px;
   justify-items: center;
+  width: 100%;
 }
 
 .progress-circle-container {
@@ -225,11 +225,11 @@
 .cat-card {
   background: var(--dark-background-color-card);
   border-radius: 12px;
-  padding: 16px;
+  padding: 1px;
   border-top: 4px solid transparent;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   transition: transform 0.2s;
   color: var(--dark-font-color-card);
@@ -281,6 +281,15 @@
   color: var(--dark-font-color-card);
 }
 
+.dashboard__header-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.btn-notification {
+  display: none;
+}
+
 @media screen and (max-width: 1024px) {
   .dashboard__top-cards {
     grid-template-columns: 1fr 1fr;
@@ -294,22 +303,170 @@
 }
 @media screen and (max-width: 768px) {
   .dashboard-v2 {
-    padding: 5dvh;
-    align-items: center;
-  }
-  .dashboard__header {
+    padding: 0;
+    height: 100dvh;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    overflow: hidden;
+    background-color: var(--dark-background-color-main);
+  }
+
+  .dashboard__header-wrapper {
+    background-color: #4a7a4a;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    padding: 20px 20px 20px 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
     gap: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }
+
+  .dashboard__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .dashboard__header-title h1 {
+    display: none;
+  }
+
+  .dashboard__header-title .date {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+  }
+
+  .btn-notification {
+    display: flex;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
   .dashboard__top-cards {
-    grid-template-columns: 1fr;
+    margin: 0;
+    width: 100%;
   }
+
   .progress-card {
-    grid-column: span 1;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    gap: 15px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
   }
+
+  .progress-circle-container {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+  }
+
+  .progress-svg .circle-track {
+    stroke: rgba(255, 255, 255, 0.2);
+  }
+
+  .progress-svg .circle-progress {
+    stroke: white;
+  }
+
+  .progress-text-inner .percent {
+    color: white;
+    font-size: 22px;
+  }
+
+  .progress-text-inner .label {
+    display: none;
+  }
+
+  .progress-info h3 {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .progress-info p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .progress-info p br {
+    display: none;
+  }
+
+  .dashboard__categories {
+    flex: 1;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .categories-title {
+    display: none;
+  }
+
   .categories-grid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 12px;
+    height: 100%;
+    padding-bottom: 20px;
+  }
+
+  .cat-card {
+    padding: 3px 12px;
+    gap: 4px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .cat-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    display: none;
+  }
+
+  .cat-num {
+    font-size: 26px;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .cat-title {
+    font-size: 13px;
+  }
+
+  .cat-sub {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 }
 

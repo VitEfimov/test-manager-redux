@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
 import { MdDelete } from "react-icons/md";
-import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
@@ -16,6 +16,8 @@ const AddTask = ({ date }) => {
     const [taskPriority, setTaskPriority] = useState('');
     const [taskPrioritySelect, setTaskPrioritySelect] = useState(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [datePickerPos, setDatePickerPos] = useState({ top: 0, left: 0 });
+    const dueDateRef = useRef(null);
 
     const handleAddTaskForm = () => {
         setAddTaskForm(!addTaskForm);
@@ -100,6 +102,13 @@ const AddTask = ({ date }) => {
     const addTaskFormRef = useRef(null)
     useClickOutside(addTaskFormRef, () => setAddTaskForm(false))
     
+    const handleShowDatePicker = () => {
+        if (dueDateRef.current) {
+            const rect = dueDateRef.current.getBoundingClientRect();
+            setDatePickerPos({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX });
+        }
+        setShowDatePicker(true);
+    };
 
     return (
         <div className='add-task' ref={addTaskFormRef}>
@@ -113,7 +122,7 @@ const AddTask = ({ date }) => {
                         </svg>
                     </button>
 
-                    <div className='task-title col-task' style={{ display: 'flex' }}>
+                    <div className='task-title col-task' style={{ display: 'flex', flex: 1, minWidth: 0 }}>
                         <input
                             className='task-title-input'
                             id="section__task-name"
@@ -131,9 +140,9 @@ const AddTask = ({ date }) => {
                         />
                     </div>
                     
-                    <div className='task-due col-due task-due-btn'>
-                        {showDatePicker ? (
-                            <div style={{ position: 'absolute', zIndex: 10 }}>
+                    <div className='task-due col-due task-due-btn' ref={dueDateRef}>
+                        {showDatePicker ? createPortal(
+                            <div style={{ position: 'absolute', top: datePickerPos.top, left: datePickerPos.left, zIndex: 99999 }}>
                                 <DatePicker
                                     handleDateSelection={(selectedDate) => {
                                         setCompletionDate(dayjs(selectedDate).format('MMMM D, YYYY'));
@@ -141,9 +150,10 @@ const AddTask = ({ date }) => {
                                     setShowDatePicker={setShowDatePicker}
                                     currentDate={completionDate}
                                 />
-                            </div>
+                            </div>,
+                            document.body
                         ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={() => setShowDatePicker(true)}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={handleShowDatePicker}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="task-due-icon">
                                         <rect x="3" y="4" width="18" height="18" rx="2" />

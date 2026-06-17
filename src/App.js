@@ -125,10 +125,7 @@ function App() {
       case 'About':
         return <About />;
       case 'Settings':
-        return <Settings
-          setCurrentPage={setCurrentPage}
-          showWeather={showWeather}
-          setShowWeather={(val) => dispatch(updateShowWeather(val))} />;
+        return <Settings setCurrentPage={setCurrentPage} />;
       default:
         return <Dashboard />;
     }
@@ -158,10 +155,6 @@ function App() {
     );
   }
 
-  if (!isAuthenticated && !isGuest) {
-    return <Login />;
-  }
-
   return (
     <div className="app-container">
       <Sidebar 
@@ -181,8 +174,6 @@ function App() {
           isPomodoroActive={isPomodoroActive}
           timeRemaining={timeRemaining}
           isTimeOver={isTimeOver}
-          showWeather={showWeather}
-          setShowWeather={(val) => dispatch(updateShowWeather(val))}
         />
         
         <div className="content">

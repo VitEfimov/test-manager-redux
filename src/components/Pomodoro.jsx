@@ -228,6 +228,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaPlay, FaPause } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
+import { IoMdSettings } from "react-icons/io";
 import useSound from 'use-sound';
 import endSound from '../assets/audio/end_sound.ogg';
 import startSound from '../assets/audio/start_sound.mp3';
@@ -267,6 +268,7 @@ const Pomodoro = () => {
   const [localCompletedIntervals, setLocalCompletedIntervals] = useState(
     typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.passed : 0
   );
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const [workMin, setWorkMin] = useState(Math.floor(pomodoro.initialTime / 60));
   const [workSec, setWorkSec] = useState(pomodoro.initialTime % 60);
@@ -283,7 +285,8 @@ const Pomodoro = () => {
     dispatch(setWorkSound(workSoundType));
     dispatch(setBreakSound(breakSoundType));
     
-    // Update active timer if we are not currently running
+    staticIntervalCountRef.current = intervalCountState;
+    
     if (!localIsActive) {
       if (!localIsBreak) {
         setLocalTime(workMin * 60 + workSec);
@@ -291,6 +294,7 @@ const Pomodoro = () => {
         setLocalTime(breakMin * 60 + breakSec);
       }
     }
+    setShowSettingsModal(false);
   };
 
   const intervalRef = useRef(null);
@@ -362,18 +366,13 @@ const Pomodoro = () => {
       : 5;
     dispatch(resetTimer());
   };
-      console.log("localIsBreak",localIsBreak);
-      console.log("localCompletedIntervals",localCompletedIntervals);
-      console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
+      
   const handlePeriodEnd = () => {
     if (localIsBreak) {
       dispatch(completeBreakInterval());
       if (pomodoro.breakSound !== 'none') {
         try { playStart(); } catch(e) { console.warn('Audio play failed:', e); }
       }
-      // console.log("localIsBreak",localIsBreak);
-      // console.log("localCompletedIntervals",localCompletedIntervals);
-      // console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
       if (localCompletedIntervals >= staticIntervalCountRef.current) {
         alert("All intervals completed!");
         dispatch(resetTimer());
@@ -385,39 +384,6 @@ const Pomodoro = () => {
       }
     }
   };
-
-//   const handlePeriodEnd = () => {
-//   if (localIsBreak) {
-//     // Break just ended → start new work session
-//     dispatch(completeBreakInterval());
-//     playStart();
-//     // Automatically start next work session
-//     setLocalIsActive(true);
-//     setLocalIsBreak(false);
-//     dispatch(startTimer());
-//     setLocalTime(pomodoro.initialTime);
-//   } else {
-//     // Work just ended
-//     dispatch(completeWorkInterval());
-//     playEnd();
-
-//     if (localCompletedIntervals + 1 >= staticIntervalCountRef.current) {
-//       // ✅ All work intervals completed
-//       setLocalIsActive(false);
-//       alert("🎉 All intervals completed!");
-//       dispatch(resetTimer());
-//       setLocalIsBreak(false);
-//       setLocalCompletedIntervals(0);
-//     } else {
-//       // Switch to break automatically
-//       setLocalIsBreak(true);
-//       setLocalTime(pomodoro.breakInterval);
-//       setLocalIsActive(true);
-//       dispatch(startTimer());
-//     }
-//   }
-// };
-
 
   const showNotification = () => {
     try {
@@ -458,11 +424,16 @@ const Pomodoro = () => {
     <section className="section pomodoro-section">
       <div className='pomodoro__container'>
         <div className="pomodoro__header">
-          <h1>Pomodoro</h1>
-          <p>Stay focused, take breaks</p>
+          <div className="pomodoro__header-text">
+            <h1>Pomodoro</h1>
+            <p>Stay focused, take breaks</p>
+          </div>
+          <button className="btn-customize-theme" onClick={() => setShowSettingsModal(true)}>
+            <IoMdSettings /> Settings
+          </button>
         </div>
         
-        <div className="pomodoro__body">
+        <div className="pomodoro__body pomodoro-single-page">
           <div className="pomodoro-col-left">
             <div className="pomodoro-timer-card">
               <div className="pomodoro__toggle">
@@ -509,10 +480,16 @@ const Pomodoro = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="pomodoro-col-right">
+      {showSettingsModal && (
+        <div className="settings-modal-overlay">
+          <div className="settings-modal-content pomodoro-modal-content">
+            <h3 className="settings-modal-title">Pomodoro Settings</h3>
+            
             <div className="pomodoro__session-settings">
-              <h3>Session settings</h3>
+              <h4>Session settings</h4>
               <div className="setting-row">
                 <span>Work interval</span>
                 <div className="setting-control flex-inputs sleek-inputs">
@@ -536,9 +513,9 @@ const Pomodoro = () => {
             </div>
 
             <div className="pomodoro__session-settings">
-              <h3>Sounds</h3>
+              <h4>Sounds</h4>
               <div className="setting-row">
-                <span className="sound-label">🔊 Work over sound</span>
+                <span className="sound-label">🎵 Work over sound</span>
                 <select className="select-sleek" value={workSoundType} onChange={(e) => setWorkSoundType(e.target.value)}>
                   <option value="default">Default</option>
                   <option value="none">None</option>
@@ -548,7 +525,7 @@ const Pomodoro = () => {
                 </select>
               </div>
               <div className="setting-row setting-row-no-border">
-                <span className="sound-label">🔊 Break over sound</span>
+                <span className="sound-label">🎵 Break over sound</span>
                 <select className="select-sleek" value={breakSoundType} onChange={(e) => setBreakSoundType(e.target.value)}>
                   <option value="default">Default</option>
                   <option value="none">None</option>
@@ -559,28 +536,13 @@ const Pomodoro = () => {
               </div>
             </div>
             
-            <button className="btn-save-settings-header pomodoro-btn-full" onClick={handleSaveSettings}>Save Settings</button>
-
-            <div className="pomodoro__focus-stats">
-              <div className="focus-header">Today's focus</div>
-              <div className="focus-grid">
-                <div className="focus-stat">
-                  <div className="focus-val">0h 0m</div>
-                  <div className="focus-label">Focused</div>
-                </div>
-                <div className="focus-stat">
-                  <div className="focus-val">{localCompletedIntervals}/{intervalCount}</div>
-                  <div className="focus-label">Sessions</div>
-                </div>
-                <div className="focus-stat">
-                  <div className="focus-val">0</div>
-                  <div className="focus-label">Breaks</div>
-                </div>
-              </div>
+            <div className="settings-modal-actions">
+              <button className='btn-delete' onClick={() => setShowSettingsModal(false)}>Cancel</button>
+              <button className='btn-save' onClick={handleSaveSettings}>Save</button>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import getFilters from '../list-view/filters';
+import { MdNotifications } from "react-icons/md";
 import '../styles/Dashboard.css';
 
 dayjs.extend(isSameOrBefore);
@@ -10,17 +11,7 @@ const Dashboard = () => {
 
     const tasks = useSelector(state => state.taskReducer.tasks || []);
 
-    // const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
-    // // const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
-    // const thisWeekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs(), 'day') &&
-    //                                     dayjs(task.completionDate).isSameOrBefore(dayjs().endOf('week')) && !task.completed);
-    // const nextWeekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) && !task.completed)
-    // const laterTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) && !task.completed)
-    // const missedTasks = tasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed);
-
-
     const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
-    // const weekTasks = tasks.filter(task => dayjs(task.completionDate).isAfter(dayjs().endOf('week')) &&
     const FILTERS = getFilters();
     const tomorrowTasks = tasks.filter(task => dayjs(task.completionDate).isSame(FILTERS.tomorrow, 'day')
                             && !task.completed)
@@ -51,66 +42,41 @@ const Dashboard = () => {
 
   return (
     <section className='section dashboard-v2'>
-      <div className="dashboard__header">
-        <div className="dashboard__header-title">
-          <div className="date">{dayjs().format('dddd, MMMM D, YYYY')}</div>
-          <h1>Dashboard</h1>
+      <div className="dashboard__header-wrapper">
+        <div className="dashboard__header">
+          <div className="dashboard__header-title">
+            <div className="date">{dayjs().format('dddd, MMMM D')}</div>
+            <h1>Dashboard</h1>
+          </div>
+          <button className="btn-notification" aria-label="Notifications">
+            <MdNotifications />
+          </button>
         </div>
-        {/* <button className="btn-new-task" onClick={() => {}}>
-          + New task
-        </button> */}
-      </div>
 
-      <div className="dashboard__top-cards">
-        <div className="dash-card progress-card">
-          <div className="progress-circle-container">
-            <svg viewBox="0 0 100 100" className="progress-svg">
-              <circle cx="50" cy="50" r="40" className="circle-track" />
-              <circle 
-                cx="50" cy="50" r="40" 
-                className="circle-progress" 
-                style={{ strokeDashoffset: 251.2 - (251.2 * currentFill) / 100 }} 
-              />
-            </svg>
-            <div className="progress-text-inner">
-              <span className="percent">{completionPercentage}%</span>
-              <span className="label">complete</span>
+        <div className="dashboard__top-cards">
+          <div className="dash-card progress-card">
+            <div className="progress-circle-container">
+              <svg viewBox="0 0 100 100" className="progress-svg">
+                <circle cx="50" cy="50" r="40" className="circle-track" />
+                <circle 
+                  cx="50" cy="50" r="40" 
+                  className="circle-progress" 
+                  style={{ strokeDashoffset: 251.2 - (251.2 * currentFill) / 100 }} 
+                />
+              </svg>
+              <div className="progress-text-inner">
+                <span className="percent">{completionPercentage}%</span>
+                <span className="label">complete</span>
+              </div>
             </div>
-          </div>
-          <div className="progress-info">
-            <h3>{completionPercentage === 100 ? 'Perfect!' : completionPercentage >= 50 ? 'Great progress!' : 'Keep going!'}</h3>
-            <p>{completedTasks} of {totalTasks} tasks<br/>completed today</p>
-            <div className="tags">
-              {missedTasks.length > 0 && <span className="tag missed">{missedTasks.length} missed</span>}
-              {todayTasks.length > 0 && <span className="tag today">{todayTasks.length} today</span>}
+            <div className="progress-info">
+              <h3>{completionPercentage === 100 ? 'Perfect!' : completionPercentage >= 50 ? 'Great progress!' : 'Keep going!'}</h3>
+              <p>{completedTasks} of {totalTasks} tasks<br/>completed today</p>
+              <div className="tags">
+                {missedTasks.length > 0 && <span className="tag missed">{missedTasks.length} missed</span>}
+                {todayTasks.length > 0 && <span className="tag today">{todayTasks.length} today</span>}
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="dash-card stat-card">
-          <div className="icon-container color-green">📚</div>
-          <div className="stat-content">
-            <span className="stat-num">{totalTasks}</span>
-            <span className="stat-title">Total tasks</span>
-            <span className="stat-sub">all tasks</span>
-          </div>
-        </div>
-
-        <div className="dash-card stat-card">
-          <div className="icon-container color-green">✅</div>
-          <div className="stat-content">
-            <span className="stat-num">{completedTasks}</span>
-            <span className="stat-title">Completed</span>
-            <span className="stat-sub">done</span>
-          </div>
-        </div>
-
-        <div className="dash-card stat-card">
-          <div className="icon-container color-yellow">☀️</div>
-          <div className="stat-content">
-            <span className="stat-num">{todayTasks.length}</span>
-            <span className="stat-title">Today</span>
-            <span className="stat-sub">due today</span>
           </div>
         </div>
       </div>

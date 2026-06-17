@@ -2,11 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdLightMode, MdDarkMode, MdDevices } from "react-icons/md";
 import { updateUserTheme, updateThemeAsync, toggleSidebar } from '../features/userSlice';
-import Weather from './Weather';
 import dayjs from 'dayjs';
 import '../styles/Header.css';
 
-const Header = ({ isPomodoroActive, timeRemaining, isTimeOver, showWeather }) => {
+const Header = ({ isPomodoroActive, timeRemaining, isTimeOver }) => {
   const dispatch = useDispatch();
   const theme = useSelector(state => state.userReducer.theme);
   const themeReducer = useSelector(state => state.themeReducer);
@@ -45,8 +44,6 @@ const Header = ({ isPomodoroActive, timeRemaining, isTimeOver, showWeather }) =>
       </div>
       
       <div className="topbar-right">
-        {showWeather ? <Weather /> : null}
-        
         {isPomodoroActive && !isTimeOver && (
           <div className="topbar-date-error">
             Pomodoro: {timeRemaining}s

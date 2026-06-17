@@ -1,0 +1,783 @@
+﻿diff --git a/src/App.css b/src/App.css
+index 407a4dd..a798826 100644
+--- a/src/App.css
++++ b/src/App.css
+@@ -1592,12 +1592,12 @@ nav {
+ 
+ 
+ .input-field {
+-  background-color: #fcfcfc;
+-  border: 1px solid #e8e4dc;
++  background-color: light-dark(#fcfcfc, var(--dark-background-color-select));
++  border: 1px solid light-dark(#e8e4dc, var(--dark-background-color-main-priority));
+   border-radius: 10px;
+   padding: 12px 15px;
+   font-size: 14px;
+-  color: #1a1a1a;
++  color: light-dark(#1a1a1a, var(--dark-font-color-white));
+   font-family: inherit;
+   width: 100%;
+   box-sizing: border-box;
+@@ -2222,6 +2222,12 @@ select.input-field {
+     align-items: center !important;
+     min-width: 100% !important;
+   }
++  .priority-pills {
++    width: 100%;
++    display: flex;
++    gap: 3dvw;
++    justify-content: center;
++  }
+ }
+ 
+ .v2-description-modal {
+diff --git a/src/App.js b/src/App.js
+index dbe4eb4..9ef997c 100644
+--- a/src/App.js
++++ b/src/App.js
+@@ -125,10 +125,7 @@ function App() {
+       case 'About':
+         return <About />;
+       case 'Settings':
+-        return <Settings
+-          setCurrentPage={setCurrentPage}
+-          showWeather={showWeather}
+-          setShowWeather={(val) => dispatch(updateShowWeather(val))} />;
++        return <Settings setCurrentPage={setCurrentPage} />;
+       default:
+         return <Dashboard />;
+     }
+@@ -158,10 +155,6 @@ function App() {
+     );
+   }
+ 
+-  if (!isAuthenticated && !isGuest) {
+-    return <Login />;
+-  }
+-
+   return (
+     <div className="app-container">
+       <Sidebar 
+@@ -181,8 +174,6 @@ function App() {
+           isPomodoroActive={isPomodoroActive}
+           timeRemaining={timeRemaining}
+           isTimeOver={isTimeOver}
+-          showWeather={showWeather}
+-          setShowWeather={(val) => dispatch(updateShowWeather(val))}
+         />
+         
+         <div className="content">
+diff --git a/src/components/AddTask.jsx b/src/components/AddTask.jsx
+index 1983c5c..e7b04c9 100644
+--- a/src/components/AddTask.jsx
++++ b/src/components/AddTask.jsx
+@@ -1,7 +1,7 @@
+-import React from 'react'
++import React, { useState, useRef } from 'react';
++import { createPortal } from 'react-dom';
+ import dayjs from 'dayjs';
+ import { MdDelete } from "react-icons/md";
+-import { useState, useRef } from 'react';
+ import { useDispatch, useSelector } from 'react-redux';
+ import { addTask } from '../features/taskSlice';
+ import DatePicker from './DatePicker';
+@@ -16,6 +16,8 @@ const AddTask = ({ date }) => {
+     const [taskPriority, setTaskPriority] = useState('');
+     const [taskPrioritySelect, setTaskPrioritySelect] = useState(false);
+     const [showDatePicker, setShowDatePicker] = useState(false);
++    const [datePickerPos, setDatePickerPos] = useState({ top: 0, left: 0 });
++    const dueDateRef = useRef(null);
+ 
+     const handleAddTaskForm = () => {
+         setAddTaskForm(!addTaskForm);
+@@ -100,6 +102,13 @@ const AddTask = ({ date }) => {
+     const addTaskFormRef = useRef(null)
+     useClickOutside(addTaskFormRef, () => setAddTaskForm(false))
+     
++    const handleShowDatePicker = () => {
++        if (dueDateRef.current) {
++            const rect = dueDateRef.current.getBoundingClientRect();
++            setDatePickerPos({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX });
++        }
++        setShowDatePicker(true);
++    };
+ 
+     return (
+         <div className='add-task' ref={addTaskFormRef}>
+@@ -113,7 +122,7 @@ const AddTask = ({ date }) => {
+                         </svg>
+                     </button>
+ 
+-                    <div className='task-title col-task' style={{ display: 'flex' }}>
++                    <div className='task-title col-task' style={{ display: 'flex', flex: 1, minWidth: 0 }}>
+                         <input
+                             className='task-title-input'
+                             id="section__task-name"
+@@ -131,9 +140,9 @@ const AddTask = ({ date }) => {
+                         />
+                     </div>
+                     
+-                    <div className='task-due col-due task-due-btn'>
+-                        {showDatePicker ? (
+-                            <div style={{ position: 'absolute', zIndex: 10 }}>
++                    <div className='task-due col-due task-due-btn' ref={dueDateRef}>
++                        {showDatePicker ? createPortal(
++                            <div style={{ position: 'absolute', top: datePickerPos.top, left: datePickerPos.left, zIndex: 99999 }}>
+                                 <DatePicker
+                                     handleDateSelection={(selectedDate) => {
+                                         setCompletionDate(dayjs(selectedDate).format('MMMM D, YYYY'));
+@@ -141,9 +150,10 @@ const AddTask = ({ date }) => {
+                                     setShowDatePicker={setShowDatePicker}
+                                     currentDate={completionDate}
+                                 />
+-                            </div>
++                            </div>,
++                            document.body
+                         ) : (
+-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={() => setShowDatePicker(true)}>
++                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={handleShowDatePicker}>
+                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="task-due-icon">
+                                         <rect x="3" y="4" width="18" height="18" rx="2" />
+diff --git a/src/components/Dashboard.jsx b/src/components/Dashboard.jsx
+index 81f447b..9d3bec7 100644
+--- a/src/components/Dashboard.jsx
++++ b/src/components/Dashboard.jsx
+@@ -86,33 +86,6 @@ const Dashboard = () => {
+             </div>
+           </div>
+         </div>
+-
+-        <div className="dash-card stat-card">
+-          <div className="icon-container color-green">≡ƒôÜ</div>
+-          <div className="stat-content">
+-            <span className="stat-num">{totalTasks}</span>
+-            <span className="stat-title">Total tasks</span>
+-            <span className="stat-sub">all tasks</span>
+-          </div>
+-        </div>
+-
+-        <div className="dash-card stat-card">
+-          <div className="icon-container color-green">Γ£à</div>
+-          <div className="stat-content">
+-            <span className="stat-num">{completedTasks}</span>
+-            <span className="stat-title">Completed</span>
+-            <span className="stat-sub">done</span>
+-          </div>
+-        </div>
+-
+-        <div className="dash-card stat-card">
+-          <div className="icon-container color-yellow">ΓÿÇ∩╕Å</div>
+-          <div className="stat-content">
+-            <span className="stat-num">{todayTasks.length}</span>
+-            <span className="stat-title">Today</span>
+-            <span className="stat-sub">due today</span>
+-          </div>
+-        </div>
+       </div>
+ 
+       <div className="dashboard__categories">
+diff --git a/src/components/Description.jsx b/src/components/Description.jsx
+index 805ccb9..ff0e647 100644
+--- a/src/components/Description.jsx
++++ b/src/components/Description.jsx
+@@ -43,6 +43,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
+   };
+ 
+   const textAreaRef = useRef(null);
++  const descriptionTextAreaRef = useRef(null);
+ 
+   const adjustTextareaHeight = (element) => {
+     if (element) {
+@@ -53,7 +54,8 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
+ 
+   useEffect(() => {
+     adjustTextareaHeight(textAreaRef.current);
+-  }, [formData.name]);
++    adjustTextareaHeight(descriptionTextAreaRef.current);
++  }, [formData.name, formData.descriptionText]);
+ 
+   const handleSubmit = (e) => {
+     e.preventDefault();
+@@ -204,29 +206,17 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
+ 
+           <div className="form-group">
+             <label>PRIORITY</label>
+-            <div className="priority-pills">
+-              <button 
+-                type="button" 
+-                className={`priority-pill high ${formData.priority === 'High' ? 'active' : ''}`}
+-                onClick={() => setFormData({...formData, priority: 'High'})}
+-              >
+-                High
+-              </button>
+-              <button 
+-                type="button" 
+-                className={`priority-pill medium ${formData.priority === 'Medium' ? 'active' : ''}`}
+-                onClick={() => setFormData({...formData, priority: 'Medium'})}
+-              >
+-                Medium
+-              </button>
+-              <button 
+-                type="button" 
+-                className={`priority-pill low ${formData.priority === 'Low' ? 'active' : ''}`}
+-                onClick={() => setFormData({...formData, priority: 'Low'})}
+-              >
+-                Low
+-              </button>
+-            </div>
++            <select
++              className="input-field select-sleek"
++              name="priority"
++              value={formData.priority || 'None'}
++              onChange={handleChange}
++            >
++              <option value="None">None</option>
++              <option value="Low">Low</option>
++              <option value="Medium">Medium</option>
++              <option value="High">High</option>
++            </select>
+           </div>
+ 
+           <div className="form-row">
+@@ -240,7 +230,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
+                   name="completionDate"
+                   value={formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : ''}
+                   onChange={(e) => {
+-                    const newDate = e.target.value ? new Date(e.target.value).toISOString() : '';
++                    const newDate = e.target.value ? dayjs(e.target.value).toISOString() : '';
+                     setFormData({ ...formData, completionDate: newDate });
+                   }}
+                 />
+@@ -281,10 +271,14 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
+           <div className="form-group">
+             <label>DESCRIPTION</label>
+             <textarea
++              ref={descriptionTextAreaRef}
+               className="input-field description-textarea"
+               name="descriptionText"
+               value={formData.descriptionText}
+               onChange={handleChange}
++              onInput={(e) => adjustTextareaHeight(e.target)}
++              rows={1}
++              style={{ overflow: 'hidden', resize: 'none' }}
+               placeholder="Add details..."
+             ></textarea>
+           </div>
+diff --git a/src/components/Header.jsx b/src/components/Header.jsx
+index e4f9527..2d4a27b 100644
+--- a/src/components/Header.jsx
++++ b/src/components/Header.jsx
+@@ -2,11 +2,10 @@ import React from 'react';
+ import { useDispatch, useSelector } from 'react-redux';
+ import { MdLightMode, MdDarkMode, MdDevices } from "react-icons/md";
+ import { updateUserTheme, updateThemeAsync, toggleSidebar } from '../features/userSlice';
+-import Weather from './Weather';
+ import dayjs from 'dayjs';
+ import '../styles/Header.css';
+ 
+-const Header = ({ isPomodoroActive, timeRemaining, isTimeOver, showWeather }) => {
++const Header = ({ isPomodoroActive, timeRemaining, isTimeOver }) => {
+   const dispatch = useDispatch();
+   const theme = useSelector(state => state.userReducer.theme);
+   const themeReducer = useSelector(state => state.themeReducer);
+@@ -45,8 +44,6 @@ const Header = ({ isPomodoroActive, timeRemaining, isTimeOver, showWeather }) =>
+       </div>
+       
+       <div className="topbar-right">
+-        {showWeather ? <Weather /> : null}
+-        
+         {isPomodoroActive && !isTimeOver && (
+           <div className="topbar-date-error">
+             Pomodoro: {timeRemaining}s
+diff --git a/src/components/Pomodoro.jsx b/src/components/Pomodoro.jsx
+index 0e77ae9..5ef266e 100644
+--- a/src/components/Pomodoro.jsx
++++ b/src/components/Pomodoro.jsx
+@@ -228,6 +228,7 @@ import React, { useEffect, useRef, useState } from 'react';
+ import { useSelector, useDispatch } from 'react-redux';
+ import { FaPlay, FaPause } from "react-icons/fa";
+ import { GrPowerReset } from "react-icons/gr";
++import { IoMdSettings } from "react-icons/io";
+ import useSound from 'use-sound';
+ import endSound from '../assets/audio/end_sound.ogg';
+ import startSound from '../assets/audio/start_sound.mp3';
+@@ -267,6 +268,7 @@ const Pomodoro = () => {
+   const [localCompletedIntervals, setLocalCompletedIntervals] = useState(
+     typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.passed : 0
+   );
++  const [showSettingsModal, setShowSettingsModal] = useState(false);
+ 
+   const [workMin, setWorkMin] = useState(Math.floor(pomodoro.initialTime / 60));
+   const [workSec, setWorkSec] = useState(pomodoro.initialTime % 60);
+@@ -283,7 +285,6 @@ const Pomodoro = () => {
+     dispatch(setWorkSound(workSoundType));
+     dispatch(setBreakSound(breakSoundType));
+     
+-    // Update active timer if we are not currently running
+     if (!localIsActive) {
+       if (!localIsBreak) {
+         setLocalTime(workMin * 60 + workSec);
+@@ -291,6 +292,7 @@ const Pomodoro = () => {
+         setLocalTime(breakMin * 60 + breakSec);
+       }
+     }
++    setShowSettingsModal(false);
+   };
+ 
+   const intervalRef = useRef(null);
+@@ -362,18 +364,13 @@ const Pomodoro = () => {
+       : 5;
+     dispatch(resetTimer());
+   };
+-      console.log("localIsBreak",localIsBreak);
+-      console.log("localCompletedIntervals",localCompletedIntervals);
+-      console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
++      
+   const handlePeriodEnd = () => {
+     if (localIsBreak) {
+       dispatch(completeBreakInterval());
+       if (pomodoro.breakSound !== 'none') {
+         try { playStart(); } catch(e) { console.warn('Audio play failed:', e); }
+       }
+-      // console.log("localIsBreak",localIsBreak);
+-      // console.log("localCompletedIntervals",localCompletedIntervals);
+-      // console.log("staticIntervalCountRef.current",staticIntervalCountRef.current);
+       if (localCompletedIntervals >= staticIntervalCountRef.current) {
+         alert("All intervals completed!");
+         dispatch(resetTimer());
+@@ -386,39 +383,6 @@ const Pomodoro = () => {
+     }
+   };
+ 
+-//   const handlePeriodEnd = () => {
+-//   if (localIsBreak) {
+-//     // Break just ended ΓåÆ start new work session
+-//     dispatch(completeBreakInterval());
+-//     playStart();
+-//     // Automatically start next work session
+-//     setLocalIsActive(true);
+-//     setLocalIsBreak(false);
+-//     dispatch(startTimer());
+-//     setLocalTime(pomodoro.initialTime);
+-//   } else {
+-//     // Work just ended
+-//     dispatch(completeWorkInterval());
+-//     playEnd();
+-
+-//     if (localCompletedIntervals + 1 >= staticIntervalCountRef.current) {
+-//       // Γ£à All work intervals completed
+-//       setLocalIsActive(false);
+-//       alert("≡ƒÄë All intervals completed!");
+-//       dispatch(resetTimer());
+-//       setLocalIsBreak(false);
+-//       setLocalCompletedIntervals(0);
+-//     } else {
+-//       // Switch to break automatically
+-//       setLocalIsBreak(true);
+-//       setLocalTime(pomodoro.breakInterval);
+-//       setLocalIsActive(true);
+-//       dispatch(startTimer());
+-//     }
+-//   }
+-// };
+-
+-
+   const showNotification = () => {
+     try {
+       if ('Notification' in window && window.Notification && Notification.permission === 'granted') {
+@@ -458,11 +422,16 @@ const Pomodoro = () => {
+     <section className="section pomodoro-section">
+       <div className='pomodoro__container'>
+         <div className="pomodoro__header">
+-          <h1>Pomodoro</h1>
+-          <p>Stay focused, take breaks</p>
++          <div className="pomodoro__header-text">
++            <h1>Pomodoro</h1>
++            <p>Stay focused, take breaks</p>
++          </div>
++          <button className="btn-customize-theme" onClick={() => setShowSettingsModal(true)}>
++            <IoMdSettings /> Settings
++          </button>
+         </div>
+         
+-        <div className="pomodoro__body">
++        <div className="pomodoro__body pomodoro-single-page">
+           <div className="pomodoro-col-left">
+             <div className="pomodoro-timer-card">
+               <div className="pomodoro__toggle">
+@@ -509,10 +478,16 @@ const Pomodoro = () => {
+               </div>
+             </div>
+           </div>
++        </div>
++      </div>
+ 
+-          <div className="pomodoro-col-right">
++      {showSettingsModal && (
++        <div className="settings-modal-overlay">
++          <div className="settings-modal-content pomodoro-modal-content">
++            <h3 className="settings-modal-title">Pomodoro Settings</h3>
++            
+             <div className="pomodoro__session-settings">
+-              <h3>Session settings</h3>
++              <h4>Session settings</h4>
+               <div className="setting-row">
+                 <span>Work interval</span>
+                 <div className="setting-control flex-inputs sleek-inputs">
+@@ -536,9 +511,9 @@ const Pomodoro = () => {
+             </div>
+ 
+             <div className="pomodoro__session-settings">
+-              <h3>Sounds</h3>
++              <h4>Sounds</h4>
+               <div className="setting-row">
+-                <span className="sound-label">≡ƒöè Work over sound</span>
++                <span className="sound-label">≡ƒÄ╡ Work over sound</span>
+                 <select className="select-sleek" value={workSoundType} onChange={(e) => setWorkSoundType(e.target.value)}>
+                   <option value="default">Default</option>
+                   <option value="none">None</option>
+@@ -548,7 +523,7 @@ const Pomodoro = () => {
+                 </select>
+               </div>
+               <div className="setting-row setting-row-no-border">
+-                <span className="sound-label">≡ƒöè Break over sound</span>
++                <span className="sound-label">≡ƒÄ╡ Break over sound</span>
+                 <select className="select-sleek" value={breakSoundType} onChange={(e) => setBreakSoundType(e.target.value)}>
+                   <option value="default">Default</option>
+                   <option value="none">None</option>
+@@ -559,28 +534,17 @@ const Pomodoro = () => {
+               </div>
+             </div>
+             
+-            <button className="btn-save-settings-header pomodoro-btn-full" onClick={handleSaveSettings}>Save Settings</button>
+-
+-            <div className="pomodoro__focus-stats">
+-              <div className="focus-header">Today's focus</div>
+-              <div className="focus-grid">
+-                <div className="focus-stat">
+                   <div className="focus-val">0h 0m</div>
+                   <div className="focus-label">Focused</div>
+                 </div>
+                 <div className="focus-stat">
+-                  <div className="focus-val">{localCompletedIntervals}/{intervalCount}</div>
+-                  <div className="focus-label">Sessions</div>
+-                </div>
+-                <div className="focus-stat">
+-                  <div className="focus-val">0</div>
+-                  <div className="focus-label">Breaks</div>
+-                </div>
+-              </div>
++            <div className="settings-modal-actions">
++              <button className='btn-delete' onClick={() => setShowSettingsModal(false)}>Cancel</button>
++              <button className='btn-save' onClick={handleSaveSettings}>Save</button>
+             </div>
+           </div>
+         </div>
+-      </div>
++      )}
+     </section>
+   );
+ };
+diff --git a/src/components/Settings.jsx b/src/components/Settings.jsx
+index 669acc8..fd7aced 100644
+--- a/src/components/Settings.jsx
++++ b/src/components/Settings.jsx
+@@ -1,33 +1,22 @@
+ import React, { useState } from 'react';
+ import { useDispatch, useSelector } from 'react-redux';
+-import { updateWeatherCity, updateWeatherApi } from '../features/weatherSlice';
+ import { setBreakInterval, setIntervalCount, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
+-import { logout, changePassword } from '../features/userSlice';
+ import { clearTasks } from '../features/taskSlice';
+ import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
+ import InfomationIcon from './InfomationIcon';
+ import '../styles/Settings.css';
+-
+ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+   const dispatch = useDispatch();
+-  const weather = useSelector((state) => state.weatherReducer.weather);
+   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
+   const theme = useSelector(state => state.themeReducer);
+-  const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
+   const dateFormat = theme.dateFormat || 'full';
+   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
+   const timeFormat = theme.timeFormat || '12h';
+-
+-  const weatherCity = weather[0].city;
+-  const weatherApi = weather[0].apiKey;
+   const workMinutes = Math.floor(pomodoro[0].initialTime / 60);
+   const workSeconds = pomodoro[0].initialTime % 60;
+   const breakMinutes = Math.floor(pomodoro[0].breakInterval / 60);
+   const breakSeconds = pomodoro[0].breakInterval % 60;
+   const intervalCount = typeof pomodoro[0].intervalCount === 'object' ? pomodoro[0].intervalCount.count : 5;
+-
+-  const [newCity, setNewCity] = useState(weatherCity);
+-  const [newApiKey, setNewApiKey] = useState(weatherApi)
+   
+   const [newWorkMin, setNewWorkMin] = useState(workMinutes);
+   const [newWorkSec, setNewWorkSec] = useState(workSeconds);
+@@ -48,48 +37,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+   const [newFontSize, setNewFontSize] = useState(theme.fontSize || 'normal');
+   const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
+ 
+-  const [showPasswordModal, setShowPasswordModal] = useState(false);
+-  const [currentPassword, setCurrentPassword] = useState('');
+-  const [newPassword, setNewPassword] = useState('');
+-  const [confirmPassword, setConfirmPassword] = useState('');
+-  const [passwordError, setPasswordError] = useState('');
+-  const [passwordSuccess, setPasswordSuccess] = useState('');
+-
+-  const handleChangePasswordSubmit = async (e) => {
+-    e.preventDefault();
+-    if (newPassword !== confirmPassword) {
+-      setPasswordError("New passwords do not match!");
+-      return;
+-    }
+-    setPasswordError('');
+-    setPasswordSuccess('');
+-    const resultAction = await dispatch(changePassword({ currentPassword, newPassword }));
+-    if (changePassword.fulfilled.match(resultAction)) {
+-      setPasswordSuccess("Password successfully changed!");
+-      setTimeout(() => {
+-        setShowPasswordModal(false);
+-        setCurrentPassword('');
+-        setNewPassword('');
+-        setConfirmPassword('');
+-        setPasswordSuccess('');
+-      }, 2000);
+-    } else {
+-      setPasswordError(resultAction.payload || "Failed to change password.");
+-    }
+-  };
+-
+-  const handleCityChange = (e) => {
+-    setNewCity(e.target.value);
+-  };
+-
+-  const handleCityApi = (e) => {
+-    setNewApiKey(e.target.value);
+-  };
+-
+-  const handleShowWeather = (e) => {
+-    setShowWeather(e.target.checked);
+-  };
+-
+   const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
+   const handleSetWorkSec = (e) => setNewWorkSec(parseInt(e.target.value) || 0);
+   const handleSetBreakMin = (e) => setNewBreakMin(parseInt(e.target.value) || 0);
+@@ -105,8 +52,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+ 
+ 
+   const handleSave = () => {
+-    dispatch(updateWeatherCity(newCity));
+-    dispatch(updateWeatherApi(newApiKey))
+     const totalWorkSeconds = newWorkMin * 60 + newWorkSec;
+     const totalBreakSeconds = newBreakMin * 60 + newBreakSec;
+     dispatch(setTime(totalWorkSeconds))
+@@ -124,18 +69,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+ 
+   const fields = [
+     { title: 'User information', description: 'Logout of your account' },
+-    // { title: 'Weather', description: 'Add city and API key for weather data, use freeAPI: api.openweathermap.org' },
+-    {
+-      title: 'Weather',
+-      description: (
+-        <p>
+-          Add city and API key for weather data. Use free API:
+-          <a href="https://api.openweathermap.org" target="_blank" rel="noopener noreferrer">
+-            openweathermap
+-          </a>
+-        </p>
+-      )
+-    },
+     { title: 'Promodoro', description: 'Customize pomodoro timer intervals' },
+     { title: 'Other', description: 'You can change theme color' }
+   ];
+@@ -168,38 +101,17 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+           <h4 className="settings-group-title">User information</h4>
+           <div className="settings-card">
+             <div className="setting-row user-profile-row">
+-               <div className="setting-label">
++                <div className="setting-label">
+                  <span className="icon large-icon green-bg">≡ƒæñ</span>
+                  <div className="user-info">
+                    <strong>User Profile</strong>
+-                   <span className="email">{isAuthenticated ? 'user@example.com' : 'Guest'}</span>
++                   <span className="email">user@example.com</span>
+                  </div>
+                </div>
+             </div>
+-            {isAuthenticated && (
+-              <div className="setting-row">
+-                <div className="setting-label">
+-                  <span>New password</span>
+-                </div>
+-                <div className="setting-control">
+-                  <input type="password" placeholder="........" className="text-input-sleek settings-text-left" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+-                </div>
+-              </div>
+-            )}
+-            {isAuthenticated ? (
+-              <div className="setting-row settings-btn-group">
+-                <button className="btn-log-out-settings" onClick={() => { dispatch(logout()); dispatch(clearTasks()); }}>Log out</button>
+-                <button className="btn-change-password-settings" onClick={handleChangePasswordSubmit}>Change password</button>
+-              </div>
+-            ) : (
+-              <div className="setting-row clickable" onClick={() => dispatch(logout())}>
+-                <div className="setting-label">
+-                  <span className="icon green-bg">≡ƒöæ</span>
+-                  <span>Login to Sync</span>
+-                </div>
+-                <div className="setting-control"><span className="arrow">{'>'}</span></div>
+-              </div>
+-            )}
++            <div className="setting-row settings-btn-group">
++                <button className="btn-log-out-settings" onClick={() => { dispatch(clearTasks()); }}>Clear Data</button>
++            </div>
+           </div>
+         </div>
+ 
+@@ -267,39 +179,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+         </div> 
+ 
+         <div className="settings-col-right">
+-          {/* WEATHER */}
+-          <div className="settings-group">
+-            <h4 className="settings-group-title">Weather</h4>
+-            <div className="settings-card">
+-              <div className="setting-row">
+-                <div className="setting-label">
+-                  <span>City</span>
+-                </div>
+-                <div className="setting-control">
+-                  <input type="text" className="text-input-sleek" value={newCity} onChange={handleCityChange} placeholder="City name" />
+-                </div>
+-              </div>
+-              <div className="setting-row">
+-                <div className="setting-label">
+-                  <span>API Key</span>
+-                </div>
+-                <div className="setting-control">
+-                  <input type="password" className="text-input-sleek" value={newApiKey} onChange={handleCityApi} placeholder="OpenWeather API" />
+-                </div>
+-              </div>
+-              <div className="setting-row">
+-                <div className="setting-label">
+-                  <span>Show on board</span>
+-                </div>
+-                <div className="setting-control">
+-                  <label className="toggle-switch">
+-                    <input type="checkbox" checked={showWeather} onChange={handleShowWeather} />
+-                    <span className="slider"></span>
+-                  </label>
+-                </div>
+-              </div>
+-            </div>
+-          </div>
+ 
+         {/* CUSTOMIZATION */}
+         <div className="settings-group">
+@@ -366,23 +245,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
+           Save Changes
+         </button> */}
+       </div>
+-
+-      {showPasswordModal && (
+-        <div className="settings-modal-overlay">
+-          <div className="settings-modal-content">
+-            <h3 className="settings-modal-title">Change Password</h3>
+-            {passwordError && <p className="settings-modal-error">{passwordError}</p>}
+-            {passwordSuccess && <p className="settings-modal-success">{passwordSuccess}</p>}
+-            <input className="input-field" type="password" placeholder="Current Password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} />
+-            <input className="input-field" type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+-            <input className="input-field" type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+-            <div className="settings-modal-actions">
+-              <button className='btn-delete' onClick={() => setShowPasswordModal(false)}>Cancel</button>
+-              <button className='btn-save' onClick={handleChangePasswordSubmit}>Submit</button>
+-            </div>
+-          </div>
+-        </div>
+-      )}
+     </section>
+   );
+ };
+diff --git a/src/components/Sidebar.jsx b/src/components/Sidebar.jsx
+index f047bf6..cbcc745 100644
+--- a/src/components/Sidebar.jsx
++++ b/src/components/Sidebar.jsx
+@@ -89,13 +89,6 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
+                     <button className="nav-button settings" onClick={() => handleNavigation('Settings')} aria-label="Settings">
+                         <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
+                     </button>
+-                    <button 
+-                      className="nav-button" 
+-                      onClick={handleLogout} 
+-                      aria-label="Logout"
+-                    >
+-                        <i className='nav-button-icon'><IoLogOutSharp /></i><span className='nav-button-name'>LogOut</span>
+-                    </button>
+                 </div>
+             ) : (
+                 <nav>
+diff --git a/src/styles/Dashboard.css b/src/styles/Dashboard.css
+index f2b7c5b..17717fb 100644
+--- a/src/styles/Dashboard.css
++++ b/src/styles/Dashboard.css
+@@ -41,8 +41,7 @@
+ }
+ 
+ .dashboard__top-cards {
+-  display: grid;
+-  grid-template-columns: 2fr 1fr 1fr 1fr;
++  display: flex;
+   gap: 20px;
+ }
+ 
+@@ -60,8 +59,9 @@
+ 
+ .progress-card {
+   justify-content: flex-start;
+-  padding: 10dvw;
++  padding: 20px;
+   justify-items: center;
++  width: 100%;
+ }
+ 
+ .progress-circle-container {
+diff --git a/src/styles/Pomodoro.css b/src/styles/Pomodoro.css
+index 2445e25..cdc0050 100644
+--- a/src/styles/Pomodoro.css
++++ b/src/styles/Pomodoro.css
+@@ -10,17 +10,28 @@
+   padding: 20px 40px;
+ }
+ 
+-.pomodoro__header h1 {
++.pomodoro__header {
++  display: flex;
++  justify-content: space-between;
++  align-items: flex-start;
++  margin-bottom: 30px;
++}
++
++.pomodoro__header-text h1 {
+   font-size: 2rem;
+   font-weight: 800;
+   color: var(--dark-font-color-white);
+   margin-bottom: 5px;
+ }
+ 
+-.pomodoro__header p {
++.pomodoro__header-text p {
+   color: var(--dark-font-color-grey);
+   font-size: 1rem;
+-  margin-bottom: 30px;
++}
++
++.pomodoro__body.pomodoro-single-page {
++  display: flex;
++  justify-content: center;
+ }
+ 
+ .pomodoro__body {

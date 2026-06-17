@@ -229,7 +229,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
           <div className="task-due col-due task-due-btn" onClick={(e) => {
             e.stopPropagation();
             if (setSelectedTaskId) setSelectedTaskId(task.id);
-          }}>
+          }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '15px' }}>
             {showDatePicker && !task.completed && !isMobile ? (
               <DatePicker handleDateSelection={handleDateSelection} setShowDatePicker={setShowDatePicker} currentDate={selectedDate} />
             ) : (
@@ -258,6 +258,9 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
                   </span>
                 )}
               </div>
+            )}
+            {task.description?.text && (
+              <div style={{ width: '8px', height: '8px', backgroundColor: '#4a7a4a', borderRadius: '50%', flexShrink: 0, marginLeft: 'auto' }} title="Has description" />
             )}
           </div>
 

@@ -147,9 +147,8 @@ export const pomodoroSlice = createSlice({
     setIntervalCount: (state, action) => {
       console.log('Setting interval count:', action.payload);
       state.pomodoro[0].intervalCount = {
+        ...state.pomodoro[0].intervalCount,
         count: action.payload,
-        progress: 0,
-        passed: 0,
       };
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
       console.log('Saved Pomodoro state after setIntervalCount:', state.pomodoro);

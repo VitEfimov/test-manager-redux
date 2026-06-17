@@ -10,17 +10,28 @@
   padding: 20px 40px;
 }
 
-.pomodoro__header h1 {
+.pomodoro__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.pomodoro__header-text h1 {
   font-size: 2rem;
   font-weight: 800;
   color: var(--dark-font-color-white);
   margin-bottom: 5px;
 }
 
-.pomodoro__header p {
+.pomodoro__header-text p {
   color: var(--dark-font-color-grey);
   font-size: 1rem;
-  margin-bottom: 30px;
+}
+
+.pomodoro__body.pomodoro-single-page {
+  display: flex;
+  justify-content: center;
 }
 
 .pomodoro__body {

@@ -1,4 +1,4 @@
-* {
+﻿* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -1592,12 +1592,12 @@ nav {
 
 
 .input-field {
-  background-color: #fcfcfc;
-  border: 1px solid #e8e4dc;
+  background-color: light-dark(#fcfcfc, var(--dark-background-color-select));
+  border: 1px solid light-dark(#e8e4dc, var(--dark-background-color-main-priority));
   border-radius: 10px;
   padding: 12px 15px;
   font-size: 14px;
-  color: #1a1a1a;
+  color: light-dark(#1a1a1a, var(--dark-font-color-white));
   font-family: inherit;
   width: 100%;
   box-sizing: border-box;
@@ -2218,10 +2218,23 @@ select.input-field {
 
   .col-headers,
   .task-row {
-    grid-template-columns: 28px 1fr 90px !important;
+    grid-template-columns: 28px 1fr 70px !important;
     align-items: center !important;
     min-width: 100% !important;
   }
+  .priority-pills {
+    width: 100%;
+    display: flex;
+    gap: 3dvw;
+    justify-content: center;
+  }
+
+  .section{
+    padding-bottom: 1dvh;
+  }
+}
+.section-badge {
+  margin-right: 15px;
 }
 
 .v2-description-modal {
