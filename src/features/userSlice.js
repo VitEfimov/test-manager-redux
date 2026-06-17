@@ -29,12 +29,7 @@ const loadBoardsFromLocalStorage = () => {
 };
 
 export const checkAuth = createAsyncThunk('user/checkAuth', async (_, thunkAPI) => {
-    try {
-        const response = await axios.get('/api/auth/me', { withCredentials: true });
-        return response.data;
-    } catch (err) {
-        return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
-    }
+    return thunkAPI.rejectWithValue('No backend');
 });
 
 export const loginUser = createAsyncThunk('user/login', async ({ email, password, rememberMe }, thunkAPI) => {
