@@ -141,17 +141,14 @@ const AddTask = ({ date }) => {
                     </div>
                     
                     <div className='task-due col-due task-due-btn' ref={dueDateRef}>
-                        {showDatePicker ? createPortal(
-                            <div style={{ position: 'absolute', top: datePickerPos.top, left: datePickerPos.left, zIndex: 99999 }}>
-                                <DatePicker
-                                    handleDateSelection={(selectedDate) => {
-                                        setCompletionDate(dayjs(selectedDate).format('MMMM D, YYYY'));
-                                    }}
-                                    setShowDatePicker={setShowDatePicker}
-                                    currentDate={completionDate}
-                                />
-                            </div>,
-                            document.body
+                        {showDatePicker ? (
+                            <DatePicker
+                                handleDateSelection={(selectedDate) => {
+                                    setCompletionDate(dayjs(selectedDate).format('MMMM D, YYYY'));
+                                }}
+                                setShowDatePicker={setShowDatePicker}
+                                currentDate={completionDate}
+                            />
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={handleShowDatePicker}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -169,8 +166,8 @@ const AddTask = ({ date }) => {
 
                     <div className='task-priority col-priority'>
                         {taskPrioritySelect ? (
-                            <div className='section__task-priority-select'>
-                                {['High', 'Medium', 'Low'].map((option) => (
+                            <div className='section__task-priority-select task-priority-dropdown'>
+                                {['Low', 'Medium', 'High'].map((option) => (
                                     <button
                                         key={option}
                                         className={`section__task-priority-btn ${option.toLowerCase()}`}
@@ -180,9 +177,9 @@ const AddTask = ({ date }) => {
                                 ))}
                             </div>
                         ) : (
-                            <button className={`task-priority-btn priority-name-${taskPriority?.toLowerCase() || 'none'}`} style={{ minWidth: '80px', height: '24px' }} onClick={handlePriorityChange}>
+                            <span className={`section-badge priority-text-${taskPriority?.toLowerCase() || 'none'} task-priority-btn`} onClick={handlePriorityChange}>
                                 {taskPriority || 'Priority'}
-                            </button>
+                            </span>
                         )}
                     </div>
 
