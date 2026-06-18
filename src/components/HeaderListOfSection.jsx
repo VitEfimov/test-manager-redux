@@ -9,9 +9,10 @@ const HeaderListOfSection = () => {
                     <button className="header__board-view-btn">Board</button>
                 </div>
                 <section className='header__board-sections'>
-                    <h2 className='header__board-sections-task-name'>Tasks</h2>
-                    <h2 className='header__board-sections-due-date'>Due date</h2>
-                    <h2 className='header__board-sections-priority'>Priority</h2>
+                    <div style={{gridColumn: 'span 2'}}></div>
+                    <h2 className='header__board-sections-task-name'>TASKS</h2>
+                    <h2 className='header__board-sections-due-date'>DUE DATE</h2>
+                    <h2 className='header__board-sections-priority'>PRIORITY</h2>
                 </section>
             </header>
     </div>
