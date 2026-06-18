@@ -826,7 +826,7 @@ nav {
 
 
 .col-header {
-  font-size: 11px;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--dark-font-color-grey);
   text-transform: uppercase;
@@ -846,7 +846,7 @@ nav {
 
 .section-title {
   font-weight: 800;
-  font-size: 14px;
+  font-size: 1rem;
   padding-left: 1dvw;
   color: var(--dark-font-color-board);
 }

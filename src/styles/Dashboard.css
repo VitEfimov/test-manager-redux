@@ -279,6 +279,7 @@
   font-weight: 800;
   margin-left: auto;
   color: var(--dark-font-color-card);
+  background-color: transparent !important;
 }
 
 .dashboard__header-wrapper {
