@@ -963,7 +963,7 @@ nav {
 
 
 .task-title {
-  font-size: 13.5px;
+  font-size: 1rem;
   color: var(--dark-font-color-board);
   overflow: hidden;
   text-overflow: ellipsis;
