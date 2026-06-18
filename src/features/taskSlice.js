@@ -70,14 +70,17 @@ const taskSlice = createSlice({
         addTaskSync(state, action) {
             const { task } = action.payload;
             state.tasks.push(task); 
+            localStorage.setItem('guestTasks', JSON.stringify(state.tasks));
         },
         addMultipleTasksSync(state, action) {
             const { tasks } = action.payload;
             state.tasks.push(...tasks);
+            localStorage.setItem('guestTasks', JSON.stringify(state.tasks));
         },
         deleteTaskSync(state, action) {
              const { taskId } = action.payload;
              state.tasks = state.tasks.filter(t => t.id !== taskId);
+             localStorage.setItem('guestTasks', JSON.stringify(state.tasks));
         },
         updateTaskSync(state, action) {
             const { taskId, name, priority, completed, description, completionDate, time } = action.payload;
@@ -97,9 +100,11 @@ const taskSlice = createSlice({
                 }
                 task.lastUpdatedDate = new Date().toISOString();
             }
+            localStorage.setItem('guestTasks', JSON.stringify(state.tasks));
         },
         clearTasks(state) {
             state.tasks = [];
+            localStorage.removeItem('guestTasks');
         },
         loadGuestTasks(state) {
             state.tasks = loadGuestTasksFromLocalStorage();

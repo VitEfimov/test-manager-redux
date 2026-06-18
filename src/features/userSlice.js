@@ -126,6 +126,7 @@ const userSlice = createSlice({
             state.boards = loadBoardsFromLocalStorage();
             state.activeBoardId = 'main';
             localStorage.removeItem('isGuest');
+            localStorage.removeItem('guestBoards');
         },
         continueAsGuest: (state) => {
             state.isGuest = true;
@@ -212,10 +213,12 @@ const userSlice = createSlice({
                 state.boards = loadBoardsFromLocalStorage();
                 state.activeBoardId = 'main';
                 localStorage.removeItem('isGuest');
+                localStorage.removeItem('guestBoards');
             })
             .addCase(addBoardAsync.pending, (state, action) => {
                 const { id, name } = action.meta.arg;
                 state.boards.push({ id, name });
+                localStorage.setItem('guestBoards', JSON.stringify(state.boards));
             })
             .addCase(addBoardAsync.fulfilled, (state, action) => {
                 // Already added optimistically
@@ -226,16 +229,21 @@ const userSlice = createSlice({
                 if (state.activeBoardId === id) {
                     state.activeBoardId = 'main';
                 }
+                localStorage.setItem('guestBoards', JSON.stringify(state.boards));
             })
             .addCase(renameBoardAsync.fulfilled, (state, action) => {
                 const board = state.boards.find(b => b.id === action.payload.id);
-                if (board) board.name = action.payload.name;
+                if (board) {
+                    board.name = action.payload.name;
+                    localStorage.setItem('guestBoards', JSON.stringify(state.boards));
+                }
             })
             .addCase(deleteBoardAsync.fulfilled, (state, action) => {
                 state.boards = state.boards.filter(b => b.id !== action.payload);
                 if (state.activeBoardId === action.payload) {
                     state.activeBoardId = 'main';
                 }
+                localStorage.setItem('guestBoards', JSON.stringify(state.boards));
             });
     }
 });

@@ -43,27 +43,14 @@ function App() {
     if (authChecked) {
       if (isAuthenticated) {
         dispatch(fetchTasks()).finally(() => setTasksChecked(true));
-      } else if (isGuest) {
-        dispatch(loadGuestTasks());
-        setTasksChecked(true);
       } else {
+        dispatch(loadGuestTasks());
         setTasksChecked(true);
       }
     }
-  }, [dispatch, authChecked, isAuthenticated, isGuest]);
+  }, [dispatch, authChecked, isAuthenticated]);
 
-  // Continuously save guest tasks to local storage whenever tasks array changes
-  useEffect(() => {
-    if (isGuest && tasks.length >= 0) {
-      localStorage.setItem('guestTasks', JSON.stringify(tasks));
-    }
-  }, [tasks, isGuest]);
-
-  useEffect(() => {
-    if (isGuest && boards && boards.length > 0) {
-      localStorage.setItem('guestBoards', JSON.stringify(boards));
-    }
-  }, [boards, isGuest]);
+  // Local storage logic moved to Redux slices
 
   useEffect(() => {
     if (authChecked && tasksChecked) {
