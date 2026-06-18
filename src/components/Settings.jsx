@@ -49,6 +49,14 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     }
   };
 
+  const handleDeleteAllData = () => {
+    if (window.confirm("Are you sure you want to clear all your data? This action cannot be undone.")) {
+      dispatch(clearTasks());
+      localStorage.clear();
+      window.location.reload();
+    }
+  }
+
 
 
   const handleSave = () => {
@@ -110,7 +118,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                </div>
             </div>
             <div className="setting-row settings-btn-group">
-                <button className="btn-log-out-settings" onClick={() => { dispatch(clearTasks()); }}>Clear Data</button>
+                <button className="btn-log-out-settings" onClick={handleDeleteAllData}>Clear Data</button>
             </div>
           </div>
         </div>
