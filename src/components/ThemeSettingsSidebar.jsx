@@ -6,6 +6,12 @@ const ThemeSettingsSidebar = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.themeReducer);
 
+  const modalRef = React.useRef(null);
+  
+  // Swipe down to close functionality
+  const [startY, setStartY] = React.useState(null);
+  const [currentY, setCurrentY] = React.useState(null);
+
   if (!theme.isSettingsOpen) return null;
 
   const handleColorChange = (e, key) => {
@@ -33,11 +39,53 @@ const ThemeSettingsSidebar = () => {
     }
   };
 
+  const handleTouchStart = (e) => {
+    setStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    if (startY === null) return;
+    const y = e.touches[0].clientY;
+    const deltaY = y - startY;
+    
+    if (deltaY > 0) {
+      setCurrentY(deltaY);
+      if (modalRef.current) {
+        modalRef.current.style.transform = `translateY(${deltaY}px)`;
+        modalRef.current.style.transition = 'none';
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (currentY > 100) {
+      onClose();
+    } else {
+      if (modalRef.current) {
+        modalRef.current.style.transform = '';
+        modalRef.current.style.transition = 'transform 0.3s ease-out';
+      }
+    }
+    setStartY(null);
+    setCurrentY(null);
+  };
+
   return (
     <div className="v2-description-modal theme-modal-overlay">
-      <div className="description__modal-content theme-modal-content">
-        <div className="modal-drag-indicator"></div>
-        <div className="modal-header">
+      <div ref={modalRef} className="description__modal-content theme-modal-content">
+        <div 
+          className="modal-drag-indicator"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          // style={{ padding: '15px 0', cursor: 'grab' }}
+        ></div>
+        <div 
+          className="modal-header"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <h2>Theme Settings</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
