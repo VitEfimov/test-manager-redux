@@ -110,13 +110,6 @@ const AddTask = ({ date }) => {
         setShowDatePicker(true);
     };
 
-    const adjustTextareaHeight = (element) => {
-        if (element) {
-            element.style.height = 'auto';
-            element.style.height = element.scrollHeight + 2 + 'px'; // +2px for top/bottom borders
-        }
-    };
-
     return (
         <div className='add-task' ref={addTaskFormRef}>
             {addTaskForm &&
@@ -130,23 +123,24 @@ const AddTask = ({ date }) => {
                     </button>
 
                     <div className='task-title col-task add-task-title-container'>
-                        <textarea
-                            className='add-task-title-input'
-                            id="section__task-name"
-                            placeholder="Enter task name..."
-                            value={taskName}
-                            onChange={(e) => handleAddTaskName(e)}
-                            required
-                            rows={1}
-                            onInput={(e) => adjustTextareaHeight(e.target)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    handleAddTask();
-                                }
-                            }}
-                            autoFocus
-                        />
+                        <div className="task-title-auto-resize-wrapper">
+                            <div className="task-title-ghost">{(taskName || "Enter task name...") + ' '}</div>
+                            <textarea
+                                className='add-task-title-input'
+                                id="section__task-name"
+                                placeholder="Enter task name..."
+                                value={taskName}
+                                onChange={(e) => handleAddTaskName(e)}
+                                required
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleAddTask();
+                                    }
+                                }}
+                                autoFocus rows={1}
+                            />
+                        </div>
                     </div>
                     
                     <div className='task-due col-due task-due-btn' ref={dueDateRef}>

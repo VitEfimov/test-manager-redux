@@ -117,18 +117,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
 
   const textAreaRef = useRef(null);
 
-  const adjustTextareaHeight = (element) => {
-    if (element) {
-      element.style.height = 'auto';
-      element.style.height = element.scrollHeight + 2 + 'px'; // +2px for top/bottom borders
-    }
-  };
-
-  React.useLayoutEffect(() => {
-    if (editingTaskName) {
-      adjustTextareaHeight(textAreaRef.current);
-    }
-  }, [editingTaskName, taskName]);
+  // Textarea auto-resize is now handled by CSS Grid Ghost element natively.
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -213,12 +202,15 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
 
           <div className={`task-title task-title-wrapper wrap-${taskNameWrap} ${task.completed ? 'done' : ''} col-task`}>
             {editingTaskName && !task.completed ? (
-              <textarea
-                ref={textAreaRef} className='section__task-input task-title-input' value={taskName ?? ""}
-                onChange={handleInputChange} onInput={(e) => adjustTextareaHeight(e.target)} onBlur={handleInputBlur} onKeyDown={handleKeyDown}
-                onFocus={(e) => { const val = e.target.value; e.target.value = ''; e.target.value = val; adjustTextareaHeight(e.target); e.target.selectionStart = e.target.value.length; }}
-                autoFocus rows={1}
-              />
+              <div className="task-title-auto-resize-wrapper">
+                <div className="task-title-ghost">{(taskName || '') + ' '}</div>
+                <textarea
+                  ref={textAreaRef} className='section__task-input task-title-input' value={taskName ?? ""}
+                  onChange={handleInputChange} onBlur={handleInputBlur} onKeyDown={handleKeyDown}
+                  onFocus={(e) => { const val = e.target.value; e.target.value = ''; e.target.value = val; e.target.selectionStart = e.target.value.length; }}
+                  autoFocus rows={1}
+                />
+              </div>
             ) : (
               <label className={`section__task-label task-title-label priority-name-${taskPriority?.toLowerCase() || 'none'}`} onClick={handleTaskNameChange}>
                 {task.name || taskName}

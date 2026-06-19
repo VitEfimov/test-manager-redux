@@ -8,11 +8,13 @@ import Header from './components/Header';
 import Login from './components/Login';
 import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
 
-import Pomodoro from './components/Pomodoro';
-import ListOfSections from './components/ListOfSections';
-import Dashboard from './components/Dashboard';
-import Settings from './components/Settings';
-import About from './components/About';
+import React, { Suspense, lazy } from 'react';
+
+const Pomodoro = lazy(() => import('./components/Pomodoro'));
+const ListOfSections = lazy(() => import('./components/ListOfSections'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const Settings = lazy(() => import('./components/Settings'));
+const About = lazy(() => import('./components/About'));
 
 
 function App() {
@@ -164,7 +166,9 @@ function App() {
         />
         
         <div className="content">
-          {renderPage(sidebarView)}
+          <Suspense fallback={<div className="global-loader" style={{ height: '100%' }}><div className="spinner"></div></div>}>
+            {renderPage(sidebarView)}
+          </Suspense>
         </div>
       </div>
       <ThemeSettingsSidebar />

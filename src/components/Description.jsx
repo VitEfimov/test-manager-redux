@@ -78,7 +78,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
 
     if (formData.repeat && formData.repeat !== 'None') {
         const tasksToGenerate = [];
-        const endDate = dayjs(formData.completionDate || dayjs()).add(6, 'month');
+        const endDate = dayjs(formData.completionDate || dayjs()).add(30, 'day');
         let currentIterDate = dayjs(formData.completionDate || dayjs());
         
         while (true) {
@@ -121,62 +121,12 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     }
   };
 
-  const handleAutoSave = () => {
-    const updatedTask = {
-      taskId: task.id,
-      name: formData.name,
-      priority: formData.priority,
-      completed: formData.completed,
-      completionDate: formData.completionDate,
-      time: formData.time,
-      description: {
-        text: formData.descriptionText,
-        img: formData.descriptionImg,
-        url: formData.descriptionUrl,
-      },
-    };
-    dispatch(updateTask(updatedTask));
-
-    if (formData.repeat && formData.repeat !== 'None') {
-        const tasksToGenerate = [];
-        const endDate = dayjs(formData.completionDate || dayjs()).add(6, 'month');
-        let currentIterDate = dayjs(formData.completionDate || dayjs());
-        
-        while (true) {
-            currentIterDate = formData.repeat === 'Daily' ? currentIterDate.add(1, 'day') : currentIterDate.add(1, 'week');
-            if (currentIterDate.isAfter(endDate)) break;
-            
-            const newTaskId = new Date().getTime().toString() + Math.random().toString(36).substr(2, 9);
-            tasksToGenerate.push({
-                id: newTaskId,
-                boardId: task.boardId || 'main',
-                taskname: formData.name,
-                priority: formData.priority,
-                completed: false,
-                completionDate: currentIterDate.toISOString(),
-                time: formData.time,
-                description: {
-                    text: formData.descriptionText,
-                    img: formData.descriptionImg,
-                    url: formData.descriptionUrl,
-                },
-                lastUpdatedDate: new Date().toISOString()
-            });
-        }
-
-        if (tasksToGenerate.length > 0) {
-            dispatch(addMultipleTasks({ tasks: tasksToGenerate }));
-            alert(`Generated ${tasksToGenerate.length} recurring tasks!`);
-        }
-    }
-
-    setTaskName(formData.name);
-    setTaskPriority(formData.priority);
+  const handleClose = () => {
     setModal(false);
   };
 
   const descriptionRef = useRef(null);
-  useClickOutside(descriptionRef, handleAutoSave);
+  useClickOutside(descriptionRef, handleClose);
 
   // Swipe down to close functionality
   const [startY, setStartY] = useState(null);
@@ -204,7 +154,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const handleTouchEnd = () => {
     if (currentY > 100) {
       // Swiped down far enough, close the modal
-      handleAutoSave();
+      handleClose();
     } else {
       // Snap back
       if (descriptionRef.current) {
@@ -233,7 +183,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
           className="modal-header"
         >
           <h2>Edit Task</h2>
-          <button type="button" className="close-btn" onClick={handleAutoSave}>
+          <button type="button" className="close-btn" onClick={handleClose}>
             &times;
           </button>
         </div>
