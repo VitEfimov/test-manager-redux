@@ -1,4 +1,4 @@
-﻿* {
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -236,7 +236,7 @@ body {
   align-items: flex-start;
   position: relative;
   border-top: 4px solid transparent;
-  
+
 }
 
 
@@ -2226,10 +2226,11 @@ select.input-field {
 
   .col-headers,
   .task-row {
-    grid-template-columns: 28px 1fr 70px !important;
+    grid-template-columns: 28px 1fr 80px !important;
     align-items: center !important;
     min-width: 100% !important;
   }
+
   .priority-pills {
     width: 100%;
     display: flex;
@@ -2237,10 +2238,11 @@ select.input-field {
     justify-content: center;
   }
 
-  .section{
+  .section {
     padding-bottom: 1dvh;
   }
 }
+
 .section-badge {
   margin-right: 15px;
 }
@@ -2275,6 +2277,7 @@ select.input-field {
     transform: translateY(0);
   }
 }
+
 /* ListOfSections styles */
 .list-of-sections-wrapper {
   display: flex;
@@ -2305,7 +2308,7 @@ select.input-field {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   font-weight: normal;
   border-bottom: none;
 }
@@ -2327,7 +2330,7 @@ select.input-field {
 
 .board-tab-btn-add {
   padding: 8px 16px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border: none;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -2367,15 +2370,17 @@ select.input-field {
   background: var(--dark-background-color-card);
   border: 1px solid var(--dark-background-color-main-priority);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 10px;
 }
+
 .date-picker-controls {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 10px;
 }
+
 .date-picker-set-btn {
   background: #4a7a4a;
   color: white;
@@ -2385,6 +2390,7 @@ select.input-field {
   cursor: pointer;
   font-weight: bold;
 }
+
 .date-picker-cancel-btn {
   background: transparent;
   color: var(--dark-font-color-white);
@@ -2393,6 +2399,7 @@ select.input-field {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .my-selected {
   background-color: #4a7a4a !important;
   color: white !important;
@@ -2421,7 +2428,7 @@ select.input-field {
 }
 
 .description-textarea {
-  min-height: 30dvh;
+  min-height: 25dvh;
   resize: vertical;
 }
 
@@ -2495,7 +2502,7 @@ select.input-field {
 
 .tiptap-editor-content .ProseMirror {
   padding: 12px 15px;
-  min-height: 30dvh;
+  min-height: 25dvh;
   outline: none;
   overflow-y: auto;
   font-family: inherit;
@@ -2525,21 +2532,90 @@ select.input-field {
   margin-bottom: 4px;
 }
 
-.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li > label {
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li>label {
   flex: 0 0 auto;
   margin-top: 2px;
   user-select: none;
 }
 
-.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li > label input {
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li>label input {
   cursor: pointer;
 }
 
-.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li > div {
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li>div {
   flex: 1 1 auto;
 }
 
-.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li[data-checked="true"]>div {
   text-decoration: line-through;
   color: light-dark(#888, #777);
+}
+
+/* Add Task Styles */
+.add-task-drag-hidden {
+  visibility: hidden;
+}
+
+.add-task-title-container {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.add-task-title-input {
+  width: 100%;
+  outline: none;
+  background: transparent;
+  border: 1px solid var(--dark-background-color-main-priority);
+  padding: 5px;
+  border-radius: 5px;
+  color: inherit;
+  resize: none;
+  overflow: hidden;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+.add-task-due-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.add-task-due-input {
+  width: 100%;
+  padding: 2px 5px;
+  font-size: 12px;
+}
+
+.add-task-actions {
+  display: flex;
+  width: 100%;
+  gap: 15px;
+  grid-column: 1 / -1;
+  /* Make sure it spans the full grid width if wrapping */
+  margin-top: 5px;
+  /* Add a little margin if it wraps to the next line */
+}
+
+.task-add-submit-btn {
+  flex: 1;
+  background-color: light-dark(#4a7a4a, #5a8a5a);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.task-row.add-task-row {
+  grid-template-columns: 28px 28px 1fr 130px 80px 30px !important;
+}
+
+@media (max-width: 768px) {
+  .task-row.add-task-row {
+    grid-template-columns: 28px 1fr 130px !important;
+  }
 }

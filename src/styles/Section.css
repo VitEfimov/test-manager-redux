@@ -22,7 +22,8 @@
   vertical-align: middle;
   overflow: hidden !important;
   resize: none;
-  line-height: inherit;
+  line-height: 1.5;
+  min-height: 32px;
   width: 100%;
   box-sizing: border-box;
   border: 1px solid transparent;
@@ -40,8 +41,6 @@
 }
 .task-title-input:focus {
   outline: none;
-  border-bottom: 1px solid #ccc;
-  border-radius: 0;
 }
 
 .task-title-label {
@@ -51,6 +50,9 @@
   box-sizing: border-box;
   padding: 5px;
   border: 1px solid transparent;
+  line-height: 1.5;
+  min-height: 32px;
+  margin: 0;
 }
 
 .wrap-wrap.task-title, .wrap-wrap .task-title-label, .wrap-wrap .task-title-input {

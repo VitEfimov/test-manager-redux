@@ -308,6 +308,18 @@ const Pomodoro = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (showSettingsModal) {
+      setWorkMin(Math.floor(pomodoro.initialTime / 60));
+      setWorkSec(pomodoro.initialTime % 60);
+      setBreakMin(Math.floor(pomodoro.breakInterval / 60));
+      setBreakSec(pomodoro.breakInterval % 60);
+      setIntervalCountState(typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.count : 5);
+      setWorkSoundType(pomodoro.workSound || 'default');
+      setBreakSoundType(pomodoro.breakSound || 'default');
+    }
+  }, [showSettingsModal, pomodoro]);
+
   const workSoundSrc = pomodoro.workSound && pomodoro.workSound !== 'default' && pomodoro.workSound !== 'none' 
     ? (SOUND_MAP[pomodoro.workSound] || pomodoro.workSound)
     : endSound;

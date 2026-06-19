@@ -82,9 +82,6 @@ const ThemeSettingsSidebar = () => {
         ></div>
         <div 
           className="modal-header"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
         >
           <h2>Theme Settings</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>

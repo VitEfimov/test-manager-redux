@@ -110,11 +110,18 @@ const AddTask = ({ date }) => {
         setShowDatePicker(true);
     };
 
+    const adjustTextareaHeight = (element) => {
+        if (element) {
+            element.style.height = 'auto';
+            element.style.height = element.scrollHeight + 2 + 'px'; // +2px for top/bottom borders
+        }
+    };
+
     return (
         <div className='add-task' ref={addTaskFormRef}>
             {addTaskForm &&
                 <div className='task-row add-task-row'>
-                    <span className='task-drag-handle col-drag' style={{ visibility: 'hidden' }}></span>
+                    <span className='task-drag-handle col-drag add-task-drag-hidden'></span>
                     
                     <button className="task-check" disabled>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -122,17 +129,19 @@ const AddTask = ({ date }) => {
                         </svg>
                     </button>
 
-                    <div className='task-title col-task' style={{ display: 'flex', flex: 1, minWidth: 0 }}>
-                        <input
-                            className='task-title-input'
+                    <div className='task-title col-task add-task-title-container'>
+                        <textarea
+                            className='add-task-title-input'
                             id="section__task-name"
-                            style={{ width: '100%', outline: 'none', background: 'transparent', border: '1px solid var(--dark-background-color-main-priority)', padding: '5px', borderRadius: '5px', color: 'inherit' }}
                             placeholder="Enter task name..."
                             value={taskName}
                             onChange={(e) => handleAddTaskName(e)}
                             required
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
+                            rows={1}
+                            onInput={(e) => adjustTextareaHeight(e.target)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
                                     handleAddTask();
                                 }
                             }}
@@ -141,27 +150,17 @@ const AddTask = ({ date }) => {
                     </div>
                     
                     <div className='task-due col-due task-due-btn' ref={dueDateRef}>
-                        {showDatePicker ? (
-                            <DatePicker
-                                handleDateSelection={(selectedDate) => {
-                                    setCompletionDate(dayjs(selectedDate).format('MMMM D, YYYY'));
+                        <div className='add-task-due-container'>
+                            <input
+                                className="input-field add-task-due-input"
+                                type="date"
+                                value={completionDate ? dayjs(completionDate).format('YYYY-MM-DD') : ''}
+                                onChange={(e) => {
+                                    const newDate = e.target.value ? dayjs(e.target.value).format('MMMM D, YYYY') : '';
+                                    setCompletionDate(newDate);
                                 }}
-                                setShowDatePicker={setShowDatePicker}
-                                currentDate={completionDate}
                             />
-                        ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', cursor: 'pointer' }} onClick={handleShowDatePicker}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="task-due-icon">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" />
-                                        <line x1="16" y1="2" x2="16" y2="6" />
-                                        <line x1="8" y1="2" x2="8" y2="6" />
-                                        <line x1="3" y1="10" x2="21" y2="10" />
-                                    </svg>
-                                    {completionDate}
-                                </div>
-                            </div>
-                        )}
+                        </div>
                     </div>
 
                     <div className='task-priority col-priority'>
@@ -183,11 +182,11 @@ const AddTask = ({ date }) => {
                         )}
                     </div>
 
-                    <div className='task-delete col-delete' style={{ display: 'flex', gap: '5px' }}>
+                    <div className='task-delete col-delete add-task-actions'>
                         <button className='task-delete-btn' onClick={handleDeleteTask}>
                             <MdDelete size={18} />
                         </button>
-                        <button className='task-add-submit-btn' onClick={handleAddTask} style={{ background: '#4a7a4a', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '4px 10px', fontSize: '12px', fontWeight: 'bold' }}>
+                        <button className='task-add-submit-btn' onClick={handleAddTask}>
                             Add
                         </button>
                     </div>

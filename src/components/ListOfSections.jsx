@@ -41,9 +41,9 @@ const ListOfSections = ({ sidebarView }) => {
     };
 
     const handleAddBoard = () => {
-        const limit = isAuthenticated ? 6 : 2;
-        if (boards.length >= limit) {
-            alert(`You have reached the maximum number of boards (${limit}) for your current plan. Please ${isAuthenticated ? 'upgrade' : 'login'} to add more.`);
+        const boardLimit = isAuthenticated ? 6 : 2;
+        if (boards.length >= boardLimit) {
+            alert(`You have reached the maximum number of boards (${boardLimit}) for your current plan. Please ${isAuthenticated ? 'upgrade' : 'login'} to add more.`);
             return;
         }
         const name = prompt('Enter new board name:');
@@ -308,13 +308,15 @@ const ListOfSections = ({ sidebarView }) => {
                                 )}
                             </div>
                         ))}
-                        <button 
-                            className="board-tab-btn-add"
-                            onClick={handleAddBoard}
-                            title="Add new board"
-                        >
-                            +
-                        </button>
+                        {boards.length < (isAuthenticated ? 6 : 2) && (
+                            <button 
+                                className="board-tab-btn-add"
+                                onClick={handleAddBoard}
+                                title="Add new board"
+                            >
+                                +
+                            </button>
+                        )}
                     </div>
 
                     <div className='col-headers'>

@@ -120,11 +120,11 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
   const adjustTextareaHeight = (element) => {
     if (element) {
       element.style.height = 'auto';
-      element.style.height = element.scrollHeight + 'px';
+      element.style.height = element.scrollHeight + 2 + 'px'; // +2px for top/bottom borders
     }
   };
 
-  useEffect(() => {
+  React.useLayoutEffect(() => {
     if (editingTaskName) {
       adjustTextareaHeight(textAreaRef.current);
     }

@@ -231,9 +231,6 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
         
         <div 
           className="modal-header"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
         >
           <h2>Edit Task</h2>
           <button type="button" className="close-btn" onClick={handleAutoSave}>
