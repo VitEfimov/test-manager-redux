@@ -5,7 +5,7 @@ import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 import ReactDOM from 'react-dom';
 import { addMultipleTasks } from '../features/taskSlice';
-
+import TiptapEditor from './TiptapEditor';
 
 const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const dispatch = useDispatch();
@@ -42,8 +42,11 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleEditorChange = (htmlContent) => {
+    setFormData({ ...formData, descriptionText: htmlContent });
+  };
+
   const textAreaRef = useRef(null);
-  const descriptionTextAreaRef = useRef(null);
 
   const adjustTextareaHeight = (element) => {
     if (element) {
@@ -54,8 +57,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
 
   useEffect(() => {
     adjustTextareaHeight(textAreaRef.current);
-    adjustTextareaHeight(descriptionTextAreaRef.current);
-  }, [formData.name, formData.descriptionText]);
+  }, [formData.name]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -176,12 +178,63 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const descriptionRef = useRef(null);
   useClickOutside(descriptionRef, handleAutoSave);
 
+  // Swipe down to close functionality
+  const [startY, setStartY] = useState(null);
+  const [currentY, setCurrentY] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    if (startY === null) return;
+    const y = e.touches[0].clientY;
+    const deltaY = y - startY;
+    
+    // Only allow dragging downwards
+    if (deltaY > 0) {
+      setCurrentY(deltaY);
+      if (descriptionRef.current) {
+        descriptionRef.current.style.transform = `translateY(${deltaY}px)`;
+        descriptionRef.current.style.transition = 'none';
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (currentY > 100) {
+      // Swiped down far enough, close the modal
+      handleAutoSave();
+    } else {
+      // Snap back
+      if (descriptionRef.current) {
+        descriptionRef.current.style.transform = '';
+        descriptionRef.current.style.transition = 'transform 0.3s ease-out';
+      }
+    }
+    setStartY(null);
+    setCurrentY(null);
+  };
+
   return ReactDOM.createPortal(
     <div className="description__modal v2-description-modal">
-      <div ref={descriptionRef} className="description__modal-content">
-        <div className="modal-drag-indicator"></div>
+      <div 
+        ref={descriptionRef} 
+        className="description__modal-content"
+      >
+        <div 
+          className="modal-drag-indicator"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        ></div>
         
-        <div className="modal-header">
+        <div 
+          className="modal-header"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <h2>Edit Task</h2>
           <button type="button" className="close-btn" onClick={handleAutoSave}>
             &times;
@@ -204,19 +257,40 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
             />
           </div>
 
-          <div className="form-group">
-            <label>PRIORITY</label>
-            <select
-              className="input-field select-sleek"
-              name="priority"
-              value={formData.priority || 'None'}
-              onChange={handleChange}
-            >
-              <option value="None">None</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
+          <div className="form-row">
+            <div className="form-group half">
+              <label>PRIORITY</label>
+              <div className="input-with-icon">
+                <span className="icon">🚩</span>
+                <select
+                  className="input-field"
+                  name="priority"
+                  value={formData.priority || 'None'}
+                  onChange={handleChange}
+                >
+                  <option value="None">None</option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+            </div>
+            <div className="form-group half">
+              <label>REPEAT</label>
+              <div className="input-with-icon">
+                <span className="icon">🔁</span>
+                <select
+                  className="input-field"
+                  name="repeat"
+                  value={formData.repeat}
+                  onChange={handleChange}
+                >
+                  <option value="None">None</option>
+                  <option value="Daily">Daily</option>
+                  <option value="Weekly">Weekly</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div className="form-row">
@@ -252,35 +326,11 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
           </div>
 
           <div className="form-group">
-            <label>REPEAT</label>
-            <div className="input-with-icon">
-              <span className="icon">🔁</span>
-              <select
-                className="input-field"
-                name="repeat"
-                value={formData.repeat}
-                onChange={handleChange}
-              >
-                <option value="None">None</option>
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group">
             <label>DESCRIPTION</label>
-            <textarea
-              ref={descriptionTextAreaRef}
-              className="input-field description-textarea"
-              name="descriptionText"
-              value={formData.descriptionText}
-              onChange={handleChange}
-              onInput={(e) => adjustTextareaHeight(e.target)}
-              rows={formData.descriptionText ? 1 : 3}
-              style={{ overflow: 'hidden', resize: 'none' }}
-              placeholder="Add details..."
-            ></textarea>
+            <TiptapEditor 
+              content={formData.descriptionText} 
+              onChange={handleEditorChange} 
+            />
           </div>
 
           <div className="modal-actions">

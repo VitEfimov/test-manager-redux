@@ -437,9 +437,9 @@
 
   .cat-card {
     padding: 3px 12px;
-    gap: 4px;
+    gap: 5px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .cat-icon {

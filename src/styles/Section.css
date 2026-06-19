@@ -67,6 +67,7 @@
 
 .task-due-btn {
   cursor: pointer;
+  position: relative;
 }
 
 .task-due-icon {

@@ -1,4 +1,4 @@
-* {
+﻿* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -236,6 +236,7 @@ body {
   align-items: flex-start;
   position: relative;
   border-top: 4px solid transparent;
+  
 }
 
 
@@ -845,9 +846,9 @@ nav {
 
 
 .section-title {
-  font-weight: 800;
+  font-weight: 600;
   font-size: 1rem;
-  padding-left: 1dvw;
+  padding-left: 2dvw;
   color: var(--dark-font-color-board);
 }
 
@@ -894,7 +895,7 @@ nav {
   grid-template-columns: 28px 28px minmax(150px, 1fr) 110px 50px;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px 10px 12px;
+  padding: 5px 10px 5px 10px;
   border-bottom: 1px solid var(--dark-background-color-main-priority);
   cursor: pointer;
   border-left: 3px solid var(--dark-background-color-sidebar);
@@ -1163,7 +1164,7 @@ nav {
   width: 100%;
   height: 30dvh;
 
-  min-height: 80px;
+  min-height: 30dvh;
   padding: 12px;
   border: 1px solid var(--dark-background-color-main-priority);
   border-radius: 8px;
@@ -1181,7 +1182,7 @@ nav {
 
 .add__task-btn {
   font-size: 13px;
-  color: #888;
+  color: light-dark(#888, #bbb);
   background: none;
   border: none;
   padding: 10px 16px;
@@ -1191,22 +1192,23 @@ nav {
   border-radius: 8px;
   width: 100%;
   text-align: left;
-  margin-top: 4px;
+  margin-top: 5px;
+
 }
 
 .add__task-btn:hover {
-  color: #5a8a5a;
-  background: #eef3eb;
+  color: light-dark(#5a8a5a, #a8d8a8);
+  background: light-dark(#eef3eb, #2d382d);
 }
 
 .add__task-btn.click_to_add_task {
-  color: #fff;
-  background: #5a8a5a;
+  color: light-dark(#fff, #fff);
+  background: light-dark(#5a8a5a, #4a7a4a);
   text-align: center;
 }
 
 .add__task-btn.click_to_add_task:hover {
-  background: #4a7a4a;
+  background: light-dark(#4a7a4a, #3a6a3a);
 }
 
 .detail-close {
@@ -1545,11 +1547,13 @@ nav {
 
 
 .modal-drag-indicator {
-  width: 40px;
-  height: 4px;
+  width: 50px;
+  height: 5px;
   background-color: #dcdcdc;
   border-radius: 2px;
-  margin: 0 auto 15px auto;
+  margin: 0 auto 10px auto;
+  padding: 3px 0px;
+  cursor: grab;
 }
 
 
@@ -1779,12 +1783,12 @@ select.input-field {
 
 .select-sleek {
   appearance: none;
-  background-color: #f9f9f9;
+  background-color: light-dark(#f9f9f9, #2a2a2a);
   border: none;
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 13px;
-  color: #333;
+  color: light-dark(#333, #e1e1e1);
   outline: none;
   cursor: pointer;
   min-width: 140px;
@@ -1950,18 +1954,19 @@ select.input-field {
 
 
 .upload-box {
-  border: 2px dashed #dcdcdc;
+  border: 2px dashed light-dark(#dcdcdc, #555555);
   border-radius: 12px;
   padding: 30px;
   text-align: center;
   cursor: pointer;
-  background-color: #fafafa;
+  background-color: light-dark(#fafafa, #2d2d2d);
   transition: background-color 0.2s;
+  color: light-dark(inherit, var(--dark-font-color-white));
 }
 
 
 .upload-box:active {
-  background-color: #f0f0f0;
+  background-color: light-dark(#f0f0f0, #3d3d3d);
 }
 
 
@@ -1978,12 +1983,13 @@ select.input-field {
 
 .select-sleek.full-width {
   width: 100%;
-  background-color: #fcfcfc;
-  border: 1px solid #e8e4dc;
+  background-color: light-dark(#fcfcfc, #2a2a2a);
+  border: 1px solid light-dark(#e8e4dc, #444);
   border-radius: 10px;
   padding: 12px 15px;
   text-align: left;
   background-position: right 15px center;
+  color: light-dark(#333, #e1e1e1);
 }
 
 
@@ -2146,18 +2152,19 @@ select.input-field {
 
 
 .upload-box {
-  border: 2px dashed #dcdcdc;
+  border: 2px dashed light-dark(#dcdcdc, #555555);
   border-radius: 12px;
   padding: 30px;
   text-align: center;
   cursor: pointer;
-  background-color: #fafafa;
+  background-color: light-dark(#fafafa, #2d2d2d);
   transition: background-color 0.2s;
+  color: light-dark(inherit, var(--dark-font-color-white));
 }
 
 
 .upload-box:active {
-  background-color: #f0f0f0;
+  background-color: light-dark(#f0f0f0, #3d3d3d);
 }
 
 
@@ -2174,12 +2181,13 @@ select.input-field {
 
 .select-sleek.full-width {
   width: 100%;
-  background-color: #fcfcfc;
-  border: 1px solid #e8e4dc;
+  background-color: light-dark(#fcfcfc, #2a2a2a);
+  border: 1px solid light-dark(#e8e4dc, #444);
   border-radius: 10px;
   padding: 12px 15px;
   text-align: left;
   background-position: right 15px center;
+  color: light-dark(#333, #e1e1e1);
 }
 
 
@@ -2353,3 +2361,185 @@ select.input-field {
   padding-bottom: 5px;
 }
 
+.date-picker-container {
+  position: absolute;
+  z-index: 1000;
+  background: var(--dark-background-color-card);
+  border: 1px solid var(--dark-background-color-main-priority);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 10px;
+}
+.date-picker-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+.date-picker-set-btn {
+  background: #4a7a4a;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.date-picker-cancel-btn {
+  background: transparent;
+  color: var(--dark-font-color-white);
+  border: 1px solid var(--dark-font-color-grey);
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.my-selected {
+  background-color: #4a7a4a !important;
+  color: white !important;
+  border-radius: 50%;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: light-dark(#888, #bbb);
+  transition: color 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.close-btn:hover {
+  color: light-dark(#e74c3c, #ff6b6b);
+  background-color: light-dark(#fdeded, #4a2a2a);
+}
+
+.description-textarea {
+  min-height: 30dvh;
+  resize: vertical;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+input[type="date"].input-field,
+input[type="time"].input-field,
+select.input-field {
+  background-color: light-dark(#fcfcfc, var(--dark-background-color-select)) !important;
+  color: light-dark(#1a1a1a, var(--dark-font-color-white)) !important;
+  border: 1px solid light-dark(#e8e4dc, var(--dark-background-color-main-priority)) !important;
+}
+
+/* Tiptap Editor Styles */
+.tiptap-editor-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.tiptap-toolbar {
+  display: flex;
+  gap: 5px;
+  padding: 8px 10px;
+  background-color: light-dark(#f5f5f5, var(--dark-background-color-main-priority));
+  border-bottom: 1px solid light-dark(#e8e4dc, var(--dark-background-color-main-priority));
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+  align-items: center;
+}
+
+.tiptap-toolbar button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  color: light-dark(#555, #bbb);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.tiptap-toolbar button:hover {
+  background-color: light-dark(#e0e0e0, #444);
+  color: light-dark(#000, #fff);
+}
+
+.tiptap-toolbar button.is-active {
+  background-color: light-dark(#d0d0d0, #555);
+  color: light-dark(#000, #fff);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: light-dark(#ccc, #666);
+  margin: 0 5px;
+}
+
+.tiptap-editor-content .ProseMirror {
+  padding: 12px 15px;
+  min-height: 30dvh;
+  outline: none;
+  overflow-y: auto;
+  font-family: inherit;
+  font-size: 14px;
+  color: inherit;
+}
+
+.tiptap-editor-content .ProseMirror p {
+  margin: 0 0 0.5em 0;
+}
+
+.tiptap-editor-content .ProseMirror ul,
+.tiptap-editor-content .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin-top: 0;
+}
+
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+}
+
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  user-select: none;
+}
+
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li > label input {
+  cursor: pointer;
+}
+
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+
+.tiptap-editor-content .ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
+  text-decoration: line-through;
+  color: light-dark(#888, #777);
+}
