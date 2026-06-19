@@ -85,6 +85,7 @@ const initialState = {
   pomodoro: loadFromLocalStoragePomodoro(),
   loading: false,
   error: null,
+  isSettingsOpen: false,
 };
 
 export const pomodoroSlice = createSlice({
@@ -199,6 +200,9 @@ export const pomodoroSlice = createSlice({
       state.pomodoro[0].breakSound = action.payload;
       localStorage.setItem('pomodoro', JSON.stringify(state.pomodoro));
     },
+    togglePomodoroSettings: (state, action) => {
+      state.isSettingsOpen = action.payload;
+    },
   },
 });
 
@@ -216,6 +220,7 @@ export const {
   completeBreakInterval,
   setWorkSound,
   setBreakSound,
+  togglePomodoroSettings,
 } = pomodoroSlice.actions;
 
 export default pomodoroSlice.reducer;

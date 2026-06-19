@@ -282,6 +282,26 @@ const ListOfSections = ({ sidebarView }) => {
         }));
     };
 
+    const handleCompleteSectionTasks = (sectionTasks, sectionName) => {
+        if (sectionTasks.length === 0) return;
+        if (window.confirm(`Are you sure you want to complete all tasks in ${sectionName}?`)) {
+            sectionTasks.forEach(task => {
+                dispatch(updateTask({
+                    taskId: task.id,
+                    completed: true
+                }));
+            });
+        }
+    };
+
+    const handleDeleteSectionTasks = (sectionTasks, sectionName) => {
+        if (sectionTasks.length === 0) return;
+        if (window.confirm(`Are you sure you want to delete all tasks in ${sectionName}? This action cannot be undone.`)) {
+            sectionTasks.forEach(task => {
+                dispatch(deleteTask({ taskId: task.id }));
+            });
+        }
+    };
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
@@ -344,8 +364,19 @@ const ListOfSections = ({ sidebarView }) => {
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    <div className='section__field-header section-header section-header-no-padding'>
-                                        <span className="section-title missed" style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</span>
+                                    <div className='section__field-header section-header section-header-no-padding' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <span className="section-title missed" style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</span>
+                                            <select className="section-action-select" value="" onChange={(e) => {
+                                                const val = e.target.value;
+                                                if (val === 'complete') handleCompleteSectionTasks(missedFiltered, 'Missed tasks');
+                                                if (val === 'delete') handleDeleteSectionTasks(missedFiltered, 'Missed tasks');
+                                            }} title="Section Actions">
+                                                <option value="" disabled hidden>▼</option>
+                                                <option value="complete">Complete all</option>
+                                                <option value="delete">Delete all</option>
+                                            </select>
+                                        </div>
                                         <span className="section-badge missed">{missedFiltered.length}</span>
                                     </div>
                                     <div className='section__line-top'></div>
@@ -363,8 +394,19 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding">
-                                    <span className="section-title today">Today ({dayjs().format('dddd')})</span>
+                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span className="section-title today">Today ({dayjs().format('dddd')})</span>
+                                        <select className="section-action-select" value="" onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'complete') handleCompleteSectionTasks(todayFiltered, 'Today');
+                                            if (val === 'delete') handleDeleteSectionTasks(todayFiltered, 'Today');
+                                        }} title="Section Actions">
+                                            <option value="" disabled hidden>▼</option>
+                                            <option value="complete">Complete all</option>
+                                            <option value="delete">Delete all</option>
+                                        </select>
+                                    </div>
                                     <span className="section-badge today">{todayFiltered.length}</span>
                                 </div>
                                 <div className='section__line-top'></div>
@@ -382,8 +424,19 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding">
-                                    <span className="section-title today">Tomorrow ({dayjs().add(1, 'day').format('dddd')})</span>
+                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span className="section-title today">Tomorrow ({dayjs().add(1, 'day').format('dddd')})</span>
+                                        <select className="section-action-select" value="" onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'complete') handleCompleteSectionTasks(tomorrowFiltered, 'Tomorrow');
+                                            if (val === 'delete') handleDeleteSectionTasks(tomorrowFiltered, 'Tomorrow');
+                                        }} title="Section Actions">
+                                            <option value="" disabled hidden>▼</option>
+                                            <option value="complete">Complete all</option>
+                                            <option value="delete">Delete all</option>
+                                        </select>
+                                    </div>
                                     <span className="section-badge today">{tomorrowFiltered.length}</span>
                                 </div>
                                 <div className='section__line-top'></div>
@@ -403,8 +456,19 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding">
-                                    <span className="section-title today">On this week</span>
+                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span className="section-title today">On this week</span>
+                                        <select className="section-action-select" value="" onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'complete') handleCompleteSectionTasks(onThisWeekFiltered, 'On this week');
+                                            if (val === 'delete') handleDeleteSectionTasks(onThisWeekFiltered, 'On this week');
+                                        }} title="Section Actions">
+                                            <option value="" disabled hidden>▼</option>
+                                            <option value="complete">Complete all</option>
+                                            <option value="delete">Delete all</option>
+                                        </select>
+                                    </div>
                                     <span className="section-badge today">{onThisWeekFiltered.length}</span>
                                 </div>
                                 <div className='section__line-top'></div>
@@ -424,8 +488,19 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding">
-                                    <span className="section-title today">On next week</span>
+                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span className="section-title today">On next week</span>
+                                        <select className="section-action-select" value="" onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'complete') handleCompleteSectionTasks(onNextWeekFiltered, 'On next week');
+                                            if (val === 'delete') handleDeleteSectionTasks(onNextWeekFiltered, 'On next week');
+                                        }} title="Section Actions">
+                                            <option value="" disabled hidden>▼</option>
+                                            <option value="complete">Complete all</option>
+                                            <option value="delete">Delete all</option>
+                                        </select>
+                                    </div>
                                     <span className="section-badge today">{onNextWeekFiltered.length}</span>
                                 </div>
                                 <div className='section__line-top'></div>
@@ -445,8 +520,19 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding">
-                                    <span className="section-title today">Later</span>
+                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span className="section-title today">Later</span>
+                                        <select className="section-action-select" value="" onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'complete') handleCompleteSectionTasks(laterFiltered, 'Later');
+                                            if (val === 'delete') handleDeleteSectionTasks(laterFiltered, 'Later');
+                                        }} title="Section Actions">
+                                            <option value="" disabled hidden>▼</option>
+                                            <option value="complete">Complete all</option>
+                                            <option value="delete">Delete all</option>
+                                        </select>
+                                    </div>
                                     <span className="section-badge today">{laterFiltered.length}</span>
                                 </div>
                                 <div className='section__line-top'></div>

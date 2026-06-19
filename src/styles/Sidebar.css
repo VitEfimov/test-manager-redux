@@ -57,6 +57,7 @@
   text-align: center;
   justify-content: center;
   justify-items: center;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     background-color: var(--dark-button-hover-color);

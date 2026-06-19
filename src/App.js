@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './components/Login';
 import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
+import PomodoroSettingsModal from './components/PomodoroSettingsModal';
 
 import React, { Suspense, lazy } from 'react';
 
@@ -172,6 +173,7 @@ function App() {
         </div>
       </div>
       <ThemeSettingsSidebar />
+      <PomodoroSettingsModal />
     </div>
   );
 }

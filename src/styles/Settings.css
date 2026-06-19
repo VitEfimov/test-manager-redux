@@ -174,8 +174,8 @@
   padding: 12px;
   border-radius: 10px;
   border: none;
-  background: #fdeded;
-  color: #e74c3c;
+  background: #e74c3c;
+  color: white;
   font-weight: bold;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -200,19 +200,26 @@
 }
 
 .btn-customize-theme {
-  width: 100%;
-  background: #eef3eb;
-  color: #4a7a4a;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #4a7a4a;
+  color: white;
   border: none;
-  padding: 15px;
+  padding: 12px 24px;
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  box-shadow: 0 4px 15px rgba(74, 122, 74, 0.2);
+  transition: all 0.3s ease;
+  margin-left: auto;
 }
 
 .btn-customize-theme:hover {
-  background: #e2ebd9;
+  background: #3a633a;
+  transform: translateY(-2px);
 }
 
 /* Toggle Switch */

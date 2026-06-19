@@ -133,7 +133,9 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const [currentY, setCurrentY] = useState(null);
 
   const handleTouchStart = (e) => {
-    setStartY(e.touches[0].clientY);
+    if (descriptionRef.current && descriptionRef.current.scrollTop <= 0) {
+      setStartY(e.touches[0].clientY);
+    }
   };
 
   const handleTouchMove = (e) => {
@@ -171,12 +173,12 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       <div 
         ref={descriptionRef} 
         className="description__modal-content"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <div 
           className="modal-drag-indicator"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
         ></div>
         
         <div 

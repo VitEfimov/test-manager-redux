@@ -246,7 +246,8 @@ import {
   setBreakInterval,
   setIntervalCount,
   setWorkSound,
-  setBreakSound
+  setBreakSound,
+  togglePomodoroSettings
 } from '../features/pomodoroSlice';
 import '../styles/Pomodoro.css';
 
@@ -440,7 +441,7 @@ const Pomodoro = () => {
             <h1>Pomodoro</h1>
             <p>Stay focused, take breaks</p>
           </div>
-          <button className="btn-customize-theme" onClick={() => setShowSettingsModal(true)}>
+          <button className="btn-customize-theme" onClick={() => dispatch(togglePomodoroSettings(true))}>
             <IoMdSettings /> Settings
           </button>
         </div>
@@ -494,67 +495,6 @@ const Pomodoro = () => {
           </div>
         </div>
       </div>
-
-      {showSettingsModal && (
-        <div className="settings-modal-overlay">
-          <div className="settings-modal-content pomodoro-modal-content">
-            <h3 className="settings-modal-title">Pomodoro Settings</h3>
-            
-            <div className="pomodoro__session-settings">
-              <h4>Session settings</h4>
-              <div className="setting-row">
-                <span>Work interval</span>
-                <div className="setting-control flex-inputs sleek-inputs">
-                  <input type="number" min="0" max="120" value={workMin} onChange={(e) => setWorkMin(parseInt(e.target.value) || 0)} className="num-input"/> <span>min</span>
-                  <input type="number" min="0" max="59" value={workSec} onChange={(e) => setWorkSec(parseInt(e.target.value) || 0)} className="num-input"/> <span>sec</span>
-                </div>
-              </div>
-              <div className="setting-row">
-                <span>Break interval</span>
-                <div className="setting-control flex-inputs sleek-inputs">
-                  <input type="number" min="0" max="120" value={breakMin} onChange={(e) => setBreakMin(parseInt(e.target.value) || 0)} className="num-input"/> <span>min</span>
-                  <input type="number" min="0" max="59" value={breakSec} onChange={(e) => setBreakSec(parseInt(e.target.value) || 0)} className="num-input"/> <span>sec</span>
-                </div>
-              </div>
-              <div className="setting-row setting-row-no-border">
-                <span>Interval count</span>
-                <div className="setting-control">
-                  <input type="number" min="1" max="10" value={intervalCountState} onChange={(e) => setIntervalCountState(parseInt(e.target.value) || 1)} className="num-input-large"/>
-                </div>
-              </div>
-            </div>
-
-            <div className="pomodoro__session-settings">
-              <h4>Sounds</h4>
-              <div className="setting-row">
-                <span className="sound-label">🎵 Work over sound</span>
-                <select className="select-sleek" value={workSoundType} onChange={(e) => setWorkSoundType(e.target.value)}>
-                  <option value="default">Default</option>
-                  <option value="none">None</option>
-                  <option value="chime.wav">Chime</option>
-                  <option value="light ping.wav">Light</option>
-                  <option value="notification.wav">Notif</option>
-                </select>
-              </div>
-              <div className="setting-row setting-row-no-border">
-                <span className="sound-label">🎵 Break over sound</span>
-                <select className="select-sleek" value={breakSoundType} onChange={(e) => setBreakSoundType(e.target.value)}>
-                  <option value="default">Default</option>
-                  <option value="none">None</option>
-                  <option value="chime.wav">Chime</option>
-                  <option value="light ping.wav">Light</option>
-                  <option value="notification.wav">Notif</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="settings-modal-actions">
-              <button className='btn-delete' onClick={() => setShowSettingsModal(false)}>Cancel</button>
-              <button className='btn-save' onClick={handleSaveSettings}>Save</button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setThemeColor, toggleSettingsOpen, resetTheme, setUserPicture, setHeaderBackgroundFit } from '../features/themeSlice';
 
@@ -40,7 +41,9 @@ const ThemeSettingsSidebar = () => {
   };
 
   const handleTouchStart = (e) => {
-    setStartY(e.touches[0].clientY);
+    if (modalRef.current && modalRef.current.scrollTop <= 0) {
+      setStartY(e.touches[0].clientY);
+    }
   };
 
   const handleTouchMove = (e) => {
@@ -70,15 +73,17 @@ const ThemeSettingsSidebar = () => {
     setCurrentY(null);
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="v2-description-modal theme-modal-overlay">
-      <div ref={modalRef} className="description__modal-content theme-modal-content">
+      <div 
+        ref={modalRef} 
+        className="description__modal-content theme-modal-content"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div 
           className="modal-drag-indicator"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          // style={{ padding: '15px 0', cursor: 'grab' }}
         ></div>
         <div 
           className="modal-header"
@@ -252,7 +257,8 @@ const ThemeSettingsSidebar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

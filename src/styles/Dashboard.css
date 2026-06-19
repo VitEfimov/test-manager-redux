@@ -313,11 +313,11 @@
   }
 
   .dashboard__header-wrapper {
-    background-color: #4a7a4a;
+    background-color: var(--dark-background-color-header, #4a7a4a);
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
     padding: 20px 20px 20px 20px;
-    color: white;
+    color: var(--dark-font-color-white);
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -339,7 +339,7 @@
   .dashboard__header-title .date {
     font-size: 16px;
     font-weight: 700;
-    color: white;
+    color: var(--dark-font-color-white);
     margin: 0;
   }
 
