@@ -379,7 +379,7 @@ const ListOfSections = ({ sidebarView }) => {
                                         </div>
                                         <span className="section-badge missed">{missedFiltered.length}</span>
                                     </div>
-                                    <div className='section__line-top'></div>
+
                                     {renderSectionItems(missedFiltered, 'missed')}
                                     {provided.placeholder}
                                     {renderExpandCollapseButton(missedFiltered, 'missed')}
@@ -409,7 +409,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     </div>
                                     <span className="section-badge today">{todayFiltered.length}</span>
                                 </div>
-                                <div className='section__line-top'></div>
+
                                 {renderSectionItems(todayFiltered, 'today')}
                                 {provided.placeholder}
                                 {renderExpandCollapseButton(todayFiltered, 'today')}
@@ -439,7 +439,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     </div>
                                     <span className="section-badge today">{tomorrowFiltered.length}</span>
                                 </div>
-                                <div className='section__line-top'></div>
+
                                 {renderSectionItems(tomorrowFiltered, 'tomorrow')}
                                 {provided.placeholder}
                                 {renderExpandCollapseButton(tomorrowFiltered, 'tomorrow')}
@@ -471,7 +471,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     </div>
                                     <span className="section-badge today">{onThisWeekFiltered.length}</span>
                                 </div>
-                                <div className='section__line-top'></div>
+
                                 {renderSectionItems(onThisWeekFiltered, 'on-this-week')}
                                 {provided.placeholder}
                                 {renderExpandCollapseButton(onThisWeekFiltered, 'on-this-week')}
@@ -503,7 +503,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     </div>
                                     <span className="section-badge today">{onNextWeekFiltered.length}</span>
                                 </div>
-                                <div className='section__line-top'></div>
+
                                 {renderSectionItems(onNextWeekFiltered, 'on-next-week')}
                                 {provided.placeholder}
                                 {renderExpandCollapseButton(onNextWeekFiltered, 'on-next-week')}
@@ -535,7 +535,7 @@ const ListOfSections = ({ sidebarView }) => {
                                     </div>
                                     <span className="section-badge today">{laterFiltered.length}</span>
                                 </div>
-                                <div className='section__line-top'></div>
+
                                 {renderSectionItems(laterFiltered, 'later')}
                                 {provided.placeholder}
                                 {renderExpandCollapseButton(laterFiltered, 'later')}
@@ -553,24 +553,26 @@ const ListOfSections = ({ sidebarView }) => {
                                 {...provided.droppableProps}
                             >
                                 <div className="completed-section-header">
-                                    <div className="section-header section-header-no-padding">
-                                        <span className="section-title today">Completed</span>
+                                    <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <span className="section-title today">Completed</span>
+                                            {completedFiltered.length > 0 && (
+                                                <select className="section-action-select" value="" onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (val === 'delete') {
+                                                        if(window.confirm('Are you sure you want to delete all completed tasks?')) {
+                                                            completedFiltered.forEach(task => dispatch(deleteTask({ taskId: task.id })));
+                                                        }
+                                                    }
+                                                }} title="Section Actions">
+                                                    <option value="" disabled hidden>▼</option>
+                                                    <option value="delete">Delete all</option>
+                                                </select>
+                                            )}
+                                        </div>
                                         <span className="section-badge today">{completedFiltered.length}</span>
                                     </div>
-                                    {completedFiltered.length > 0 && (
-                                        <button 
-                                            className="btn-delete-all-completed"
-                                            onClick={() => {
-                                                if(window.confirm('Are you sure you want to delete all completed tasks?')) {
-                                                    completedFiltered.forEach(task => dispatch(deleteTask({ taskId: task.id })));
-                                                }
-                                            }}
-                                        >
-                                            Delete All
-                                        </button>
-                                    )}
                                 </div>
-                                <div className='section__line-top'></div>
                                 {renderSectionItems(completedFiltered, 'completed')}
                                 {provided.placeholder}
                                 {renderExpandCollapseButton(completedFiltered, 'completed')}

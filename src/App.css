@@ -30,9 +30,10 @@ body {
       rgb(28, 28, 28));
   --dark-background-color-select: light-dark(rgba(200, 200, 200, 0.951),
       rgb(50, 50, 50));
-  --dark-background-color-main-priority: color-mix(in srgb,
+  /* --dark-background-color-main-priority: color-mix(in srgb,
       var(--dark-background-color-main),
-      green 5%);
+      green 5%); */
+  --dark-background-color-main-priority: light-dark( rgb(21, 21, 21),rgba(200, 200, 200, 0.951));
 
   --background-color-main: white;
   --background-color-main-priority: color-mix(in srgb,
@@ -73,8 +74,8 @@ body {
 :root {
   color-scheme: light dark;
 
-  --dark-button-hover-color: light-dark(rgba(255, 255, 255, 0.267),
-      rgb(32, 32, 32));
+  --dark-button-hover-color: light-dark(rgb(199, 209, 199),
+      rgb(51, 51, 51));
   --dark-background-color-sidebar: light-dark(rgb(145, 175, 145), rgb(10, 10, 10));
   --dark-font-color-white: light-dark(rgb(0, 0, 0), rgb(241, 231, 231));
   --dark-font-color-grey: light-dark(rgb(0, 0, 0), rgb(205, 205, 205));
@@ -85,6 +86,8 @@ body {
   --dark-background-color-main-priority: color-mix(in srgb,
       var(--dark-background-color-main),
       green 5%);
+  --underline-task-row: light-dark( rgb(182, 182, 182),rgba(88, 87, 87, 0.951));
+
   --dark-background-color-card: light-dark(rgb(255, 255, 255), rgb(45, 45, 45));
   --dark-font-color-sidebar: var(--dark-font-color-white);
   --dark-font-color-card: var(--dark-font-color-white);
@@ -813,9 +816,10 @@ nav {
 
 .col-headers {
   display: grid;
-  grid-template-columns: 28px 28px minmax(150px, 1fr) 130px 110px;
+  grid-template-columns: 28px 28px minmax(150px, 50vw) 110px 80px 1fr;
   gap: 8px;
-  padding: 10px 16px 10px 12px;
+  padding: 10px 10px 10px 10px;
+  border-left: 3px solid transparent;
   background: var(--dark-background-color-main);
   border-bottom: 2px solid var(--dark-background-color-main-priority);
   position: sticky;
@@ -848,7 +852,7 @@ nav {
 .section-title {
   font-weight: 600;
   font-size: 1rem;
-  padding-left: 2dvw;
+  padding-left: 5dvw;
   color: var(--dark-font-color-board);
 }
 
@@ -867,46 +871,67 @@ nav {
 
 
 .section-badge {
-  font-size: 11px;
-  padding: 2px 8px;
+  background-color: light-dark(#d8d8d8, #444);
+  color: var(--dark-font-color-white);
+  padding: 3px 7px;
   border-radius: 12px;
+  font-size: 0.8rem;
   font-weight: 600;
   margin-right: 1dvw;
+  min-width: 15px;
+  text-align: center;
+  justify-content: center;
 }
-
-
 
 .section-badge.missed {
-  color: #e74c3c;
-  background: #fdecea;
+  color: light-dark(#e74c3c, #ff6b6b);
+  background: light-dark(#fdeded, rgba(231, 76, 60, 0.2));
 }
 
-
-
 .section-badge.today {
-  color: #5a8a5a;
-  background: #eaf3ea;
+  color: light-dark(#5a8a5a, #81c784);
+  background: light-dark(#eaf3ea, rgba(90, 138, 90, 0.2));
 }
 
 
 
 .task-row {
   display: grid;
-  grid-template-columns: 28px 28px minmax(150px, 1fr) 110px 50px;
+  grid-template-columns: 28px 28px minmax(150px, 50vw) 110px 80px 1fr;
   align-items: center;
   gap: 8px;
   padding: 5px 10px 5px 10px;
-  border-bottom: 1px solid var(--dark-background-color-main-priority);
   cursor: pointer;
   border-left: 3px solid var(--dark-background-color-sidebar);
   transition: background .12s;
   min-width: 600px;
+  position: relative;
 }
 
+.task-row::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 1dvw;
+  right: 15px;
+  height: 1px;
+  background-color: var(--underline-task-row);
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
 
+@media (max-width: 768px) {
+  .task-row::after {
+    left: 3vw; 
+  }
+}
 
 .task-row:hover {
-  background: var(--dark-background-color-main-priority);
+  background: var(--dark-button-hover-color);
+}
+
+.task-row:hover::after {
+  opacity: 0;
 }
 
 
@@ -969,6 +994,7 @@ nav {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* border-bottom: 1px solid var(--dark-background-color-main-priority); */
 }
 
 
@@ -987,6 +1013,7 @@ nav {
   align-items: center;
   gap: 5px;
   white-space: nowrap;
+  /* border-bottom: 1px solid var(--dark-background-color-main-priority); */
 }
 
 
@@ -1701,15 +1728,7 @@ select.input-field {
   box-shadow: 0 5px 10px rgba(74, 122, 74, 0.2);
 }
 
-.section-badge {
-  background-color: #d8d8d8;
-  color: var(--dark-font-color-white);
-  padding: 3px 6px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  min-width: 15px;
-  text-align: center;
-}
+
 
 .section-action-select {
   border: none;

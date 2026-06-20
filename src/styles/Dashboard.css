@@ -313,7 +313,7 @@
   }
 
   .dashboard__header-wrapper {
-    background-color: var(--dark-background-color-header, #4a7a4a);
+    background-color: var(--dark-background-color-sidebar);
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
     padding: 20px 20px 20px 20px;
