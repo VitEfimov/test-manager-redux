@@ -200,7 +200,15 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
             )}
           </button>
 
-          <div className={`task-title task-title-wrapper wrap-${taskNameWrap} ${task.completed ? 'done' : ''} col-task`}>
+          <div 
+            className={`task-title task-title-wrapper wrap-${taskNameWrap} ${task.completed ? 'done' : ''} col-task`}
+            onClick={(e) => {
+              if (!editingTaskName && setSelectedTaskId) {
+                setSelectedTaskId(task.id);
+              }
+            }}
+            style={{ cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }}
+          >
             {editingTaskName && !task.completed ? (
               <div className="task-title-auto-resize-wrapper">
                 <div className="task-title-ghost">{(taskName || '') + ' '}</div>
@@ -208,11 +216,18 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
                   ref={textAreaRef} className='section__task-input task-title-input' value={taskName ?? ""}
                   onChange={handleInputChange} onBlur={handleInputBlur} onKeyDown={handleKeyDown}
                   onFocus={(e) => { const val = e.target.value; e.target.value = ''; e.target.value = val; e.target.selectionStart = e.target.value.length; }}
+                  onClick={(e) => e.stopPropagation()}
                   autoFocus rows={1}
                 />
               </div>
             ) : (
-              <label className={`section__task-label task-title-label priority-name-${taskPriority?.toLowerCase() || 'none'}`} onClick={handleTaskNameChange}>
+              <label 
+                className={`section__task-label task-title-label priority-name-${taskPriority?.toLowerCase() || 'none'}`} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTaskNameChange();
+                }}
+              >
                 {task.name || taskName}
               </label>
             )}
@@ -238,7 +253,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
                   {dayjs(task.completionDate).format(dateFormat === 'short' ? 'MMM D' : 'MMM DD, YYYY')}
                 </div>
                 {task.time && (
-                  <span style={{ fontSize: '10px', color: '#999', marginLeft: isMobile ? '0' : '15px', fontWeight: 'normal' }}>
+                  <span style={{ fontSize: '0.65rem', color: '#999', marginLeft: isMobile ? '0' : '15px', fontWeight: 'normal' }}>
                     {timeFormat === '24h' ? task.time : (() => {
                       const [h, m] = task.time.split(':');
                       if (!h || !m) return task.time;

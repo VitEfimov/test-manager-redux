@@ -91,6 +91,7 @@ function App() {
     let fontCalc = 'calc(10px + 1vmin)';
     if (theme.fontSize === 'small') fontCalc = 'calc(7px + 1vmin)';
     if (theme.fontSize === 'big') fontCalc = 'calc(15px + 1vmin)';
+    if (theme.fontSize === 'device') fontCalc = 'calc(1rem + 0.5vmin)';
     root.style.setProperty('font-size', fontCalc);
 
     // Columns

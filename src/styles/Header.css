@@ -1,9 +1,9 @@
 .header {
-  border-top-right-radius: 2px solid var(--dark-background-color-sidebar);
-  border-bottom: 2px solid var(--dark-background-color-sidebar);
+  border-top-right-radius: 2px solid var(--bg-sidebar);
+  border-bottom: 2px solid var(--bg-sidebar);
   padding-left: 1dvh;
-  color: var(--dark-font-color-grey);
-  background-color: var(--dark-background-color-main);
+  color: var(--text-secondary);
+  background-color: var(--bg-main);
   position: inherit;
   height: calc(6vw + 1vmin);
   align-content: center;
@@ -42,11 +42,11 @@
 }
 
 .header__board {
-  border-top-right-radius: 2px solid var(--dark-background-color-sidebar);
+  border-top-right-radius: 2px solid var(--bg-sidebar);
   padding-bottom: 10px;
-  border-bottom: 2px solid var(--dark-background-color-sidebar);
-  color: var(--dark-font-color-grey);
-  background-color: var(--dark-background-color-main);
+  border-bottom: 2px solid var(--bg-sidebar);
+  color: var(--text-secondary);
+  background-color: var(--bg-main);
   display: flex;
   flex-direction: column;
 
@@ -61,7 +61,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px 10px 12px;
-  border-bottom: 2px solid var(--dark-background-color-sidebar);
+  border-bottom: 2px solid var(--bg-sidebar);
   border-left: 3px solid transparent;
   min-width: 600px;
   text-transform: uppercase;
@@ -70,7 +70,7 @@
 .header__board-sections h2 {
   font-size: 0.75rem !important;
   font-weight: 800;
-  color: var(--dark-font-color-sidebar);
+  color: var(--text-primary);
   opacity: 0.8;
   letter-spacing: 0.5px;
   margin: 0;
@@ -80,7 +80,7 @@
   display: none;
   margin: 1dvh 0 1dvh 0;
   padding: 5px;
-  background-color: grey;
+  background-color: var(--text-secondary);
   color: aquamarine;
   width: 55px;
   box-shadow: none;
@@ -137,7 +137,7 @@
 
 /* Newly extracted inline styles */
 .weather-info-gray {
-  color: var(--dark-font-color-grey);
+  color: var(--text-secondary);
 }
 
 .weather-info-red {
@@ -159,6 +159,6 @@
 }
 
 .topbar-date-error {
-  color: red;
+  color: var(--color-danger);
   font-weight: bold;
 }

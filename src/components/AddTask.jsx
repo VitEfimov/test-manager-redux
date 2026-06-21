@@ -84,12 +84,15 @@ const AddTask = ({ date }) => {
 
         setTaskName('');
         setTaskPriority('');
+        setCompletionDate(getCompletionDate(date));
         setAddTaskForm(false);
     };
 
     const handleDeleteTask = () => {
+        setTaskName('');
+        setTaskPriority('');
+        setCompletionDate(getCompletionDate(date));
         setAddTaskForm(false);
-
     };
     const handlePriorityChange = () => {
         setTaskPrioritySelect(!taskPrioritySelect)

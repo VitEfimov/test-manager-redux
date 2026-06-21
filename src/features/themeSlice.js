@@ -35,8 +35,8 @@ const initialState = {
   dateFormat: loaded?.dateFormat || 'short',
   taskNameWrap: loaded?.taskNameWrap || 'wrap',
   timeFormat: loaded?.timeFormat || '12h',
-  userPicture: loaded?.userPicture || null,
-  headerBackgroundFit: loaded?.headerBackgroundFit || 'cover'
+  headerBackgroundFit: loaded?.headerBackgroundFit || 'cover',
+  notificationsEnabled: loaded?.notificationsEnabled || false
 };
 
 const themeSlice = createSlice({
@@ -63,6 +63,10 @@ const themeSlice = createSlice({
       } else {
         state.isSettingsOpen = !state.isSettingsOpen;
       }
+    },
+    setNotificationsEnabled: (state, action) => {
+      state.notificationsEnabled = action.payload;
+      localStorage.setItem('customTheme', JSON.stringify(state));
     },
     resetTheme: (state) => {
       state.colors = {
@@ -114,5 +118,5 @@ const themeSlice = createSlice({
   }
 });
 
-export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit } = themeSlice.actions;
+export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit } = themeSlice.actions;
 export default themeSlice.reducer;

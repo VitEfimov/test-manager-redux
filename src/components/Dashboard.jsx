@@ -1,15 +1,18 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import getFilters from '../list-view/filters';
-import { MdNotifications } from "react-icons/md";
+import { MdNotifications, MdNotificationsOff } from "react-icons/md";
+import { setNotificationsEnabled } from '../features/themeSlice';
 import '../styles/Dashboard.css';
 
 dayjs.extend(isSameOrBefore);
 const Dashboard = () => {
-
+    const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks || []);
+    const theme = useSelector(state => state.themeReducer);
+    const notificationsEnabled = theme.notificationsEnabled || false;
 
     const todayTasks = tasks.filter(task => dayjs(task.completionDate).isSame(dayjs(), 'day') && !task.completed);
     const FILTERS = getFilters();
@@ -40,6 +43,43 @@ const Dashboard = () => {
   const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
   const currentFill = Math.max(0, Math.min(100, 100 - completionPercentage)); // strokeDashoffset for circle
 
+  useEffect(() => {
+    if (notificationsEnabled && Notification.permission !== 'granted') {
+      dispatch(setNotificationsEnabled(false));
+    }
+  }, [notificationsEnabled, dispatch]);
+
+  const handleToggleNotifications = async () => {
+    if (notificationsEnabled) {
+      dispatch(setNotificationsEnabled(false));
+    } else {
+      if (!('Notification' in window)) {
+        alert("This browser does not support desktop notification");
+        return;
+      }
+      
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        dispatch(setNotificationsEnabled(true));
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification("Notifications Enabled!", {
+              body: `You have ${todayTasks.length} tasks today and ${missedTasks.length} missed.`,
+              icon: '/icons/icon-192x192.png'
+            });
+          });
+        } else {
+          new Notification("Notifications Enabled!", {
+            body: `You have ${todayTasks.length} tasks today and ${missedTasks.length} missed.`,
+          });
+        }
+      } else {
+        alert("Notification permission denied. Please enable it in your browser settings.");
+        dispatch(setNotificationsEnabled(false));
+      }
+    }
+  };
+
   return (
     <section className='section dashboard-v2'>
       <div className="dashboard__header-wrapper">
@@ -48,8 +88,13 @@ const Dashboard = () => {
             <div className="date">{dayjs().format('dddd, MMMM D')}</div>
             <h1>Dashboard</h1>
           </div>
-          <button className="btn-notification" aria-label="Notifications">
-            <MdNotifications />
+          <button 
+            className={`btn-notification ${notificationsEnabled ? 'active' : ''}`} 
+            aria-label="Notifications"
+            onClick={handleToggleNotifications}
+            style={{ color: notificationsEnabled ? '#4a7a4a' : 'inherit' }}
+          >
+            {notificationsEnabled ? <MdNotifications /> : <MdNotificationsOff />}
           </button>
         </div>
 

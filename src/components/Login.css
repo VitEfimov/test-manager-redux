@@ -5,7 +5,7 @@
     height: 100vh;
     width: 100vw;
     background-color: var(--secondary-color, #1e1e1e);
-    color: var(--text-color, #fff);
+    color: var(--text-color, var(--text-inverse));
 }
 
 .login-form {
@@ -34,16 +34,16 @@
 .form-group input {
     padding: 0.75rem;
     border-radius: 4px;
-    border: 1px solid #555;
+    border: 1px solid var(--text-primary);
     background: #111;
-    color: #fff;
+    color: var(--text-inverse);
     outline: none;
 }
 
 .login-form button {
     padding: 0.75rem;
     background-color: #007bff;
-    color: white;
+    color: var(--text-inverse);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -56,7 +56,7 @@
 }
 
 .error-message {
-    color: #ff4d4f;
+    color: var(--color-danger);
     font-size: 0.875rem;
     text-align: center;
 }
@@ -64,7 +64,7 @@
 .toggle-auth {
     text-align: center;
     font-size: 0.875rem;
-    color: #999;
+    color: var(--text-secondary);
     cursor: pointer;
     margin-top: 1rem;
 }

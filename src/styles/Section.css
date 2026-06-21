@@ -8,7 +8,7 @@
 }
 
 .task-icon-done {
-  color: #5a8a5a;
+  color: var(--color-primary);
 }
 
 .task-title-wrapper {
@@ -105,8 +105,8 @@
 .task-priority-dropdown {
   position: absolute;
   z-index: 10;
-  background: #fff;
-  border: 1px solid #ccc;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 4px;
   display: flex;
@@ -126,4 +126,16 @@
   .col-more {
     display: none !important;
   }
+}
+
+.task-add-submit-btn {
+  flex: 1;
+  background-color: light-dark(var(--color-primary), var(--color-primary));
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
 }

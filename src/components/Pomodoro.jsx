@@ -300,6 +300,7 @@ const Pomodoro = () => {
 
   const intervalRef = useRef(null);
   const staticIntervalCountRef = useRef(null);
+  const targetEndTimeRef = useRef(null);
 
   useEffect(() => {
     if (staticIntervalCountRef.current === null) {
@@ -346,9 +347,13 @@ const Pomodoro = () => {
     setLocalIsActive(true);
     dispatch(startTimer());
 
+    targetEndTimeRef.current = Date.now() + (localTime * 1000);
+
     intervalRef.current = setInterval(() => {
       setLocalTime(prevTime => {
-        const newTime = prevTime - 1;
+        const remainingMs = targetEndTimeRef.current - Date.now();
+        const newTime = Math.round(remainingMs / 1000);
+
         if (newTime <= 0) {
           clearInterval(intervalRef.current);
           setLocalIsActive(false);
@@ -366,6 +371,7 @@ const Pomodoro = () => {
   const handlePauseTimer = () => {
     clearInterval(intervalRef.current);
     setLocalIsActive(false);
+    targetEndTimeRef.current = null;
     dispatch(pauseTimer());
   };
 
@@ -374,6 +380,7 @@ const Pomodoro = () => {
     setLocalIsActive(false);
     setLocalIsBreak(false);
     setLocalCompletedIntervals(0);
+    targetEndTimeRef.current = null;
     staticIntervalCountRef.current = typeof pomodoro.intervalCount === 'object'
       ? pomodoro.intervalCount.count
       : 5;
@@ -401,10 +408,18 @@ const Pomodoro = () => {
   const showNotification = () => {
     try {
       if ('Notification' in window && window.Notification && Notification.permission === 'granted') {
-        new Notification('Pomodoro Timer', {
+        const title = 'Pomodoro Timer';
+        const options = {
           body: localIsBreak ? 'Break over! Time to work!' : 'Work done! Take a break!',
           icon: '/task_manager_icon.png'
-        });
+        };
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(title, options);
+          });
+        } else {
+          new Notification(title, options);
+        }
       }
     } catch (e) {
       console.error('Notification error:', e);

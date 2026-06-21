@@ -1,7 +1,7 @@
 .sidebar {
   display: flex;
-  background-color: var(--dark-background-color-sidebar);
-  color: var(--dark-font-color-sidebar);
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
   width: calc(10vw + 1vmin);
   position: absolute;
   height: 100vh;
@@ -33,7 +33,7 @@
   gap: 1dvw;
   padding: 3dvh;
   width: 100%;
-  color: var(--dark-font-color-sidebar);
+  color: var(--text-primary);
   appearance: none;
   background-color: transparent;
   border: none;
@@ -60,13 +60,13 @@
   -webkit-tap-highlight-color: transparent;
 
   &:hover {
-    background-color: var(--dark-button-hover-color);
-    border-right: var(--dark-font-color-white) solid 3px;
+    background-color: var(--bg-hover);
+    border-right: var(--text-primary) solid 3px;
   } 
 
   &:focus {
     outline: none;
-    background-color: var(--dark-background-color-main);
+    background-color: var(--bg-main);
   }
 
   &:active {
@@ -90,7 +90,7 @@
   width: 100%;
 
   padding-left: 1dvw;
-  background-color: var(--dark-background-color-main);
+  background-color: var(--bg-main);
   display: none;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .sidebar__arrow-btn {
-  background-color: red;
+  background-color: var(--color-danger);
   width: 10%;
   height: 100%;
   align-content: center;
