@@ -143,13 +143,13 @@
 }
 
 .tag.missed {
-  background-color: #fdeded;
+  background-color: var(--priority-high-bg);
   color: var(--color-danger);
 }
 
 .tag.today {
-  background-color: #fcf3cf;
-  color: #f39c12;
+  background-color: var(--priority-medium-bg);
+  color: var(--color-warning);
 }
 
 .stat-card {

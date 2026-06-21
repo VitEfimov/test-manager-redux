@@ -411,7 +411,10 @@ const Pomodoro = () => {
         const title = 'Pomodoro Timer';
         const options = {
           body: localIsBreak ? 'Break over! Time to work!' : 'Work done! Take a break!',
-          icon: '/task_manager_icon.png'
+          icon: '/task_manager_icon.png',
+          vibrate: [200, 100, 200, 100, 200, 100, 200],
+          silent: false,
+          requireInteraction: true
         };
         if (navigator.serviceWorker) {
           navigator.serviceWorker.ready.then(registration => {
