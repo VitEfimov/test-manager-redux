@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MdLightMode, MdDarkMode, MdDevices } from "react-icons/md";
+import { MdLightMode, MdDarkMode, MdContrast } from "react-icons/md";
 import { updateUserTheme, updateThemeAsync, toggleSidebar } from '../features/userSlice';
 import dayjs from 'dayjs';
 import '../styles/Header.css';
@@ -14,11 +14,30 @@ const Header = ({ isPomodoroActive, timeRemaining, isTimeOver }) => {
   const handleToggle = () => {
     let newTheme = 'light';
     if (theme === 'light') newTheme = 'dark';
-    else if (theme === 'dark') newTheme = 'system';
-    
+    else if (theme === 'dark') newTheme = 'contrast';
+    else if (theme === 'contrast') newTheme = 'light';
+    else if (theme === 'system') {
+      const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      newTheme = systemIsDark ? 'light' : 'dark';
+    }
+
     dispatch(updateUserTheme(newTheme));
     dispatch(updateThemeAsync(newTheme));
   };
+
+  let activeIcon;
+  let nextAria = 'dark';
+  
+  if (theme === 'contrast') {
+    activeIcon = <MdContrast />;
+    nextAria = 'light';
+  } else if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    activeIcon = <MdDarkMode />;
+    nextAria = theme === 'system' ? 'light' : 'contrast';
+  } else {
+    activeIcon = <MdLightMode />;
+    nextAria = 'dark';
+  }
 
   const headerStyle = {};
   if (userPicture) {
@@ -62,9 +81,9 @@ const Header = ({ isPomodoroActive, timeRemaining, isTimeOver }) => {
         <button 
             className="topbar-icon-btn" 
             onClick={handleToggle}
-            aria-label={`Toggle theme (currently ${theme})`}
+            aria-label={`Switch to ${nextAria} mode`}
         >
-            {theme === 'system' ? <MdDevices /> : theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
+            {activeIcon}
         </button>
       </div>
     </header>

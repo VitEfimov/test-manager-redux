@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBreakInterval, setIntervalCount, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
 import { clearTasks } from '../features/taskSlice';
+import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
 import { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setThemeMode, setPresetTheme } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 import '../styles/Settings.css';
@@ -9,6 +10,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
   const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
   const theme = useSelector(state => state.themeReducer);
+  const userTheme = useSelector(state => state.userReducer.theme);
   const dateFormat = theme.dateFormat || 'full';
   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
   const timeFormat = theme.timeFormat || '12h';
@@ -35,7 +37,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
   const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
   const [newFontSize, setNewFontSize] = useState(theme.fontSize || 'normal');
-  const [newPresetTheme, setNewPresetTheme] = useState(theme.presetTheme || 'default');
+  const [newUserTheme, setNewUserTheme] = useState(userTheme);
   const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
 
   const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
@@ -72,7 +74,8 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setTaskNameWrap(newTaskNameWrap));
     dispatch(setTimeFormat(newTimeFormat));
     dispatch(setFontSize(newFontSize));
-    dispatch(setPresetTheme(newPresetTheme));
+    dispatch(updateUserTheme(newUserTheme));
+    dispatch(updateThemeAsync(newUserTheme));
     dispatch(setDefaultTaskLimit(newTaskLimit));
     setCurrentPage('Board');
   };
@@ -230,19 +233,19 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
               </div>
             </div>
 
-            <div className="setting-row setting-row-no-border">
+            {/* <div className="setting-row setting-row-no-border">
               <div className="setting-label">
                 <span>Theme Mode</span>
               </div>
               <div className="setting-control">
-                <select className="select-sleek" value={newPresetTheme} onChange={(e) => setNewPresetTheme(e.target.value)}>
-                  <option value="default">Default</option>
-                  <option value="dynamic">Dynamic</option>
-                  <option value="monochrome">Monochrome</option>
-                  <option value="blue">Blue</option>
+                <select className="select-sleek" value={newUserTheme} onChange={(e) => setNewUserTheme(e.target.value)}>
+                  <option value="system">System Default</option>
+                  <option value="light">Light Mode</option>
+                  <option value="dark">Dark Mode</option>
+                  <option value="contrast">High Contrast</option>
                 </select>
               </div>
-            </div>
+            </div> */}
             <div className="setting-row setting-row-no-border">
               <div className="setting-label">
                 <span>Task display limit</span>

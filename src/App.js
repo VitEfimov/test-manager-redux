@@ -11,6 +11,7 @@ import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
 import PomodoroSettingsModal from './components/PomodoroSettingsModal';
 
 import React, { Suspense, lazy } from 'react';
+import { themeFromSourceColor, argbFromHex, hexFromArgb } from '@material/material-color-utilities';
 
 const Pomodoro = lazy(() => import('./components/Pomodoro'));
 const ListOfSections = lazy(() => import('./components/ListOfSections'));
@@ -65,7 +66,7 @@ function App() {
   useEffect(() => {
     const root = document.documentElement;
 
-    if (userTheme === 'dark') {
+    if (userTheme === 'dark' || userTheme === 'contrast') {
       document.body.classList.add('dark-mode');
       document.body.classList.remove('light-mode');
       root.style.colorScheme = 'dark';
@@ -90,27 +91,58 @@ function App() {
   useEffect(() => {
     const root = document.documentElement;
 
-    // Helper to set or remove property
     const setOrReset = (variable, value) => {
-      // If a preset theme is active (not 'default' or missing), we ignore custom colors
-      // so the preset theme can take full effect!
-      if (theme.presetTheme && theme.presetTheme !== 'default') {
-        root.style.removeProperty(variable);
-      } else if (value) {
+      if (value) {
         root.style.setProperty(variable, value);
       } else {
         root.style.removeProperty(variable);
       }
     };
 
-    setOrReset('--bg-sidebar', theme.colors.sidebarBg);
-    setOrReset('--bg-main', theme.colors.mainBg);
-    setOrReset('--bg-header', theme.colors.headerBg);
-    setOrReset('--text-primary', theme.colors.textColor);
-    setOrReset('--bg-card', theme.colors.cardBg);
-    setOrReset('--text-inverse', theme.colors.sidebarText);
-    setOrReset('--text-secondary', theme.colors.cardText);
-    setOrReset('--text-tertiary', theme.colors.boardText);
+    if (theme.sourceColor) {
+      const matTheme = themeFromSourceColor(argbFromHex(theme.sourceColor));
+      const isDark = userTheme === 'dark' || userTheme === 'contrast' || (userTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const scheme = isDark ? matTheme.schemes.dark : matTheme.schemes.light;
+      
+      setOrReset('--color-primary', hexFromArgb(scheme.primary));
+      setOrReset('--color-primary-container', hexFromArgb(scheme.primaryContainer));
+      
+      if (userTheme === 'contrast') {
+        setOrReset('--bg-main', '#000000');
+        setOrReset('--bg-sidebar', '#0a0a0a');
+        setOrReset('--bg-card', '#141414');
+        setOrReset('--bg-header', '#0a0a0a');
+        setOrReset('--surface-container', '#0a0a0a');
+        setOrReset('--surface-container-high', '#222222');
+        setOrReset('--text-primary', '#ffffff');
+        setOrReset('--text-secondary', '#dddddd');
+        setOrReset('--border-color', hexFromArgb(scheme.primary));
+        setOrReset('--color-danger', '#ff3333');
+      } else {
+        setOrReset('--bg-main', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 94%)`);
+        setOrReset('--bg-sidebar', hexFromArgb(scheme.surfaceVariant)); 
+        setOrReset('--bg-card', hexFromArgb(scheme.surface));
+        setOrReset('--bg-header', hexFromArgb(scheme.primaryContainer));
+        setOrReset('--surface-container', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 90%)`);
+        setOrReset('--surface-container-high', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 80%)`);
+        setOrReset('--text-primary', hexFromArgb(scheme.onSurface));
+        setOrReset('--text-secondary', hexFromArgb(scheme.onSurfaceVariant));
+        setOrReset('--border-color', hexFromArgb(scheme.outline));
+        setOrReset('--color-danger', hexFromArgb(scheme.error));
+      }
+
+      setOrReset('--text-inverse', hexFromArgb(scheme.onPrimary));
+      setOrReset('--text-tertiary', hexFromArgb(scheme.onSurfaceVariant));
+    } else {
+      setOrReset('--bg-sidebar', theme.colors.sidebarBg);
+      setOrReset('--bg-main', theme.colors.mainBg);
+      setOrReset('--bg-header', theme.colors.headerBg);
+      setOrReset('--text-primary', theme.colors.textColor);
+      setOrReset('--bg-card', theme.colors.cardBg);
+      setOrReset('--text-inverse', theme.colors.sidebarText);
+      setOrReset('--text-secondary', theme.colors.cardText);
+      setOrReset('--text-tertiary', theme.colors.boardText);
+    }
 
     // Font size
     let fontCalc = 'calc(10px + 1vmin)';
@@ -131,7 +163,7 @@ function App() {
       root.removeAttribute('data-theme');
     }
 
-  }, [theme]);
+  }, [theme, userTheme]);
 
   const renderPage = (sidebarView) => {
     switch (currentPage) {

@@ -1,63 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setThemeColor, toggleSettingsOpen, resetTheme, setUserPicture, setHeaderBackgroundFit, setPresetTheme } from '../features/themeSlice';
+import { setThemeColor, setSourceColor, toggleSettingsOpen, resetTheme, setUserPicture, setHeaderBackgroundFit, setPresetTheme } from '../features/themeSlice';
 
-const ColorRow = ({ label, id, colorValue, defaultColor, onChange }) => {
-  const [textValue, setTextValue] = useState((colorValue || defaultColor).toUpperCase());
 
-  useEffect(() => {
-    setTextValue((colorValue || defaultColor).toUpperCase());
-  }, [colorValue, defaultColor]);
-
-  const handleTextChange = (e) => {
-    let val = e.target.value;
-    if (!val.startsWith('#')) val = '#' + val;
-    
-    if (/^[#a-fA-F0-9]*$/.test(val) && val.length <= 7) {
-      setTextValue(val);
-      if (/^#([0-9A-F]{3}){1,2}$/i.test(val)) {
-        onChange(val);
-      }
-    }
-  };
-
-  const handlePickerChange = (e) => {
-    const val = e.target.value;
-    setTextValue(val.toUpperCase());
-    onChange(val);
-  };
-
-  const getPickerValue = () => {
-    let val = colorValue || defaultColor;
-    if (/^#([0-9A-F]{3})$/i.test(val)) {
-      val = '#' + val[1]+val[1] + val[2]+val[2] + val[3]+val[3];
-    }
-    return val;
-  };
-
-  return (
-    <div className="theme-color-row">
-      <label htmlFor={id}>{label}</label>
-      <div className="color-control">
-        <input 
-          id={id}
-          type="color" 
-          className="color-picker"
-          value={getPickerValue()} 
-          onChange={handlePickerChange} 
-        />
-        <input 
-          type="text" 
-          className="hex-value-input" 
-          value={textValue} 
-          onChange={handleTextChange} 
-          style={{ width: '70px', border: '1px solid gray', background: 'transparent', color: 'inherit', padding: '2px 4px', borderRadius: '4px' }} 
-        />
-      </div>
-    </div>
-  );
-};
 
 const ThemeSettingsSidebar = () => {
   const dispatch = useDispatch();
@@ -69,28 +15,7 @@ const ThemeSettingsSidebar = () => {
   const [startY, setStartY] = React.useState(null);
   const [currentY, setCurrentY] = React.useState(null);
 
-  const [localColors, setLocalColors] = React.useState(theme.colors);
-
-  React.useEffect(() => {
-    if (theme.isSettingsOpen) {
-      setLocalColors(theme.colors);
-    }
-  }, [theme.isSettingsOpen, theme.colors]);
-
   if (!theme.isSettingsOpen) return null;
-
-  const handleColorChange = (e, key) => {
-    setLocalColors(prev => ({ ...prev, [key]: e.target.value }));
-  };
-
-  const handleSave = () => {
-    Object.keys(localColors).forEach(key => {
-      dispatch(setThemeColor({ key, value: localColors[key] }));
-    });
-    // If they manually customize the theme, switch off any preset!
-    dispatch(setPresetTheme('default'));
-    dispatch(toggleSettingsOpen(false));
-  };
 
   const handleReset = () => {
     dispatch(resetTheme());
@@ -166,69 +91,57 @@ const ThemeSettingsSidebar = () => {
         </div>
 
         <div className="theme-settings-body">
-          <ColorRow 
-            label="SIDEBAR" 
-            id="sidebarBg" 
-            colorValue={localColors.sidebarBg} 
-            defaultColor="#699B69" 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'sidebarBg')} 
-          />
-
-          <ColorRow 
-            label="BACKGROUND" 
-            id="mainBg" 
-            colorValue={localColors.mainBg} 
-            defaultColor="#E7E2E2" 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'mainBg')} 
-          />
-
-          <ColorRow 
-            label="HEADER" 
-            id="headerBg" 
-            colorValue={localColors.headerBg} 
-            defaultColor={localColors.mainBg || "#E7E2E2"} 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'headerBg')} 
-          />
-
-          <ColorRow 
-            label="TEXT" 
-            id="textColor" 
-            colorValue={localColors.textColor} 
-            defaultColor="#000000" 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'textColor')} 
-          />
-
-          <ColorRow 
-            label="CARD BACKGROUND" 
-            id="cardBg" 
-            colorValue={localColors.cardBg} 
-            defaultColor={localColors.mainBg || "#FFFFFF"} 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'cardBg')} 
-          />
-
-          <ColorRow 
-            label="SIDEBAR TEXT" 
-            id="sidebarText" 
-            colorValue={localColors.sidebarText} 
-            defaultColor={localColors.textColor || "#000000"} 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'sidebarText')} 
-          />
-
-          <ColorRow 
-            label="CARD TEXT" 
-            id="cardText" 
-            colorValue={localColors.cardText} 
-            defaultColor={localColors.textColor || "#000000"} 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'cardText')} 
-          />
-
-          <ColorRow 
-            label="BOARD TEXT" 
-            id="boardText" 
-            colorValue={localColors.boardText} 
-            defaultColor={localColors.textColor || "#000000"} 
-            onChange={(val) => handleColorChange({target: {value: val}}, 'boardText')} 
-          />
+          <div className="theme-color-section" style={{ padding: '0 20px', marginTop: '20px' }}>
+            <h3 style={{ marginBottom: '15px' }}>Material You Theme</h3>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '15px' }}>
+              Choose a source color and we'll generate a complete, accessible theme palette for you automatically.
+            </p>
+            
+            <div className="theme-presets" style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
+              {[
+                { name: 'Forest', hex: '#4F7D4F' },
+                { name: 'Ocean', hex: '#4F6FAE' },
+                { name: 'Amethyst', hex: '#7953C2' },
+                { name: 'Sunflower', hex: '#E4C938' }
+              ].map(preset => (
+                <div 
+                  key={preset.name}
+                  onClick={() => {
+                    dispatch(setSourceColor(preset.hex));
+                    dispatch(setPresetTheme('default'));
+                  }}
+                  style={{
+                    width: '45px', height: '45px', borderRadius: '50%', 
+                    backgroundColor: preset.hex, cursor: 'pointer',
+                    border: (theme.sourceColor || '#4F7D4F').toUpperCase() === preset.hex.toUpperCase() 
+                      ? '3px solid var(--text-primary)' 
+                      : '2px solid transparent',
+                    boxShadow: 'var(--shadow-sm)',
+                    transition: 'transform 0.2s'
+                  }}
+                  title={preset.name}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                />
+              ))}
+            </div>
+            
+            <div className="custom-color-picker" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '10px', marginBottom: '30px' }}>
+              <label style={{ fontWeight: 'bold' }}>Custom Color: </label>
+              <input 
+                type="color" 
+                value={theme.sourceColor || '#4F7D4F'} 
+                onChange={(e) => {
+                  dispatch(setSourceColor(e.target.value));
+                  dispatch(setPresetTheme('default'));
+                }}
+                style={{ cursor: 'pointer', width: '50px', height: '50px', padding: '0', border: 'none', borderRadius: '8px', background: 'transparent' }}
+              />
+              <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', backgroundColor: 'var(--bg-main)', padding: '5px 10px', borderRadius: '4px' }}>
+                {(theme.sourceColor || '#4F7D4F').toUpperCase()}
+              </span>
+            </div>
+          </div>
 
           <div className="theme-upload-group">
             <label>Header banner image</label>
@@ -275,13 +188,13 @@ const ThemeSettingsSidebar = () => {
           <div style={{ padding: '20px', display: 'flex', gap: '10px' }}>
             <button className="btn-delete" style={{ flex: 1 }} onClick={handleReset}>
               Reset Defaults
-            </button><button 
-              style={{ flex: 1, padding: '10px', backgroundColor: '#699b69', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-              onClick={handleSave}
-            >
-              Save Theme
             </button>
-
+            <button 
+              style={{ flex: 1, padding: '10px', backgroundColor: 'var(--color-primary)', color: 'var(--text-inverse)', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+              onClick={onClose}
+            >
+              Done
+            </button>
           </div>
         </div>
       </div>

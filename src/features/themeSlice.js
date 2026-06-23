@@ -14,6 +14,7 @@ const loadThemeState = () => {
 
 const loaded = loadThemeState();
 const initialState = {
+  sourceColor: loaded?.sourceColor || '#4F7D4F',
   colors: loaded?.colors || {
     sidebarBg: null,
     mainBg: null,
@@ -50,6 +51,10 @@ const themeSlice = createSlice({
       state.colors[key] = value;
       localStorage.setItem('customTheme', JSON.stringify(state));
     },
+    setSourceColor: (state, action) => {
+      state.sourceColor = action.payload;
+      localStorage.setItem('customTheme', JSON.stringify(state));
+    },
     setFontSize: (state, action) => {
       state.fontSize = action.payload;
       localStorage.setItem('customTheme', JSON.stringify(state));
@@ -71,6 +76,7 @@ const themeSlice = createSlice({
       localStorage.setItem('customTheme', JSON.stringify(state));
     },
     resetTheme: (state) => {
+      state.sourceColor = '#4F7D4F';
       state.colors = {
         sidebarBg: null,
         mainBg: null,
@@ -128,5 +134,5 @@ const themeSlice = createSlice({
   }
 });
 
-export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
+export const { setThemeColor, setSourceColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
 export default themeSlice.reducer;

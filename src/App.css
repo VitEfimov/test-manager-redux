@@ -1846,21 +1846,33 @@ nav {
 
 
 .input-field {
-  background-color: light-dark(#fcfcfc, var(--bg-hover));
-  border: 1px solid light-dark(#e8e4dc, var(--bg-main-priority));
-  border-radius: 10px;
-  padding: 12px 15px;
+  background: var(--surface-container);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: none;
   font-size: 1rem;
-  color: light-dark(#1a1a1a, var(--text-primary));
+  color: var(--text-primary);
   font-family: inherit;
   width: 100%;
   box-sizing: border-box;
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
+.input-field:hover {
+  background: var(--surface-container-high);
+}
 
 .input-field:focus {
+  background: var(--bg-card);
   outline: none;
   border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 3px color-mix(
+      in srgb,
+      var(--color-primary) 18%,
+      transparent
+    );
 }
 
 
@@ -2681,7 +2693,7 @@ select.input-field {
   border: none;
   font-size: 1.714rem;
   cursor: pointer;
-  color: light-dark(var(--text-secondary), #bbb);
+  color: var(--text-secondary);
   transition: color 0.2s, background-color 0.2s;
   display: flex;
   align-items: center;
@@ -2693,8 +2705,8 @@ select.input-field {
 }
 
 .close-btn:hover {
-  color: light-dark(var(--color-danger), #ff6b6b);
-  background-color: light-dark(#fdeded, #4a2a2a);
+  color: var(--color-danger);
+  background-color: var(--priority-high-bg);
 }
 
 .description-textarea {
@@ -2715,9 +2727,9 @@ select.input-field {
 input[type="date"].input-field,
 input[type="time"].input-field,
 select.input-field {
-  background-color: light-dark(#fcfcfc, var(--bg-hover)) !important;
-  color: light-dark(#1a1a1a, var(--text-primary)) !important;
-  border: 1px solid light-dark(#e8e4dc, var(--bg-main-priority)) !important;
+  background-color: var(--bg-sidebar) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
 }
 
 /* Tiptap Editor Styles */
@@ -2732,8 +2744,8 @@ select.input-field {
   display: flex;
   gap: 5px;
   padding: 8px 10px;
-  background-color: light-dark(#f5f5f5, var(--bg-main-priority));
-  border-bottom: 1px solid light-dark(#e8e4dc, var(--bg-main-priority));
+  background-color: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-color);
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;
   align-items: center;
@@ -2745,7 +2757,7 @@ select.input-field {
   cursor: pointer;
   padding: 5px;
   border-radius: 5px;
-  color: light-dark(var(--text-primary), #bbb);
+  color: var(--text-secondary);
   font-size: 1.286rem;
   display: flex;
   align-items: center;
@@ -2946,4 +2958,10 @@ select.input-field {
 .select-sleek:focus {
   border-color: var(--color-primary);
   background: var(--bg-main);
+}
+
+/* Style native select options */
+select option {
+  background-color: var(--surface-container);
+  color: var(--text-primary);
 }
