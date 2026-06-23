@@ -160,12 +160,12 @@
 
   .nav-button-icon {
     display: flex;
-    font-size: 22px;
+    font-size: 1.571rem;
   }
 
   .nav-button-name {
     display: block !important;
-    font-size: 10px;
+    font-size: 0.714rem;
     line-height: 1;
   }
 }

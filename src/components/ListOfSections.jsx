@@ -282,6 +282,41 @@ const ListOfSections = ({ sidebarView }) => {
         }));
     };
 
+    const handleMoveForward = (sectionTasks, currentSectionId) => {
+        if (sectionTasks.length === 0) return;
+        const today = dayjs();
+        let newDate;
+        switch (currentSectionId) {
+            case 'missed':
+                newDate = today.toISOString();
+                break;
+            case 'today':
+                newDate = today.add(1, 'day').toISOString();
+                break;
+            case 'tomorrow':
+                newDate = today.endOf('isoWeek').toISOString();
+                break;
+            case 'on-this-week':
+                newDate = today.add(1, 'week').startOf('isoWeek').toISOString();
+                break;
+            case 'on-next-week':
+                newDate = today.add(2, 'week').startOf('isoWeek').toISOString();
+                break;
+            default:
+                return;
+        }
+
+        if (window.confirm(`Are you sure you want to move all tasks forward?`)) {
+            sectionTasks.forEach(task => {
+                dispatch(updateTask({
+                    taskId: task.id,
+                    completionDate: newDate,
+                    completed: false
+                }));
+            });
+        }
+    };
+
     const handleCompleteSectionTasks = (sectionTasks, sectionName) => {
         if (sectionTasks.length === 0) return;
         if (window.confirm(`Are you sure you want to complete all tasks in ${sectionName}?`)) {
@@ -370,10 +405,12 @@ const ListOfSections = ({ sidebarView }) => {
                                             <select className="section-action-select" value="" onChange={(e) => {
                                                 const val = e.target.value;
                                                 if (val === 'complete') handleCompleteSectionTasks(missedFiltered, 'Missed tasks');
+                                                if (val === 'move-forward') handleMoveForward(missedFiltered, 'missed');
                                                 if (val === 'delete') handleDeleteSectionTasks(missedFiltered, 'Missed tasks');
                                             }} title="Section Actions">
                                                 <option value="" disabled hidden>▼</option>
                                                 <option value="complete">Complete all</option>
+                                                <option value="move-forward">Move forward</option>
                                                 <option value="delete">Delete all</option>
                                             </select>
                                         </div>
@@ -400,10 +437,12 @@ const ListOfSections = ({ sidebarView }) => {
                                         <select className="section-action-select" value="" onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'complete') handleCompleteSectionTasks(todayFiltered, 'Today');
+                                            if (val === 'move-forward') handleMoveForward(todayFiltered, 'today');
                                             if (val === 'delete') handleDeleteSectionTasks(todayFiltered, 'Today');
                                         }} title="Section Actions">
                                             <option value="" disabled hidden>▼</option>
                                             <option value="complete">Complete all</option>
+                                            <option value="move-forward">Move forward</option>
                                             <option value="delete">Delete all</option>
                                         </select>
                                     </div>
@@ -430,10 +469,12 @@ const ListOfSections = ({ sidebarView }) => {
                                         <select className="section-action-select" value="" onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'complete') handleCompleteSectionTasks(tomorrowFiltered, 'Tomorrow');
+                                            if (val === 'move-forward') handleMoveForward(tomorrowFiltered, 'tomorrow');
                                             if (val === 'delete') handleDeleteSectionTasks(tomorrowFiltered, 'Tomorrow');
                                         }} title="Section Actions">
                                             <option value="" disabled hidden>▼</option>
                                             <option value="complete">Complete all</option>
+                                            <option value="move-forward">Move forward</option>
                                             <option value="delete">Delete all</option>
                                         </select>
                                     </div>
@@ -462,10 +503,12 @@ const ListOfSections = ({ sidebarView }) => {
                                         <select className="section-action-select" value="" onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'complete') handleCompleteSectionTasks(onThisWeekFiltered, 'On this week');
+                                            if (val === 'move-forward') handleMoveForward(onThisWeekFiltered, 'on-this-week');
                                             if (val === 'delete') handleDeleteSectionTasks(onThisWeekFiltered, 'On this week');
                                         }} title="Section Actions">
                                             <option value="" disabled hidden>▼</option>
                                             <option value="complete">Complete all</option>
+                                            <option value="move-forward">Move forward</option>
                                             <option value="delete">Delete all</option>
                                         </select>
                                     </div>
@@ -494,10 +537,12 @@ const ListOfSections = ({ sidebarView }) => {
                                         <select className="section-action-select" value="" onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'complete') handleCompleteSectionTasks(onNextWeekFiltered, 'On next week');
+                                            if (val === 'move-forward') handleMoveForward(onNextWeekFiltered, 'on-next-week');
                                             if (val === 'delete') handleDeleteSectionTasks(onNextWeekFiltered, 'On next week');
                                         }} title="Section Actions">
                                             <option value="" disabled hidden>▼</option>
                                             <option value="complete">Complete all</option>
+                                            <option value="move-forward">Move forward</option>
                                             <option value="delete">Delete all</option>
                                         </select>
                                     </div>

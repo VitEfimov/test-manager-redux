@@ -36,7 +36,9 @@ const initialState = {
   taskNameWrap: loaded?.taskNameWrap || 'wrap',
   timeFormat: loaded?.timeFormat || '12h',
   headerBackgroundFit: loaded?.headerBackgroundFit || 'cover',
-  notificationsEnabled: loaded?.notificationsEnabled || false
+  notificationsEnabled: loaded?.notificationsEnabled || false,
+  themeMode: loaded?.themeMode || 'system',
+  presetTheme: loaded?.presetTheme || 'default'
 };
 
 const themeSlice = createSlice({
@@ -114,9 +116,17 @@ const themeSlice = createSlice({
     setHeaderBackgroundFit: (state, action) => {
       state.headerBackgroundFit = action.payload;
       localStorage.setItem('customTheme', JSON.stringify(state));
+    },
+    setThemeMode: (state, action) => {
+      state.themeMode = action.payload;
+      localStorage.setItem('customTheme', JSON.stringify(state));
+    },
+    setPresetTheme: (state, action) => {
+      state.presetTheme = action.payload;
+      localStorage.setItem('customTheme', JSON.stringify(state));
     }
   }
 });
 
-export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit } = themeSlice.actions;
+export const { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
 export default themeSlice.reducer;

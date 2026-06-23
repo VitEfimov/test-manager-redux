@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBreakInterval, setIntervalCount, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
 import { clearTasks } from '../features/taskSlice';
-import { toggleSettingsOpen, setDateFormat, setTaskNameWrap, setTimeFormat, setFontSize, setDefaultTaskLimit } from '../features/themeSlice';
+import { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setThemeMode, setPresetTheme } from '../features/themeSlice';
 import InfomationIcon from './InfomationIcon';
 import '../styles/Settings.css';
 const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
@@ -35,6 +35,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
   const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
   const [newFontSize, setNewFontSize] = useState(theme.fontSize || 'normal');
+  const [newPresetTheme, setNewPresetTheme] = useState(theme.presetTheme || 'default');
   const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
 
   const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
@@ -71,6 +72,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setTaskNameWrap(newTaskNameWrap));
     dispatch(setTimeFormat(newTimeFormat));
     dispatch(setFontSize(newFontSize));
+    dispatch(setPresetTheme(newPresetTheme));
     dispatch(setDefaultTaskLimit(newTaskLimit));
     setCurrentPage('Board');
   };
@@ -224,6 +226,20 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                   <option value="normal">Normal</option>
                   <option value="big">Big</option>
                   <option value="device">Device Default</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="setting-row setting-row-no-border">
+              <div className="setting-label">
+                <span>Theme Mode</span>
+              </div>
+              <div className="setting-control">
+                <select className="select-sleek" value={newPresetTheme} onChange={(e) => setNewPresetTheme(e.target.value)}>
+                  <option value="default">Default</option>
+                  <option value="dynamic">Dynamic</option>
+                  <option value="monochrome">Monochrome</option>
+                  <option value="blue">Blue</option>
                 </select>
               </div>
             </div>

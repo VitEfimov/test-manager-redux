@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks, loadGuestTasks } from './features/taskSlice';
 import { checkAuth, updateShowWeather } from './features/userSlice';
+import { resetTheme } from './features/themeSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './components/Login';
@@ -62,30 +63,54 @@ function App() {
   }, [authChecked, tasksChecked]);
 
   useEffect(() => {
-    if (userTheme === 'system') {
-      document.documentElement.style.colorScheme = 'light dark';
+    const root = document.documentElement;
+
+    if (userTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.body.classList.remove('light-mode');
+      root.style.colorScheme = 'dark';
+    } else if (userTheme === 'light') {
+      document.body.classList.add('light-mode');
+      document.body.classList.remove('dark-mode');
+      root.style.colorScheme = 'light';
     } else {
-      document.documentElement.style.colorScheme = userTheme === 'dark' ? 'dark' : 'light';
+      document.body.classList.remove('dark-mode', 'light-mode');
+      root.style.colorScheme = 'light dark';
     }
   }, [userTheme]);
+
+  // Auto-repair corrupted theme colors from previous bug
+  useEffect(() => {
+    if (theme.colors.textColor === '#000000' && theme.colors.mainBg === null && theme.colors.sidebarBg === null) {
+      console.log("Auto-repairing corrupted custom theme colors...");
+      dispatch(resetTheme());
+    }
+  }, [theme.colors, dispatch]);
 
   useEffect(() => {
     const root = document.documentElement;
 
     // Helper to set or remove property
     const setOrReset = (variable, value) => {
-      if (value) root.style.setProperty(variable, value);
-      else root.style.removeProperty(variable);
+      // If a preset theme is active (not 'default' or missing), we ignore custom colors
+      // so the preset theme can take full effect!
+      if (theme.presetTheme && theme.presetTheme !== 'default') {
+        root.style.removeProperty(variable);
+      } else if (value) {
+        root.style.setProperty(variable, value);
+      } else {
+        root.style.removeProperty(variable);
+      }
     };
 
-    setOrReset('--dark-background-color-sidebar', theme.colors.sidebarBg);
-    setOrReset('--dark-background-color-main', theme.colors.mainBg);
-    setOrReset('--dark-background-color-header', theme.colors.headerBg);
-    setOrReset('--dark-font-color-white', theme.colors.textColor);
-    setOrReset('--dark-background-color-card', theme.colors.cardBg);
-    setOrReset('--dark-font-color-sidebar', theme.colors.sidebarText);
-    setOrReset('--dark-font-color-card', theme.colors.cardText);
-    setOrReset('--dark-font-color-board', theme.colors.boardText);
+    setOrReset('--bg-sidebar', theme.colors.sidebarBg);
+    setOrReset('--bg-main', theme.colors.mainBg);
+    setOrReset('--bg-header', theme.colors.headerBg);
+    setOrReset('--text-primary', theme.colors.textColor);
+    setOrReset('--bg-card', theme.colors.cardBg);
+    setOrReset('--text-inverse', theme.colors.sidebarText);
+    setOrReset('--text-secondary', theme.colors.cardText);
+    setOrReset('--text-tertiary', theme.colors.boardText);
 
     // Font size
     let fontCalc = 'calc(10px + 1vmin)';
@@ -98,6 +123,14 @@ function App() {
     root.style.setProperty('--col-task-width', `${theme.columnWidths.taskName}dvw`);
     root.style.setProperty('--col-due-width', `${theme.columnWidths.dueDate}dvw`);
     root.style.setProperty('--col-priority-width', `${theme.columnWidths.priority}dvw`);
+
+    // Preset Theme Palette (Default, Forest, Green, etc)
+    if (theme.presetTheme && theme.presetTheme !== 'default') {
+      root.setAttribute('data-theme', theme.presetTheme);
+    } else {
+      root.removeAttribute('data-theme');
+    }
+
   }, [theme]);
 
   const renderPage = (sidebarView) => {

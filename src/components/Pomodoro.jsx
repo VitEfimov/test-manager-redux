@@ -391,7 +391,11 @@ const Pomodoro = () => {
     if (localIsBreak) {
       dispatch(completeBreakInterval());
       if (pomodoro.breakSound !== 'none') {
-        try { playStart(); } catch(e) { console.warn('Audio play failed:', e); }
+        try { 
+          playStart(); 
+          const audio = new Audio(breakSoundSrc);
+          audio.play().catch(e => console.warn('Fallback audio failed:', e));
+        } catch(e) { console.warn('Audio play failed:', e); }
       }
       if (localCompletedIntervals >= staticIntervalCountRef.current) {
         alert("All intervals completed!");
@@ -400,7 +404,11 @@ const Pomodoro = () => {
     } else {
       dispatch(completeWorkInterval());
       if (pomodoro.workSound !== 'none') {
-        try { playEnd(); } catch(e) { console.warn('Audio play failed:', e); }
+        try { 
+          playEnd(); 
+          const audio = new Audio(workSoundSrc);
+          audio.play().catch(e => console.warn('Fallback audio failed:', e));
+        } catch(e) { console.warn('Audio play failed:', e); }
       }
     }
   };
