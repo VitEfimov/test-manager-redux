@@ -16,7 +16,9 @@ body {
   overflow: hidden;
   position: fixed;
 }
+
 /* Default */
+/*
 :root {
   color-scheme: light dark;
 
@@ -33,7 +35,7 @@ body {
       rgb(50, 50, 50));
   /* --dark-background-color-main-priority: color-mix(in srgb,
       var(--dark-background-color-main),
-      green 5%); */
+      green 5%); *//*
   --dark-background-color-main-priority: light-dark( rgb(21, 21, 21),rgba(200, 200, 200, 0.951));
 
   --background-color-main: white;
@@ -46,14 +48,14 @@ body {
   --priority-medium-bg: light-dark(rgba(218, 143, 3, 0.4), rgba(218, 143, 3, 0.2));
   --priority-low-bg: light-dark(rgba(71, 133, 71, 0.4), rgba(71, 133, 71, 0.2));
 
-  /* Borders & UI */
+  /* Borders & UI *//*
   --border-color: light-dark(#cccccc, #444444);
   --border-color-light: light-dark(#eeeeee, #333333);
   --underline-task-row: light-dark(rgb(202, 201, 201), rgba(67, 67, 67, 0.95));
   --shadow-sm: 0 4px 15px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
   --shadow-md: 0 10px 30px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
 
-  /* Layout Variables */
+  /* Layout Variables *//*
   --col-task-width: 55dvw;
   --col-due-width: 10dvw;
   --col-priority-width: 10dvw;
@@ -64,15 +66,12 @@ body {
   color: var(--text-primary);
   font-size: calc(7px + 1vmin);
 }
-
+*/
 
 
 
 :root {
   color-scheme: light dark;
-
-
-
   --color-primary: light-dark(#4A7A4A, #6BA86B);
   --color-primary-hover: light-dark(#3D663D, #5D945D);
   --color-primary-light: light-dark(#DCE8DC, rgba(107, 168, 107, 0.15));
@@ -191,6 +190,7 @@ body {
 
 
 /* Blue */
+/*
 [data-theme="blue"] {
   color-scheme: light dark;
 
@@ -229,12 +229,11 @@ body {
       rgba(0,0,0,.08),
       rgba(0,0,0,.35)
     );
-}
-
-
+}*/
 
 
 /* Monochrome */
+/*
 [data-theme="monochrome"] {
   color-scheme: light dark;
 
@@ -269,10 +268,11 @@ body {
       rgba(0,0,0,.07),
       rgba(0,0,0,.4)
     );
-}
+}*/
 
 
 /* Dynamic */
+/*
 [data-theme="dynamic"] {
   color-scheme: light dark;
 
@@ -324,7 +324,7 @@ body {
       rgba(0,0,0,.35)
     );
 }
-
+*/
 
 
 /* ///////////////////////////// dashboard /////////////////////////////*/
@@ -445,7 +445,7 @@ body {
 
 .cat-card {
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   display: flex;
@@ -1915,7 +1915,7 @@ select.input-field {
 .btn-delete {
   flex: 1;
   padding: 14px 0;
-  border-radius: 10px;
+  border-radius: 12px;
   background-color: var(--color-danger);
   color: var(--text-inverse);
   border: none;
@@ -1927,7 +1927,7 @@ select.input-field {
 .btn-save {
   flex: 2;
   padding: 14px 0;
-  border-radius: 10px;
+  border-radius: 12px;
   background-color: var(--color-primary);
   color: var(--text-inverse);
   border: none;
@@ -1949,7 +1949,7 @@ select.input-field {
   background-color: var(--color-primary);
   color: var(--text-inverse);
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: none;
   font-weight: 700;
   font-size: 1rem;
@@ -2018,7 +2018,7 @@ select.input-field {
 
 
 .settings-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 
@@ -2064,16 +2064,29 @@ select.input-field {
 
 
 .select-sleek {
-  appearance: none;
-  background-color: light-dark(var(--bg-main), #2a2a2a);
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 0.929rem;
-  color: light-dark(var(--text-primary), #e1e1e1);
+  background-color: var(--bg-sidebar) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: none;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
   outline: none;
   cursor: pointer;
   min-width: 140px;
+}
+
+.select-sleek:hover {
+  background-color: var(--surface-container-high) !important;
+}
+
+.select-sleek:focus {
+  background-color: var(--bg-card) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
 
 
@@ -2265,13 +2278,6 @@ select.input-field {
 
 .select-sleek.full-width {
   width: 100%;
-  background-color: light-dark(#fcfcfc, #2a2a2a);
-  border: 1px solid light-dark(#e8e4dc, var(--text-primary));
-  border-radius: 10px;
-  padding: 12px 15px;
-  text-align: left;
-  background-position: right 15px center;
-  color: light-dark(var(--text-primary), #e1e1e1);
 }
 
 
@@ -2463,13 +2469,6 @@ select.input-field {
 
 .select-sleek.full-width {
   width: 100%;
-  background-color: light-dark(#fcfcfc, #2a2a2a);
-  border: 1px solid light-dark(#e8e4dc, var(--text-primary));
-  border-radius: 10px;
-  padding: 12px 15px;
-  text-align: left;
-  background-position: right 15px center;
-  color: light-dark(var(--text-primary), #e1e1e1);
 }
 
 
@@ -2730,6 +2729,7 @@ select.input-field {
   background-color: var(--bg-sidebar) !important;
   color: var(--text-primary) !important;
   border: 1px solid var(--border-color) !important;
+  border-radius: 16px;
 }
 
 /* Tiptap Editor Styles */
@@ -2907,7 +2907,7 @@ select.input-field {
 
 /* Shared Settings and Pomodoro Components */
 .btn-customize-theme {
-  width: 50%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2915,7 +2915,7 @@ select.input-field {
   background: var(--color-primary);
   color: var(--text-inverse);
   border: none;
-  padding: 12px 24px;
+  padding: 12px 16px;
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
@@ -2947,18 +2947,7 @@ select.input-field {
   background: var(--bg-main);
 }
 
-.select-sleek {
-  background: var(--bg-sidebar);
-  font-family: inherit;
-  font-size: 0.9rem;
-  color: var(--text-primary);
-  outline: none;
-}
-
-.select-sleek:focus {
-  border-color: var(--color-primary);
-  background: var(--bg-main);
-}
+/* select-sleek styles consolidated above */
 
 /* Style native select options */
 select option {

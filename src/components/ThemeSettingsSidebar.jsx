@@ -102,7 +102,8 @@ const ThemeSettingsSidebar = () => {
                 { name: 'Forest', hex: '#4F7D4F' },
                 { name: 'Ocean', hex: '#4F6FAE' },
                 { name: 'Amethyst', hex: '#7953C2' },
-                { name: 'Sunflower', hex: '#E4C938' }
+                { name: 'Sunflower', hex: '#E4C938' },
+                { name: 'Hello', hex: '#CC3D87'}
               ].map(preset => (
                 <div 
                   key={preset.name}
@@ -190,7 +191,7 @@ const ThemeSettingsSidebar = () => {
               Reset Defaults
             </button>
             <button 
-              style={{ flex: 1, padding: '10px', backgroundColor: 'var(--color-primary)', color: 'var(--text-inverse)', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+              className='btn-save'
               onClick={onClose}
             >
               Done

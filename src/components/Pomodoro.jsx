@@ -467,7 +467,7 @@ const Pomodoro = () => {
             <h1>Pomodoro</h1>
             <p>Stay focused, take breaks</p>
           </div>
-          <button className="btn-customize-theme" onClick={() => dispatch(togglePomodoroSettings(true))}>
+          <button className="btn-save-settings-header" onClick={() => dispatch(togglePomodoroSettings(true))}>
             <IoMdSettings /> Settings
           </button>
         </div>

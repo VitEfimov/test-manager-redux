@@ -6,9 +6,11 @@ import dayjs from 'dayjs';
 import ReactDOM from 'react-dom';
 import { addMultipleTasks } from '../features/taskSlice';
 import TiptapEditor from './TiptapEditor';
+import { useTaskRepeat } from '../custom-hooks/useTaskRepeat';
 
 const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const dispatch = useDispatch();
+  const { generateRepeatingTasks } = useTaskRepeat();
   const theme = useSelector(state => state.themeReducer);
   const timeFormat = theme.timeFormat || '12h';
   const [formData, setFormData] = useState({
@@ -20,7 +22,8 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
     descriptionText: task.description?.text || '',
     descriptionImg: task.description?.img || '',
     descriptionUrl: task.description?.url || '',
-    repeat: 'None'
+    repeat: 'None',
+    repeatEndDate: ''
   });
 
   useEffect(() => {
@@ -75,39 +78,6 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
       },
     };
     dispatch(updateTask(updatedTask));
-
-    if (formData.repeat && formData.repeat !== 'None') {
-        const tasksToGenerate = [];
-        const endDate = dayjs(formData.completionDate || dayjs()).add(30, 'day');
-        let currentIterDate = dayjs(formData.completionDate || dayjs());
-        
-        while (true) {
-            currentIterDate = formData.repeat === 'Daily' ? currentIterDate.add(1, 'day') : currentIterDate.add(1, 'week');
-            if (currentIterDate.isAfter(endDate)) break;
-            
-            const newTaskId = new Date().getTime().toString() + Math.random().toString(36).substr(2, 9);
-            tasksToGenerate.push({
-                id: newTaskId,
-                boardId: task.boardId || 'main',
-                taskname: formData.name,
-                priority: formData.priority,
-                completed: false,
-                completionDate: currentIterDate.toISOString(),
-                time: formData.time,
-                description: {
-                    text: formData.descriptionText,
-                    img: formData.descriptionImg,
-                    url: formData.descriptionUrl,
-                },
-                lastUpdatedDate: new Date().toISOString()
-            });
-        }
-
-        if (tasksToGenerate.length > 0) {
-            dispatch(addMultipleTasks({ tasks: tasksToGenerate }));
-            alert(`Generated ${tasksToGenerate.length} recurring tasks!`);
-        }
-    }
 
     setTaskName(formData.name);
     setTaskPriority(formData.priority);
@@ -237,10 +207,54 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
                   <option value="None">None</option>
                   <option value="Daily">Daily</option>
                   <option value="Weekly">Weekly</option>
+                  <option value="Monthly">Monthly</option>
                 </select>
               </div>
             </div>
           </div>
+
+          {formData.repeat && formData.repeat !== 'None' && (
+            <div style={{ padding: '12px', background: 'var(--bg-sidebar)', borderRadius: '8px', margin: '0 0 16px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>REPEAT CONFIGURATION</div>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', width: '70px' }}>Start Date:</span>
+                    <input 
+                        type="date" 
+                        className="input-field" 
+                        style={{flex: 1, backgroundColor: 'var(--surface-container)', border: '1px solid var(--border-color)'}} 
+                        value={formData.repeatStartDate || (formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : '')} 
+                        onChange={(e) => setFormData(prev => ({...prev, repeatStartDate: e.target.value}))}
+                    />
+                </div>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', width: '70px' }}>End Date:</span>
+                    <input 
+                        type="date" 
+                        className="input-field" 
+                        style={{flex: 1, backgroundColor: 'var(--surface-container)'}} 
+                        value={formData.repeatEndDate || ''}
+                        onChange={(e) => setFormData(prev => ({...prev, repeatEndDate: e.target.value}))}
+                    />
+                </div>
+                <button 
+                    type="button"
+                    className="btn-save" 
+                    style={{marginTop: '5px', width: '100%', justifyContent: 'center'}}
+                    onClick={() => {
+                        const success = generateRepeatingTasks(task, formData, {
+                            frequency: formData.repeat,
+                            startDate: formData.repeatStartDate || formData.completionDate || new Date().toISOString(),
+                            endDate: formData.repeatEndDate
+                        });
+                        if (success) {
+                            setFormData(prev => ({...prev, repeat: 'None', repeatEndDate: '', repeatStartDate: ''}));
+                        }
+                    }}
+                >
+                    Generate Tasks
+                </button>
+            </div>
+          )}
 
           <div className="form-row">
             <div className="form-group half">

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { addMultipleTasks } from '../features/taskSlice';
+import { useTaskRepeat } from '../custom-hooks/useTaskRepeat';
 
 const DetailPanel = ({ task, onClose, onSave, onDelete }) => {
     const dispatch = useDispatch();
+    const { generateRepeatingTasks } = useTaskRepeat();
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
@@ -15,6 +17,7 @@ const DetailPanel = ({ task, onClose, onSave, onDelete }) => {
                 priority: task.priority || '',
                 time: task.time || '',
                 repeat: 'None',
+                repeatEndDate: '',
                 descriptionText: task.description?.text || ''
             });
         }
@@ -53,40 +56,6 @@ const DetailPanel = ({ task, onClose, onSave, onDelete }) => {
             }
         };
         if (onSave) onSave(updatedTask);
-
-        if (newData.repeat && newData.repeat !== 'None') {
-            const tasksToGenerate = [];
-            const endDate = dayjs(newData.completionDate || dayjs()).add(6, 'month');
-            let currentIterDate = dayjs(newData.completionDate || dayjs());
-            
-            while (true) {
-                currentIterDate = newData.repeat === 'Daily' ? currentIterDate.add(1, 'day') : currentIterDate.add(1, 'week');
-                if (currentIterDate.isAfter(endDate)) break;
-                
-                const newTaskId = new Date().getTime().toString() + Math.random().toString(36).substr(2, 9);
-                tasksToGenerate.push({
-                    id: newTaskId,
-                    boardId: task.boardId || 'main',
-                    taskname: newData.name,
-                    priority: newData.priority === 'None' ? '' : newData.priority,
-                    completed: false,
-                    completionDate: currentIterDate.toISOString(),
-                    time: newData.time,
-                    description: {
-                        ...task.description,
-                        text: newData.descriptionText
-                    },
-                    lastUpdatedDate: new Date().toISOString()
-                });
-            }
-
-            if (tasksToGenerate.length > 0) {
-                dispatch(addMultipleTasks({ tasks: tasksToGenerate }));
-                alert(`Generated ${tasksToGenerate.length} recurring tasks!`);
-                // Reset repeat so it doesn't fire again
-                setFormData(prev => ({ ...prev, repeat: 'None' }));
-            }
-        }
     };
 
     const handleChangeAndSave = (field, value) => {
@@ -185,8 +154,53 @@ const DetailPanel = ({ task, onClose, onSave, onDelete }) => {
                         <option value="None">None</option>
                         <option value="Daily">Daily</option>
                         <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
                     </select>
                 </div>
+
+                {formData.repeat && formData.repeat !== 'None' && (
+                    <div style={{ padding: '12px', background: 'var(--bg-main-priority, var(--bg-main))', borderRadius: '8px', margin: '0 0 16px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>REPEAT CONFIGURATION</div>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', width: '70px' }}>Start Date:</span>
+                            <input 
+                                type="date" 
+                                className="detail-input-date" 
+                                style={{flex: 1, backgroundColor: 'var(--surface-container)', border: '1px solid var(--border-color)'}} 
+                                value={formData.repeatStartDate || (formData.completionDate ? dayjs(formData.completionDate).format('YYYY-MM-DD') : '')} 
+                                onChange={(e) => setFormData(prev => ({...prev, repeatStartDate: e.target.value}))}
+                            />
+                        </div>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', width: '70px' }}>End Date:</span>
+                            <input 
+                                type="date" 
+                                className="detail-input-date" 
+                                style={{flex: 1, backgroundColor: 'var(--surface-container)', border: '1px solid var(--border-color)'}} 
+                                value={formData.repeatEndDate || ''}
+                                onChange={(e) => setFormData(prev => ({...prev, repeatEndDate: e.target.value}))}
+                            />
+                        </div>
+                        <button 
+                            className="detail-btn edit" 
+                            style={{marginTop: '5px', justifyContent: 'center', background: 'var(--color-primary)', color: 'var(--text-inverse)', border: 'none'}}
+                            onClick={() => {
+                                const success = generateRepeatingTasks(task, formData, {
+                                    frequency: formData.repeat,
+                                    startDate: formData.repeatStartDate || formData.completionDate || new Date().toISOString(),
+                                    endDate: formData.repeatEndDate
+                                });
+                                if (success) {
+                                    handleChangeAndSave('repeat', 'None');
+                                    setFormData(prev => ({...prev, repeatEndDate: '', repeatStartDate: ''}));
+                                }
+                            }}
+                        >
+                            Generate Tasks
+                        </button>
+                    </div>
+                )}
+
                 <div className="detail-divider"></div>
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
                     <div className="detail-section-label">
