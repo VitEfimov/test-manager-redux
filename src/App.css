@@ -1116,9 +1116,13 @@ nav {
   padding: 3.5px 10px 5px 10px;
   cursor: pointer;
   border-left: 3px solid var(--bg-sidebar);
-  transition: background .12s;
+  transition: background .12s, border-left-color .12s;
   min-width: 600px;
   position: relative;
+}
+
+.task-row.has-description {
+  border-left-color: rgb(74, 122, 74);
 }
 
 .task-row::after {
@@ -2077,6 +2081,10 @@ select.input-field {
   outline: none;
   cursor: pointer;
   min-width: 140px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23888%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
 }
 
 .select-sleek:hover {
@@ -2507,7 +2515,7 @@ select.input-field {
 
   .col-headers,
   .task-row {
-    grid-template-columns: 28px 1fr 80px !important;
+    grid-template-columns: 28px 1fr 85px !important;
     align-items: center !important;
     min-width: 100% !important;
   }

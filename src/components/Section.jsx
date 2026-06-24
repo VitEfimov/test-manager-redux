@@ -170,7 +170,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
 
   const renderContent = (provided) => (
     <li
-      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''}`}
+      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''} ${task.description?.text ? 'has-description' : ''}`}
       onClick={(e) => {
         if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.closest('button') === null && e.target.closest('.section__task-priority-select') === null) {
           if (!isMobile) {
@@ -266,9 +266,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
                 )}
               </div>
             )}
-            {task.description?.text && (
-              <div style={{ width: '8px', height: '8px', backgroundColor: '#4a7a4a', borderRadius: '50%', flexShrink: 0, marginLeft: 'auto' }} title="Has description" />
-            )}
+            {/* Description indicator moved to left border via .has-description class */}
           </div>
 
           <div className='section__task-priority col-priority' ref={priorityRef}>
