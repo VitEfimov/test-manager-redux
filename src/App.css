@@ -1,4 +1,4 @@
-﻿
+
 * {
   padding: 0;
   margin: 0;
@@ -1220,6 +1220,7 @@ nav {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  stroke: currentColor;
   /* border-bottom: 1px solid var(--bg-main-priority); */
 }
 
@@ -1986,8 +1987,8 @@ select.input-field {
 }
 
 .section-action-select option {
-  background-color: var(--bg-card, var(--bg-main));
-  color: var(--text-primary, var(--text-primary));
+  background-color: var(--bg-sidebar) !important;
+  color: var(--text-primary) !important;
   border: none;
 }
 
@@ -2527,6 +2528,7 @@ select.input-field {
     grid-template-columns: 28px 1fr max-content 15px !important;
     align-items: center !important;
     min-width: 100% !important;
+    stroke: currentColor
   }
 
   .priority-pills {
