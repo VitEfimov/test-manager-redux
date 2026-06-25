@@ -2997,6 +2997,6 @@ select option {
 /* Mobile browser bottom spacing */
 @media screen and (max-width: 768px) {
   .content {
-    padding-bottom: 80px;
+    padding-bottom: 3px;
   }
 }
