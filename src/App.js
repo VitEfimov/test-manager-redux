@@ -8,9 +8,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 // eslint-disable-next-line no-unused-vars
 import Login from './components/Login';
-import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
-import PomodoroSettingsModal from './components/PomodoroSettingsModal';
-
+// Modals are lazy loaded below
 import React, { Suspense, lazy } from 'react';
 import { themeFromSourceColor, argbFromHex, hexFromArgb } from '@material/material-color-utilities';
 
@@ -19,8 +17,8 @@ const ListOfSections = lazy(() => import('./components/ListOfSections'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Settings = lazy(() => import('./components/Settings'));
 const About = lazy(() => import('./components/About'));
-
-
+const ThemeSettingsSidebar = lazy(() => import('./components/ThemeSettingsSidebar'));
+const PomodoroSettingsModal = lazy(() => import('./components/PomodoroSettingsModal'));
 function App() {
 
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -239,8 +237,10 @@ function App() {
           </Suspense>
         </div>
       </div>
-      <ThemeSettingsSidebar />
-      <PomodoroSettingsModal />
+      <Suspense fallback={null}>
+        <ThemeSettingsSidebar />
+        <PomodoroSettingsModal />
+      </Suspense>
     </div>
   );
 }

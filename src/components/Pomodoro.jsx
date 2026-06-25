@@ -362,8 +362,9 @@ const Pomodoro = () => {
           clearInterval(intervalRef.current);
           setLocalIsActive(false);
           dispatch(pauseTimer());
-          showNotification();
-          handlePeriodEnd();
+          handlePeriodEnd().then((audioPlayed) => {
+            showNotification(audioPlayed);
+          });
           return 0;
         }
         dispatch(updateTime(newTime));
@@ -392,34 +393,51 @@ const Pomodoro = () => {
   };
       
   const handlePeriodEnd = () => {
-    if (localIsBreak) {
-      dispatch(completeBreakInterval());
-      if (pomodoro.breakSound !== 'none') {
-        try { 
-          if (breakAudioRef.current) {
-            breakAudioRef.current.currentTime = 0;
-            breakAudioRef.current.play().catch(e => console.warn('Audio play failed:', e));
+    return new Promise((resolve) => {
+      let audioPromise = Promise.resolve(false);
+
+      const playAudio = (audioRef) => {
+        if (!audioRef.current) return Promise.resolve(false);
+        try {
+          audioRef.current.currentTime = 0;
+          const p = audioRef.current.play();
+          if (p !== undefined) {
+            return p.then(() => true).catch(e => {
+              console.warn('Audio play failed:', e);
+              return false;
+            });
           }
-        } catch(e) { console.warn('Audio play failed:', e); }
+          return Promise.resolve(true);
+        } catch (e) {
+          console.warn('Audio play failed:', e);
+          return Promise.resolve(false);
+        }
+      };
+
+      if (localIsBreak) {
+        dispatch(completeBreakInterval());
+        if (pomodoro.breakSound !== 'none') {
+          audioPromise = playAudio(breakAudioRef);
+        }
+        if (localCompletedIntervals >= staticIntervalCountRef.current) {
+          // Delay alert slightly so audio and notification can fire
+          setTimeout(() => {
+            alert("All intervals completed!");
+            dispatch(resetTimer());
+          }, 500);
+        }
+      } else {
+        dispatch(completeWorkInterval());
+        if (pomodoro.workSound !== 'none') {
+          audioPromise = playAudio(workAudioRef);
+        }
       }
-      if (localCompletedIntervals >= staticIntervalCountRef.current) {
-        alert("All intervals completed!");
-        dispatch(resetTimer());
-      }
-    } else {
-      dispatch(completeWorkInterval());
-      if (pomodoro.workSound !== 'none') {
-        try { 
-          if (workAudioRef.current) {
-            workAudioRef.current.currentTime = 0;
-            workAudioRef.current.play().catch(e => console.warn('Audio play failed:', e));
-          }
-        } catch(e) { console.warn('Audio play failed:', e); }
-      }
-    }
+
+      audioPromise.then(resolve);
+    });
   };
 
-  const showNotification = () => {
+  const showNotification = (audioPlayed) => {
     try {
       if ('Notification' in window && window.Notification && Notification.permission === 'granted') {
         const title = 'Pomodoro Timer';
@@ -427,7 +445,7 @@ const Pomodoro = () => {
           body: localIsBreak ? 'Break over! Time to work!' : 'Work done! Take a break!',
           icon: '/task_manager_icon.png',
           vibrate: [200, 100, 200, 100, 200, 100, 200],
-          silent: true,
+          silent: audioPlayed,
           requireInteraction: true
         };
         if (navigator.serviceWorker) {
