@@ -2993,3 +2993,10 @@ select option {
 .hex-color-input:focus {
   border-color: var(--color-primary);
 }
+
+/* Mobile browser bottom spacing */
+@media screen and (max-width: 768px) {
+  .content {
+    padding-bottom: 80px;
+  }
+}

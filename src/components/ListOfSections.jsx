@@ -610,6 +610,7 @@ const ListOfSections = ({ sidebarView }) => {
 
 
                 </section>
+                
             </div>
             
             {/* Desktop Detail Panel */}
