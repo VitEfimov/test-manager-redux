@@ -71,7 +71,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
 
         {/* ACCOUNT */}
         <div className="settings-group">
-          <h4 className="settings-group-title">User information</h4>
+          <h4 className="settings-group-title">Account</h4>
           <div className="settings-card">
             <div className="setting-row user-profile-row">
                 <div className="setting-label">
@@ -83,7 +83,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                </div>
             </div>
             <div className="setting-row settings-btn-group">
-                <button className="btn-log-out-settings" onClick={handleDeleteAllData}>Clear Data</button>
+                <button className="btn-log-out-settings" onClick={handleDeleteAllData}>Delete All Data</button>
             </div>
           </div>
         </div>
@@ -159,23 +159,23 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
           <div className="settings-card">
             <div className="setting-row setting-row-no-border">
               <div className="setting-label">
-                <span>Due date format</span>
+                <span>Date format</span>
               </div>
               <div className="setting-control">
                 <select className="select-sleek" value={newDateFormat} onChange={(e) => setNewDateFormat(e.target.value)}>
-                  <option value="full">Full (MMMM D, YYYY)</option>
-                  <option value="short">Short (MMM D)</option>
+                  <option value="full">Full</option>
+                  <option value="short">Short</option>
                 </select>
               </div>
             </div>
             <div className="setting-row setting-row-no-border">
               <div className="setting-label">
-                <span>Task name wrap</span>
+                <span>Text wrapping</span>
               </div>
               <div className="setting-control">
                 <select className="select-sleek" value={newTaskNameWrap} onChange={(e) => setNewTaskNameWrap(e.target.value)}>
-                  <option value="ellipsis">Ellipsis</option>
-                  <option value="wrap">Wrap (Full)</option>
+                  <option value="ellipsis">Short</option>
+                  <option value="wrap">Full</option>
                 </select>
               </div>
             </div>
@@ -188,7 +188,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                   <option value="small">Small</option>
                   <option value="normal">Normal</option>
                   <option value="big">Big</option>
-                  <option value="device">Device Default</option>
+                  <option value="device">Default</option>
                 </select>
               </div>
             </div>
@@ -208,7 +208,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             </div> */}
             <div className="setting-row setting-row-no-border">
               <div className="setting-label">
-                <span>Task display limit</span>
+                <span>List limit</span>
               </div>
               <div className="setting-control">
                 <input type="number" min="5" max="50" className="num-input-large" value={newTaskLimit} onChange={(e) => setNewTaskLimit(e.target.value)} />

@@ -116,7 +116,7 @@ const Dashboard = () => {
             </div>
             <div className="progress-info">
               <h3>{completionPercentage === 100 ? 'Perfect!' : completionPercentage >= 50 ? 'Great progress!' : 'Keep going!'}</h3>
-              <p>{completedTasks} of {totalTasks} tasks<br/>completed today</p>
+              <p>{completedTasks} of {totalTasks} tasks<br/> completed today</p>
               <div className="tags">
                 {missedTasks.length > 0 && <span className="tag missed">{missedTasks.length} missed</span>}
                 {todayTasks.length > 0 && <span className="tag today">{todayTasks.length} today</span>}
@@ -132,8 +132,8 @@ const Dashboard = () => {
           <div className="cat-card border-green">
             <div className="cat-icon color-green">📚</div>
             <div className="cat-info">
-              <span className="cat-title">Total tasks</span>
-              <span className="cat-sub">all tasks</span>
+              <span className="cat-title">All tasks</span>
+              <span className="cat-sub">total tasks</span>
             </div>
             <span className="cat-num color-green">{totalTasks}</span>
           </div>
@@ -186,8 +186,8 @@ const Dashboard = () => {
           <div className="cat-card border-brown">
             <div className="cat-icon color-brown">⭐</div>
             <div className="cat-info">
-              <span className="cat-title">Later</span>
-              <span className="cat-sub">future</span>
+              <span className="cat-title">Upcoming</span>
+              <span className="cat-sub">later</span>
             </div>
             <span className="cat-num color-brown">{laterTasks.length}</span>
           </div>
@@ -195,8 +195,8 @@ const Dashboard = () => {
           <div className="cat-card border-red">
             <div className="cat-icon color-red">❗</div>
             <div className="cat-info">
-              <span className="cat-title">Missed</span>
-              <span className="cat-sub">overdue</span>
+              <span className="cat-title">Overdue</span>
+              <span className="cat-sub">missed</span>
             </div>
             <span className="cat-num color-red">{missedTasks.length}</span>
           </div>

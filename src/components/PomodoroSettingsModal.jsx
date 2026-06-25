@@ -111,7 +111,7 @@ const PomodoroSettingsModal = () => {
 
         <div className="theme-settings-body">
           <div className="theme-color-row">
-            <label>Work interval</label>
+            <label>Work duration</label>
             <div className="color-control flex-inputs sleek-inputs" style={{display: 'flex', gap: '5px', alignItems: 'center'}}>
               <input type="number" min="0" max="120" value={newWorkMin} onChange={handleSetWorkMin} className="num-input" style={{width: '50px'}}/> <span>min</span>
               <input type="number" min="0" max="59" value={newWorkSec} onChange={handleSetWorkSec} className="num-input" style={{width: '50px'}}/> <span>sec</span>
@@ -119,7 +119,7 @@ const PomodoroSettingsModal = () => {
           </div>
           
           <div className="theme-color-row">
-            <label>Break interval</label>
+            <label>Break duration</label>
             <div className="color-control flex-inputs sleek-inputs" style={{display: 'flex', gap: '5px', alignItems: 'center'}}>
               <input type="number" min="0" max="120" value={newBreakMin} onChange={handleSetBreakMin} className="num-input" style={{width: '50px'}}/> <span>min</span>
               <input type="number" min="0" max="59" value={newBreakSec} onChange={handleSetBreakSec} className="num-input" style={{width: '50px'}}/> <span>sec</span>
@@ -127,14 +127,14 @@ const PomodoroSettingsModal = () => {
           </div>
           
           <div className="theme-color-row">
-            <label>Interval count</label>
+            <label>Sessions</label>
             <div className="color-control">
                <input type="number" min="1" max="10" value={newIntervalCount} onChange={handleSetIntervalCount} className="num-input-large" style={{width: '60px'}}/>
             </div>
           </div>
 
           <div className="theme-color-row">
-            <label>Work over sound</label>
+            <label>Work complete sound</label>
             <div className="color-control">
               <select className="select-sleek" value={workSoundType} onChange={(e) => { setWorkSoundType(e.target.value); if (e.target.value !== 'custom') setNewWorkSound(e.target.value); }}>
                 <option value="default">Default</option>
@@ -147,7 +147,7 @@ const PomodoroSettingsModal = () => {
           </div>
           
           <div className="theme-color-row">
-            <label>Break over sound</label>
+            <label>Break complete sound</label>
             <div className="color-control">
                <select className="select-sleek" value={breakSoundType} onChange={(e) => { setBreakSoundType(e.target.value); if (e.target.value !== 'custom') setNewBreakSound(e.target.value); }}>
                 <option value="default">Default</option>
@@ -165,7 +165,7 @@ const PomodoroSettingsModal = () => {
               <polyline points="17 21 17 13 7 13 7 21"></polyline>
               <polyline points="7 3 7 8 15 8"></polyline>
             </svg>
-            Save changes
+            Save
           </button>
         </div>
       </div>

@@ -443,7 +443,7 @@ const Pomodoro = () => {
         const title = 'Pomodoro Timer';
         const options = {
           body: localIsBreak ? 'Break over! Time to work!' : 'Work done! Take a break!',
-          icon: '/task_manager_icon.png',
+          icon: '/task_manager_icon_opt.png',
           vibrate: [200, 100, 200, 100, 200, 100, 200],
           silent: audioPlayed,
           requireInteraction: true
@@ -540,7 +540,7 @@ const Pomodoro = () => {
                   })}
                 </div>
                 <div className="pomodoro__intervals-text">
-                  {Math.min(localCompletedIntervals + 1, intervalCount)} / {intervalCount} intervals completed
+                  {Math.min(localCompletedIntervals + 1, intervalCount)} / {intervalCount} sessions completed
                 </div>
               </div>
             </div>

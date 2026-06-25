@@ -104,12 +104,12 @@ const ListOfSections = ({ sidebarView }) => {
                 >
                     {isExpanded ? (
                         <>
-                            <span>Show Less</span>
+                            <span>View Less</span>
                             <i className="fa-solid fa-chevron-up"></i>
                         </>
                     ) : (
                         <>
-                            <span>Show All ({tasksList.length})</span>
+                            <span>View All ({tasksList.length})</span>
                             <i className="fa-solid fa-chevron-down"></i>
                         </>
                     )}
@@ -481,7 +481,7 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">On this week</span>
+                                        <span className="section-title today">This week</span>
                                         <select className="section-action-select" value="" onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'complete') handleCompleteSectionTasks(onThisWeekFiltered, 'On this week');
@@ -515,7 +515,7 @@ const ListOfSections = ({ sidebarView }) => {
                             >
                                 <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">On next week</span>
+                                        <span className="section-title today">Next week</span>
                                         <select className="section-action-select" value="" onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'complete') handleCompleteSectionTasks(onNextWeekFiltered, 'On next week');

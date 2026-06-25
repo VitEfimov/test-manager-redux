@@ -14,6 +14,11 @@ const ThemeSettingsSidebar = () => {
   // Swipe down to close functionality
   const [startY, setStartY] = React.useState(null);
   const [currentY, setCurrentY] = React.useState(null);
+  const [localHex, setLocalHex] = React.useState(theme.sourceColor || '#4F7D4F');
+
+  React.useEffect(() => {
+    setLocalHex(theme.sourceColor || '#4F7D4F');
+  }, [theme.sourceColor]);
 
   if (!theme.isSettingsOpen) return null;
 
@@ -86,13 +91,13 @@ const ThemeSettingsSidebar = () => {
         <div 
           className="modal-header"
         >
-          <h2>Theme Settings</h2>
+          <h2>Appearance</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
 
         <div className="theme-settings-body">
           <div className="theme-color-section" style={{ padding: '0 20px', marginTop: '20px' }}>
-            <h3 style={{ marginBottom: '15px' }}>Material You Theme</h3>
+            <h3 style={{ marginBottom: '15px' }}>Theme</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '15px' }}>
               Choose a source color and we'll generate a complete, accessible theme palette for you automatically.
             </p>
@@ -138,14 +143,25 @@ const ThemeSettingsSidebar = () => {
                 }}
                 style={{ cursor: 'pointer', width: '50px', height: '50px', padding: '0', border: 'none', borderRadius: '8px', background: 'transparent' }}
               />
-              <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', backgroundColor: 'var(--bg-main)', padding: '5px 10px', borderRadius: '4px' }}>
-                {(theme.sourceColor || '#4F7D4F').toUpperCase()}
-              </span>
+              <input
+                type="text"
+                className="hex-color-input"
+                value={localHex.toUpperCase()}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setLocalHex(val);
+                  if (/^#[0-9A-Fa-f]{6}$/i.test(val)) {
+                    dispatch(setSourceColor(val));
+                    dispatch(setPresetTheme('default'));
+                  }
+                }}
+                maxLength={7}
+              />
             </div>
           </div>
 
           <div className="theme-upload-group">
-            <label>Header banner image</label>
+            <label>Custom banner</label>
             <div className="upload-box" onClick={() => document.getElementById('userPictureUpload').click()}>
               <input 
                 id="userPictureUpload"
@@ -167,13 +183,13 @@ const ThemeSettingsSidebar = () => {
                   document.getElementById('userPictureUpload').value = '';
                 }}
               >
-                Remove Image
+                Remove banner
               </button>
             )}
           </div>
 
           <div className="theme-upload-group" style={{ marginTop: '15px' }}>
-            <label>Header Image Fit</label>
+            <label>Banner fit</label>
             <select 
               className="select-sleek full-width"
               value={theme.headerBackgroundFit || 'cover'} 

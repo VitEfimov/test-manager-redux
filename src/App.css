@@ -2974,3 +2974,22 @@ select option {
   background-color: var(--surface-container);
   color: var(--text-primary);
 }
+
+/* Hex Color Input Styles */
+.hex-color-input {
+  font-family: monospace;
+  font-size: 1.1rem;
+  background-color: var(--bg-main);
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 95px;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hex-color-input:focus {
+  border-color: var(--color-primary);
+}

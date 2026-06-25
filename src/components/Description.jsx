@@ -163,7 +163,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
 
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
-            <label>TASK NAME</label>
+            <label>TASK TITLE</label>
             <textarea
               ref={textAreaRef}
               className="input-field task-name-input"
@@ -306,7 +306,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
               🗑️ Delete
             </button>
             <button type="submit" className="btn-save">
-              Save Task
+              Save
             </button>
           </div>
         </form>

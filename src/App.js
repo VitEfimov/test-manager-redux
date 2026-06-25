@@ -102,7 +102,11 @@ function App() {
     };
 
     if (theme.sourceColor) {
-      const matTheme = themeFromSourceColor(argbFromHex(theme.sourceColor));
+      let colorToUse = theme.sourceColor;
+      if (!/^#[0-9A-Fa-f]{6}$/i.test(colorToUse)) {
+        colorToUse = '#4F7D4F'; // fallback if corrupted
+      }
+      const matTheme = themeFromSourceColor(argbFromHex(colorToUse));
       const isDark = userTheme === 'dark' || userTheme === 'contrast' || (userTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
       const scheme = isDark ? matTheme.schemes.dark : matTheme.schemes.light;
       
@@ -148,8 +152,8 @@ function App() {
 
     // Font size
     let fontCalc = 'calc(10px + 1vmin)';
-    if (theme.fontSize === 'small') fontCalc = 'calc(7px + 1vmin)';
-    if (theme.fontSize === 'big') fontCalc = 'calc(15px + 1vmin)';
+    if (theme.fontSize === 'small') fontCalc = 'calc(9px + 1vmin)';
+    if (theme.fontSize === 'big') fontCalc = 'calc(16px + 1vmin)';
     if (theme.fontSize === 'device') fontCalc = 'calc(1rem + 0.5vmin)';
     root.style.setProperty('font-size', fontCalc);
 
