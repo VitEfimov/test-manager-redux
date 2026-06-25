@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
-import { addMultipleTasks } from '../features/taskSlice';
+
 import { useTaskRepeat } from '../custom-hooks/useTaskRepeat';
 
 const DetailPanel = ({ task, onClose, onSave, onDelete }) => {
+    // eslint-disable-next-line no-unused-vars
     const dispatch = useDispatch();
     const { generateRepeatingTasks } = useTaskRepeat();
     const [formData, setFormData] = useState({});

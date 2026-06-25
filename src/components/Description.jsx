@@ -4,7 +4,7 @@ import { updateTask, deleteTask } from '../features/taskSlice';
 import { useClickOutside } from '../custom-hooks/ClickOut';
 import dayjs from 'dayjs';
 import ReactDOM from 'react-dom';
-import { addMultipleTasks } from '../features/taskSlice';
+
 import TiptapEditor from './TiptapEditor';
 import { useTaskRepeat } from '../custom-hooks/useTaskRepeat';
 
@@ -12,6 +12,7 @@ const Description = ({ task, setModal, setTaskName, setTaskPriority }) => {
   const dispatch = useDispatch();
   const { generateRepeatingTasks } = useTaskRepeat();
   const theme = useSelector(state => state.themeReducer);
+  // eslint-disable-next-line no-unused-vars
   const timeFormat = theme.timeFormat || '12h';
   const [formData, setFormData] = useState({
     name: task.taskname,

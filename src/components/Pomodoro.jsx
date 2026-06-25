@@ -229,7 +229,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FaPlay, FaPause } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import { IoMdSettings } from "react-icons/io";
-import useSound from 'use-sound';
 import endSound from '../assets/audio/end_sound.ogg';
 import startSound from '../assets/audio/start_sound.mp3';
 import chimeSound from '../assets/audio/chime.wav';
@@ -278,7 +277,7 @@ const Pomodoro = () => {
   const [intervalCountState, setIntervalCountState] = useState(typeof pomodoro.intervalCount === 'object' ? pomodoro.intervalCount.count : 5);
   const [workSoundType, setWorkSoundType] = useState(pomodoro.workSound || 'default');
   const [breakSoundType, setBreakSoundType] = useState(pomodoro.breakSound || 'default');
-
+  // eslint-disable-next-line no-unused-vars
   const handleSaveSettings = () => {
     dispatch(setTime(workMin * 60 + workSec));
     dispatch(setBreakInterval(breakMin * 60 + breakSec));
@@ -301,6 +300,8 @@ const Pomodoro = () => {
   const intervalRef = useRef(null);
   const staticIntervalCountRef = useRef(null);
   const targetEndTimeRef = useRef(null);
+  const workAudioRef = useRef(null);
+  const breakAudioRef = useRef(null);
 
   useEffect(() => {
     if (staticIntervalCountRef.current === null) {
@@ -308,6 +309,7 @@ const Pomodoro = () => {
         ? pomodoro.intervalCount.count
         : 5;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -330,8 +332,6 @@ const Pomodoro = () => {
     ? (SOUND_MAP[pomodoro.breakSound] || pomodoro.breakSound)
     : startSound;
 
-  const [playEnd] = useSound(workSoundSrc);
-  const [playStart] = useSound(breakSoundSrc);
 
   useEffect(() => {
     setLocalTime(pomodoro.time);
@@ -346,6 +346,10 @@ const Pomodoro = () => {
 
     setLocalIsActive(true);
     dispatch(startTimer());
+    
+    // Attempt to preload audio on user interaction to satisfy browser autoplay policies
+    if (workAudioRef.current) workAudioRef.current.load();
+    if (breakAudioRef.current) breakAudioRef.current.load();
 
     targetEndTimeRef.current = Date.now() + (localTime * 1000);
 
@@ -392,9 +396,10 @@ const Pomodoro = () => {
       dispatch(completeBreakInterval());
       if (pomodoro.breakSound !== 'none') {
         try { 
-          playStart(); 
-          const audio = new Audio(breakSoundSrc);
-          audio.play().catch(e => console.warn('Fallback audio failed:', e));
+          if (breakAudioRef.current) {
+            breakAudioRef.current.currentTime = 0;
+            breakAudioRef.current.play().catch(e => console.warn('Audio play failed:', e));
+          }
         } catch(e) { console.warn('Audio play failed:', e); }
       }
       if (localCompletedIntervals >= staticIntervalCountRef.current) {
@@ -405,9 +410,10 @@ const Pomodoro = () => {
       dispatch(completeWorkInterval());
       if (pomodoro.workSound !== 'none') {
         try { 
-          playEnd(); 
-          const audio = new Audio(workSoundSrc);
-          audio.play().catch(e => console.warn('Fallback audio failed:', e));
+          if (workAudioRef.current) {
+            workAudioRef.current.currentTime = 0;
+            workAudioRef.current.play().catch(e => console.warn('Audio play failed:', e));
+          }
         } catch(e) { console.warn('Audio play failed:', e); }
       }
     }
@@ -461,6 +467,8 @@ const Pomodoro = () => {
 
   return (
     <section className="section pomodoro-section">
+      <audio ref={workAudioRef} src={workSoundSrc} preload="auto" />
+      <audio ref={breakAudioRef} src={breakSoundSrc} preload="auto" />
       <div className='pomodoro__container'>
         <div className="pomodoro__header">
           <div className="pomodoro__header-text">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Section from './Section';
 import AddTask from './AddTask';
@@ -21,9 +21,7 @@ const ListOfSections = ({ sidebarView }) => {
     const boards = useSelector(state => state.userReducer.boards) || [{ id: 'main', name: 'Main' }];
     const activeBoardId = useSelector(state => state.userReducer.activeBoardId);
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
-    const [missedTasks, setMissedTasks] = useState(false);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
-    const [desktopModalTaskId, setDesktopModalTaskId] = useState(null);
     const [expandedSections, setExpandedSections] = useState({});
     const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
 
@@ -146,16 +144,6 @@ const ListOfSections = ({ sidebarView }) => {
     // }, []);
 
 
-    const handleMissedTasks = () => {
-        if (sortedTasks.filter(task => dayjs(task.completionDate).isBefore(dayjs(), 'day') && !task.completed).length > 0) {
-            console.log('missed tasks')
-            setMissedTasks(true);
-        } else {
-            setMissedTasks(false);
-
-        }
-    };
-
     const [currentTime, setCurrentTime] = useState(Date.now());
 
     useEffect(() => {
@@ -167,13 +155,6 @@ const ListOfSections = ({ sidebarView }) => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     }, []);
-
-    useEffect(() => {
-        handleMissedTasks();
-    }, [tasks]);
-
-
-
     const sortedTasks = useMemo(() => {
         return [...tasks]
             .filter(task => (task.boardId || 'main') === activeBoardId)
@@ -211,6 +192,7 @@ const ListOfSections = ({ sidebarView }) => {
             ),
             completedFiltered: sortedTasks.filter(task => task.completed)
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sortedTasks, currentTime]);
 
     const onDragEnd = (result) => {

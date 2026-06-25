@@ -35,7 +35,13 @@
     "react-scripts": "5.0.1",
     "test-manager-redux": "file:",
     "use-sound": "^4.0.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "workbox-core": "^7.4.1",
+    "workbox-expiration": "^7.4.1",
+    "workbox-precaching": "^7.4.1",
+    "workbox-routing": "^7.4.1",
+    "workbox-strategies": "^7.4.1",
+    "workbox-webpack-plugin": "^7.4.1"
   },
   "scripts": {
     "start:react": "react-app-rewired start",
@@ -65,6 +71,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.9",
     "eslint-plugin-unused-imports": "^4.4.1",

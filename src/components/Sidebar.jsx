@@ -5,6 +5,7 @@ import { clearTasks } from '../features/taskSlice';
 import dayjs from 'dayjs';
 import { FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
+// eslint-disable-next-line no-unused-vars
 import { IoTimerOutline, IoInformationCircle, IoLogOutSharp } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import '../styles/Sidebar.css';

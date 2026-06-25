@@ -1,19 +1,18 @@
 import React from 'react'
-import { MdDelete } from "react-icons/md";
+import { MdMoreVert } from "react-icons/md";
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import { FcAcceptDatabase, FcDatabase } from "react-icons/fc";
 import { useClickOutside } from '../custom-hooks/ClickOut';
 
 import { Draggable } from '@hello-pangea/dnd';
 
 
 import { GrDrag } from "react-icons/gr";
-import { updateTask, deleteTask } from '../features/taskSlice';
+import { updateTask } from '../features/taskSlice';
 import DatePicker from './DatePicker';
-import Description from './Description';
+
 import '../styles/Section.css';
 
 
@@ -85,13 +84,6 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
     setTaskPrioritySelect(false);
   };
 
-  const handleDeleteTask = () => {
-    if (window.confirm(`Are you sure you want to delete the task "${task.taskname}"?`)) {
-      dispatch(deleteTask({
-        taskId: task.id
-      }));
-    }
-  };
 
   const [editingTaskName, setEditingTaskName] = useState(false);
 
@@ -126,13 +118,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
     }
   };
 
-  const handleDatePicker = () => {
-    if (window.innerWidth <= 768) {
-      setModal(true);
-      return;
-    }
-    setShowDatePicker(prev => !prev);
-  }
+
 
   const handleDateSelection = (date) => {
     const isoDate = dayjs(date).toISOString();
@@ -144,10 +130,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
   };
 
   const [taskPrioritySelect, setTaskPrioritySelect] = useState(false)
-  const [modal, setModal] = useState(false)
-  const handleModal = () => {
-    setModal(!modal);
-  }
+
 
   const priorityRef = useRef(null)
 
@@ -155,18 +138,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
 
 
 
-  const getPriorityBgColor = (priority) => {
-    switch (priority?.toLowerCase()) {
-      case 'high':
-        return 'rgba(241, 81, 81, 0.3)';
-      case 'medium':
-        return 'rgba(218, 143, 3, 0.3)';
-      case 'low':
-        return 'rgba(71, 133, 71, 0.3)';
-      default:
-        return 'transparent';
-    }
-  };
+
 
   const renderContent = (provided) => (
     <li
@@ -236,7 +208,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
           <div className="task-due col-due task-due-btn" onClick={(e) => {
             e.stopPropagation();
             if (setSelectedTaskId) setSelectedTaskId(task.id);
-          }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '15px' }}>
+          }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             {showDatePicker && !task.completed && !isMobile ? (
               <DatePicker handleDateSelection={handleDateSelection} setShowDatePicker={setShowDatePicker} currentDate={selectedDate} />
             ) : (
@@ -282,6 +254,12 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
               </span>
             )}
           </div>
+
+          {isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)' }}>
+              <MdMoreVert size={20} />
+            </div>
+          )}
         </>
     </li>
   );

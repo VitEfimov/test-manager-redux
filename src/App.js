@@ -2,10 +2,11 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTasks, loadGuestTasks } from './features/taskSlice';
-import { checkAuth, updateShowWeather } from './features/userSlice';
+import { checkAuth } from './features/userSlice';
 import { resetTheme } from './features/themeSlice';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+// eslint-disable-next-line no-unused-vars
 import Login from './components/Login';
 import ThemeSettingsSidebar from './components/ThemeSettingsSidebar';
 import PomodoroSettingsModal from './components/PomodoroSettingsModal';
@@ -30,9 +31,12 @@ function App() {
   const [sidebarView, setSidebarView] = useState(true);
 
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const { isAuthenticated, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer);
+  // eslint-disable-next-line no-unused-vars
   const tasks = useSelector((state) => state.taskReducer.tasks);
+  // eslint-disable-next-line no-unused-vars
   const boards = useSelector((state) => state.userReducer.boards);
 
 
@@ -169,12 +173,6 @@ function App() {
     switch (currentPage) {
       case 'Board':
         return <ListOfSections sidebarView={sidebarView} />;
-      case 'Pomodoro':
-
-        return <Pomodoro isPomodoroActive={isPomodoroActive}
-          setIsPromodoroActive={setIsPromodoroActive}
-          timeRemaining={timeRemaining}
-          setTimeRemaining={setTimeRemaining} />;
 
       case 'Dashboard':
         return <Dashboard />;
@@ -234,7 +232,10 @@ function App() {
         
         <div className="content">
           <Suspense fallback={<div className="global-loader" style={{ height: '100%' }}><div className="spinner"></div></div>}>
-            {renderPage(sidebarView)}
+            {currentPage !== 'Pomodoro' && renderPage(sidebarView)}
+            <div style={{ display: currentPage === 'Pomodoro' ? 'block' : 'none', height: '100%', width: '100%', flex: 1 }}>
+              <Pomodoro />
+            </div>
           </Suspense>
         </div>
       </div>

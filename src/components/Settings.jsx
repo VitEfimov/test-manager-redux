@@ -1,56 +1,27 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBreakInterval, setIntervalCount, setTime, setWorkSound, setBreakSound } from '../features/pomodoroSlice';
 import { clearTasks } from '../features/taskSlice';
 import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
-import { setThemeColor, setFontSize, setColumnWidth, toggleSettingsOpen, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setThemeMode, setPresetTheme } from '../features/themeSlice';
-import InfomationIcon from './InfomationIcon';
+import { setFontSize, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, toggleSettingsOpen } from '../features/themeSlice';
 import '../styles/Settings.css';
 const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
-  const pomodoro = useSelector(state => state.pomodoroReducer.pomodoro);
   const theme = useSelector(state => state.themeReducer);
   const userTheme = useSelector(state => state.userReducer.theme);
   const dateFormat = theme.dateFormat || 'full';
   const taskNameWrap = theme.taskNameWrap || 'ellipsis';
   const timeFormat = theme.timeFormat || '12h';
-  const workMinutes = Math.floor(pomodoro[0].initialTime / 60);
-  const workSeconds = pomodoro[0].initialTime % 60;
-  const breakMinutes = Math.floor(pomodoro[0].breakInterval / 60);
-  const breakSeconds = pomodoro[0].breakInterval % 60;
-  const intervalCount = typeof pomodoro[0].intervalCount === 'object' ? pomodoro[0].intervalCount.count : 5;
-  
-  const [newWorkMin, setNewWorkMin] = useState(workMinutes);
-  const [newWorkSec, setNewWorkSec] = useState(workSeconds);
-  const [newBreakMin, setNewBreakMin] = useState(breakMinutes);
-  const [newBreakSec, setNewBreakSec] = useState(breakSeconds);
-  const [newIntervalCount, setNewIntervalCount] = useState(intervalCount);
 
-  const workSound = pomodoro[0].workSound || 'default';
-  const breakSound = pomodoro[0].breakSound || 'default';
-  const [newWorkSound, setNewWorkSound] = useState(workSound);
-  const [newBreakSound, setNewBreakSound] = useState(breakSound);
-  const predefinedSounds = ['default', 'none', 'chime.wav', 'light ping.wav', 'notification.wav', 'end_sound.ogg', 'start_sound.mp3'];
-  const [workSoundType, setWorkSoundType] = useState(predefinedSounds.includes(workSound) ? workSound : 'custom');
-  const [breakSoundType, setBreakSoundType] = useState(predefinedSounds.includes(breakSound) ? breakSound : 'custom');
-  const [newDateFormat, setNewDateFormat] = useState(dateFormat);
-  const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
+  // eslint-disable-next-line no-unused-vars
   const [newTimeFormat, setNewTimeFormat] = useState(timeFormat);
   const [newFontSize, setNewFontSize] = useState(theme.fontSize || 'normal');
-  const [newUserTheme, setNewUserTheme] = useState(userTheme);
+  // eslint-disable-next-line no-unused-vars
+  const [newUserTheme] = useState(userTheme);
+  const [newDateFormat, setNewDateFormat] = useState(dateFormat);
+  const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
   const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
 
-  const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
-  const handleSetWorkSec = (e) => setNewWorkSec(parseInt(e.target.value) || 0);
-  const handleSetBreakMin = (e) => setNewBreakMin(parseInt(e.target.value) || 0);
-  const handleSetBreakSec = (e) => setNewBreakSec(parseInt(e.target.value) || 0);
-  const handleSetIntervalCount = (e) => {
-    if (parseInt(e.target.value)>10) {
-      alert("10 intervals maximum")
-    } else {
-      setNewIntervalCount(parseInt(e.target.value));
-    }
-  };
+
 
   const handleDeleteAllData = () => {
     if (window.confirm("Are you sure you want to clear all your data? This action cannot be undone.")) {
@@ -63,13 +34,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
 
 
   const handleSave = () => {
-    const totalWorkSeconds = newWorkMin * 60 + newWorkSec;
-    const totalBreakSeconds = newBreakMin * 60 + newBreakSec;
-    dispatch(setTime(totalWorkSeconds))
-    dispatch(setBreakInterval(totalBreakSeconds))
-    dispatch(setIntervalCount(newIntervalCount))
-    dispatch(setWorkSound(newWorkSound));
-    dispatch(setBreakSound(newBreakSound));
     dispatch(setDateFormat(newDateFormat));
     dispatch(setTaskNameWrap(newTaskNameWrap));
     dispatch(setTimeFormat(newTimeFormat));
@@ -80,11 +44,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     setCurrentPage('Board');
   };
 
-  const fields = [
-    { title: 'User information', description: 'Logout of your account' },
-    { title: 'Promodoro', description: 'Customize pomodoro timer intervals' },
-    { title: 'Other', description: 'You can change theme color' }
-  ];
+
 
 
   return (
@@ -100,7 +60,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             <polyline points="17 21 17 13 7 13 7 21"></polyline>
             <polyline points="7 3 7 8 15 8"></polyline>
           </svg>
-          Save changes
+          Save
         </button>
       </div>
 
@@ -238,7 +198,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                 <span>Theme Mode</span>
               </div>
               <div className="setting-control">
-                <select className="select-sleek" value={newUserTheme} onChange={(e) => setNewUserTheme(e.target.value)}>
+                <select className="select-sleek" value={newUserTheme} readOnly>
                   <option value="system">System Default</option>
                   <option value="light">Light Mode</option>
                   <option value="dark">Dark Mode</option>

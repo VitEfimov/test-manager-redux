@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setThemeColor, setSourceColor, toggleSettingsOpen, resetTheme, setUserPicture, setHeaderBackgroundFit, setPresetTheme } from '../features/themeSlice';
+import { setSourceColor, toggleSettingsOpen, resetTheme, setUserPicture, setHeaderBackgroundFit, setPresetTheme } from '../features/themeSlice';
 
 
 

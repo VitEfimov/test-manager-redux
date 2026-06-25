@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask } from '../features/taskSlice';
-import DatePicker from './DatePicker';
 import { useClickOutside } from '../custom-hooks/ClickOut';
 
 
@@ -15,8 +13,6 @@ const AddTask = ({ date }) => {
     const [taskName, setTaskName] = useState('');
     const [taskPriority, setTaskPriority] = useState('');
     const [taskPrioritySelect, setTaskPrioritySelect] = useState(false);
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [datePickerPos, setDatePickerPos] = useState({ top: 0, left: 0 });
     const dueDateRef = useRef(null);
 
     const handleAddTaskForm = () => {
@@ -104,15 +100,6 @@ const AddTask = ({ date }) => {
 
     const addTaskFormRef = useRef(null)
     useClickOutside(addTaskFormRef, () => setAddTaskForm(false))
-    
-    const handleShowDatePicker = () => {
-        if (dueDateRef.current) {
-            const rect = dueDateRef.current.getBoundingClientRect();
-            setDatePickerPos({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX });
-        }
-        setShowDatePicker(true);
-    };
-
     return (
         <div className='add-task' ref={addTaskFormRef}>
             {addTaskForm &&

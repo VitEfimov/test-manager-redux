@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdLightMode, MdDarkMode, MdContrast } from "react-icons/md";
-import { updateUserTheme, updateThemeAsync, toggleSidebar } from '../features/userSlice';
+import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
 import dayjs from 'dayjs';
 import '../styles/Header.css';
 
