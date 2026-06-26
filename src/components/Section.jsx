@@ -18,7 +18,7 @@ import '../styles/Section.css';
 
 
 dayjs.extend(isoWeek);
-const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, setSelectedTaskId }) => {
+const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, setSelectedTaskId, isHighlighted }) => {
 
   const dispatch = useDispatch();
   const [taskName, setTaskName] = useState(task.taskname);
@@ -142,7 +142,8 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
 
   const renderContent = (provided) => (
     <li
-      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''} ${task.description?.text ? 'has-description' : ''}`}
+      id={`task-${task.id}`}
+      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''} ${task.description?.text ? 'has-description' : ''} ${isHighlighted ? 'task-highlight' : ''}`}
       onClick={(e) => {
         if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.closest('button') === null && e.target.closest('.section__task-priority-select') === null) {
           if (!isMobile) {

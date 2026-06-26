@@ -1,4 +1,4 @@
-﻿* {
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -3020,4 +3020,13 @@ select option {
 
 .section-title {
   user-select: none;
+}
+
+@keyframes flashHighlight {
+  0% { background-color: var(--color-primary-light); }
+  100% { background-color: transparent; }
+}
+
+.task-highlight {
+  animation: flashHighlight 2s ease-out;
 }

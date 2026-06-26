@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Section from './Section';
 import AddTask from './AddTask';
@@ -11,6 +11,7 @@ import { addBoardAsync, renameBoardAsync, deleteBoardAsync, setActiveBoardId } f
 import ColumnResizer from './ColumnResizer';
 import DetailPanel from './DetailPanel';
 import Description from './Description';
+import { MdExpandMore, MdChevronRight } from "react-icons/md";
 
 dayjs.extend(isSameOrBefore);
 
@@ -29,6 +30,59 @@ const ListOfSections = ({ sidebarView }) => {
     });
     const [openMenuSectionId, setOpenMenuSectionId] = useState(null);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+    const [highlightTaskId, setHighlightTaskId] = useState(null);
+    const previousTasksRef = useRef(tasks);
+
+    useEffect(() => {
+        if (tasks.length > previousTasksRef.current.length) {
+            const addedTasks = tasks.filter(t => !previousTasksRef.current.some(pt => pt.id === t.id));
+            if (addedTasks.length > 0) {
+                const newTask = addedTasks[0];
+                setHighlightTaskId(newTask.id);
+
+                const FILTERS = getFilters();
+                const now = dayjs();
+                let sectionIdToExpand = null;
+
+                if (!newTask.completed) {
+                    if (dayjs(newTask.completionDate).isBefore(now, 'day')) {
+                        sectionIdToExpand = 'missed';
+                    } else if (dayjs(newTask.completionDate).isSame(now, 'day')) {
+                        sectionIdToExpand = 'today';
+                    } else if (dayjs(newTask.completionDate).isSame(FILTERS.tomorrow, 'day')) {
+                        sectionIdToExpand = 'tomorrow';
+                    } else if (dayjs(newTask.completionDate).isAfter(now.add(1, 'day'), 'day') && dayjs(newTask.completionDate).isSameOrBefore(FILTERS['on-this-week'], 'day')) {
+                        sectionIdToExpand = 'on-this-week';
+                    } else if (!dayjs(newTask.completionDate).isSame(now.add(1, 'day'), 'day') && dayjs(newTask.completionDate).isAfter(FILTERS['on-this-week'], 'day') && dayjs(newTask.completionDate).isSameOrBefore(FILTERS['on-next-week'], 'day')) {
+                        sectionIdToExpand = 'on-next-week';
+                    } else if (dayjs(newTask.completionDate).isAfter(FILTERS['on-next-week'], 'day')) {
+                        sectionIdToExpand = 'later';
+                    }
+                } else {
+                    sectionIdToExpand = 'completed';
+                }
+
+                if (sectionIdToExpand) {
+                    setExpandedSections(prev => ({
+                        ...prev,
+                        [sectionIdToExpand]: true
+                    }));
+                }
+
+                setTimeout(() => {
+                    const taskElement = document.getElementById(`task-${newTask.id}`);
+                    if (taskElement) {
+                        taskElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
+
+                setTimeout(() => {
+                    setHighlightTaskId(null);
+                }, 2000);
+            }
+        }
+        previousTasksRef.current = tasks;
+    }, [tasks]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -99,6 +153,7 @@ const ListOfSections = ({ sidebarView }) => {
                 checked={sectionId === 'completed'}
                 selectedTaskId={selectedTaskId}
                 setSelectedTaskId={setSelectedTaskId}
+                isHighlighted={highlightTaskId === task.id}
             />
         ));
     };
@@ -115,7 +170,7 @@ const ListOfSections = ({ sidebarView }) => {
                         style={{ color: customTitleColor || '', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
                         onClick={() => toggleSection(id)}
                     >
-                        <i className={`fa-solid ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: '0.8em', opacity: 0.7 }}></i>
+                        {isExpanded ? <MdExpandMore size={20} style={{ opacity: 0.7 }} /> : <MdChevronRight size={20} style={{ opacity: 0.7 }} />}
                         {title}
                     </span>
                 </div>
@@ -128,15 +183,26 @@ const ListOfSections = ({ sidebarView }) => {
                     >
                         {tasksFiltered.length}
                     </span>
-                    {(tasksFiltered.length > 0 || id === 'completed') && (
-                        <span 
-                            className="section-action-dots" 
-                            onClick={(e) => { e.stopPropagation(); setOpenMenuSectionId(isMenuOpen ? null : id); }} 
-                            style={{ cursor: 'pointer', padding: '0 8px', fontSize: '1.2em', fontWeight: 'bold', color: 'var(--text-secondary)' }}
-                        >
-                            ⋮
-                        </span>
-                    )}
+                    <span 
+                        className="section-action-dots" 
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            if(tasksFiltered.length > 0 || id === 'completed') {
+                                setOpenMenuSectionId(isMenuOpen ? null : id); 
+                            }
+                        }} 
+                        style={{ 
+                            cursor: (tasksFiltered.length > 0 || id === 'completed') ? 'pointer' : 'default', 
+                            padding: '0 8px', 
+                            fontSize: '1.2em', 
+                            fontWeight: 'bold', 
+                            color: 'var(--text-secondary)',
+                            opacity: (tasksFiltered.length > 0 || id === 'completed') ? 1 : 0,
+                            pointerEvents: (tasksFiltered.length > 0 || id === 'completed') ? 'auto' : 'none'
+                        }}
+                    >
+                        ⋮
+                    </span>
                     
                     {isMenuOpen && tasksFiltered.length > 0 && (
                         <div className="section-action-menu" style={{ 
