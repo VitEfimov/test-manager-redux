@@ -1,5 +1,4 @@
-﻿
-* {
+﻿* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -37,7 +36,8 @@ body {
       rgb(50, 50, 50));
   /* --dark-background-color-main-priority: color-mix(in srgb,
       var(--dark-background-color-main),
-      green 5%); *//*
+      green 5%); */
+/*
   --dark-background-color-main-priority: light-dark( rgb(21, 21, 21),rgba(200, 200, 200, 0.951));
 
   --background-color-main: white;
@@ -50,14 +50,16 @@ body {
   --priority-medium-bg: light-dark(rgba(218, 143, 3, 0.4), rgba(218, 143, 3, 0.2));
   --priority-low-bg: light-dark(rgba(71, 133, 71, 0.4), rgba(71, 133, 71, 0.2));
 
-  /* Borders & UI *//*
+  /* Borders & UI */
+/*
   --border-color: light-dark(#cccccc, #444444);
   --border-color-light: light-dark(#eeeeee, #333333);
   --underline-task-row: light-dark(rgb(202, 201, 201), rgba(67, 67, 67, 0.95));
   --shadow-sm: 0 4px 15px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
   --shadow-md: 0 10px 30px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
 
-  /* Layout Variables *//*
+  /* Layout Variables */
+/*
   --col-task-width: 55dvw;
   --col-due-width: 10dvw;
   --col-priority-width: 10dvw;
@@ -88,15 +90,11 @@ body {
   --bg-sidebar: light-dark(#DCE8DC, #121212);
   --bg-secondary: light-dark(#F1F3F4, #262626);
 
-  --bg-hover: light-dark(
-    rgba(74, 122, 74, 0.08),
-    rgba(255, 255, 255, 0.05)
-  );
+  --bg-hover: light-dark(rgba(74, 122, 74, 0.08),
+      rgba(255, 255, 255, 0.05));
 
-  --bg-row-hover: light-dark(
-    rgba(74, 122, 74, 0.06),
-    rgba(255, 255, 255, 0.04)
-  );
+  --bg-row-hover: light-dark(rgba(74, 122, 74, 0.06),
+      rgba(255, 255, 255, 0.04));
 
   --surface-container: light-dark(#F1F3F4, #252525);
   --surface-container-high: light-dark(#ECEFF1, #303030);
@@ -107,63 +105,43 @@ body {
   --text-tertiary: light-dark(#8A8A8A, #A0A0A0);
   --text-inverse: light-dark(#FFFFFF, #000000);
 
-  --priority-high-bg: light-dark(
-    rgba(211, 47, 47, 0.08),
-    rgba(255, 107, 107, 0.12)
-  );
+  --priority-high-bg: light-dark(rgba(211, 47, 47, 0.08),
+      rgba(255, 107, 107, 0.12));
 
-  --priority-medium-bg: light-dark(
-    rgba(237, 139, 0, 0.08),
-    rgba(245, 166, 35, 0.12)
-  );
+  --priority-medium-bg: light-dark(rgba(237, 139, 0, 0.08),
+      rgba(245, 166, 35, 0.12));
 
-  --priority-low-bg: light-dark(
-    rgba(46, 125, 50, 0.08),
-    rgba(76, 175, 80, 0.12)
-  );
+  --priority-low-bg: light-dark(rgba(46, 125, 50, 0.08),
+      rgba(76, 175, 80, 0.12));
 
-  --priority-high-border: light-dark(
-    rgba(211, 47, 47, 0.8),
-    rgba(255, 107, 107, 0.8)
-  );
+  --priority-high-border: light-dark(rgba(211, 47, 47, 0.8),
+      rgba(255, 107, 107, 0.8));
 
-  --priority-medium-border: light-dark(
-    rgba(237, 139, 0, 0.8),
-    rgba(245, 166, 35, 0.8)
-  );
+  --priority-medium-border: light-dark(rgba(237, 139, 0, 0.8),
+      rgba(245, 166, 35, 0.8));
 
-  --priority-low-border: light-dark(
-    rgba(46, 125, 50, 0.8),
-    rgba(76, 175, 80, 0.8)
-  );
+  --priority-low-border: light-dark(rgba(46, 125, 50, 0.8),
+      rgba(76, 175, 80, 0.8));
 
   --border-color: light-dark(#DADCE0, #444444);
   --border-color-light: light-dark(#E8EAED, #363636);
 
-  --underline-task-row: light-dark(
-    rgba(218, 220, 224, 0.9),
-    rgba(70, 70, 70, 0.9)
-  );
+  --underline-task-row: light-dark(rgba(218, 220, 224, 0.9),
+      rgba(70, 70, 70, 0.9));
 
   --outline: light-dark(#DADCE0, #555555);
 
   --shadow-sm:
-    0 2px 8px light-dark(
-      rgba(0, 0, 0, 0.05),
-      rgba(0, 0, 0, 0.25)
-    );
+    0 2px 8px light-dark(rgba(0, 0, 0, 0.05),
+      rgba(0, 0, 0, 0.25));
 
   --shadow-md:
-    0 8px 24px light-dark(
-      rgba(0, 0, 0, 0.08),
-      rgba(0, 0, 0, 0.35)
-    );
+    0 8px 24px light-dark(rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.35));
 
   --shadow-lg:
-    0 16px 40px light-dark(
-      rgba(0, 0, 0, 0.12),
-      rgba(0, 0, 0, 0.45)
-    );
+    0 16px 40px light-dark(rgba(0, 0, 0, 0.12),
+      rgba(0, 0, 0, 0.45));
 
   --radius-xs: 8px;
   --radius-sm: 12px;
@@ -1131,7 +1109,7 @@ nav {
   /* border-right: 3px solid; */
   border-left-color: rgb(75, 122, 75);
   /* border-right-color: rgb(74, 122, 74); */
-  
+
 
 }
 
@@ -1149,7 +1127,7 @@ nav {
 
 @media (max-width: 768px) {
   .task-row::after {
-    left: 3vw; 
+    left: 3vw;
   }
 }
 
@@ -1883,11 +1861,9 @@ nav {
   outline: none;
   border-color: var(--color-primary);
   box-shadow:
-    0 0 0 3px color-mix(
-      in srgb,
+    0 0 0 3px color-mix(in srgb,
       var(--color-primary) 18%,
-      transparent
-    );
+      transparent);
 }
 
 
