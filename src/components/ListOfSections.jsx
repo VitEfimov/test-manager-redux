@@ -22,8 +22,23 @@ const ListOfSections = ({ sidebarView }) => {
     const activeBoardId = useSelector(state => state.userReducer.activeBoardId);
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
-    const [expandedSections, setExpandedSections] = useState({});
+    const [expandedSections, setExpandedSections] = useState({
+        missed: true,
+        today: true,
+        tomorrow: true
+    });
+    const [openMenuSectionId, setOpenMenuSectionId] = useState(null);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest('.section-action-wrapper')) {
+                setOpenMenuSectionId(null);
+            }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const handleResize = () => setIsDesktop(window.innerWidth > 768);
@@ -75,12 +90,8 @@ const ListOfSections = ({ sidebarView }) => {
         }
     };
 
-    const limit = theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10;
-
     const renderSectionItems = (tasksList, sectionId) => {
-        const isExpanded = !!expandedSections[sectionId];
-        const displayTasks = isExpanded ? tasksList : tasksList.slice(0, limit);
-        return displayTasks.map((task, index) => (
+        return tasksList.map((task, index) => (
             <Section 
                 key={task.id} 
                 task={task} 
@@ -92,28 +103,61 @@ const ListOfSections = ({ sidebarView }) => {
         ));
     };
 
-    const renderExpandCollapseButton = (tasksList, sectionId) => {
-        if (tasksList.length <= limit) return null;
-        const isExpanded = !!expandedSections[sectionId];
+    const renderSectionHeader = (id, title, tasksFiltered, colorClass, customTitleColor) => {
+        const isExpanded = !!expandedSections[id];
+        const isMenuOpen = openMenuSectionId === id;
+
         return (
-            <div className="section__expand-collapse-container">
-                <button 
-                    type="button" 
-                    className="section__expand-collapse-btn" 
-                    onClick={() => toggleSection(sectionId)}
-                >
-                    {isExpanded ? (
-                        <>
-                            <span>View Less</span>
-                            <i className="fa-solid fa-chevron-up"></i>
-                        </>
-                    ) : (
-                        <>
-                            <span>View All ({tasksList.length})</span>
-                            <i className="fa-solid fa-chevron-down"></i>
-                        </>
+            <div className={`section-header section-header-no-padding ${id === 'completed' ? 'completed-section-header' : ''}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span 
+                        className={`section-title ${colorClass}`} 
+                        style={{ color: customTitleColor || '', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                        onClick={() => toggleSection(id)}
+                    >
+                        <i className={`fa-solid ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: '0.8em', opacity: 0.7 }}></i>
+                        {title}
+                    </span>
+                </div>
+                
+                <div className="section-action-wrapper" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <span 
+                        className={`section-badge ${colorClass}`} 
+                        onClick={(e) => { e.stopPropagation(); setOpenMenuSectionId(isMenuOpen ? null : id); }} 
+                        style={{ cursor: 'pointer' }}
+                    >
+                        {tasksFiltered.length}
+                    </span>
+                    {(tasksFiltered.length > 0 || id === 'completed') && (
+                        <span 
+                            className="section-action-dots" 
+                            onClick={(e) => { e.stopPropagation(); setOpenMenuSectionId(isMenuOpen ? null : id); }} 
+                            style={{ cursor: 'pointer', padding: '0 8px', fontSize: '1.2em', fontWeight: 'bold', color: 'var(--text-secondary)' }}
+                        >
+                            ⋮
+                        </span>
                     )}
-                </button>
+                    
+                    {isMenuOpen && tasksFiltered.length > 0 && (
+                        <div className="section-action-menu" style={{ 
+                            position: 'absolute', top: '100%', right: '0', background: 'var(--bg-card)', 
+                            border: '1px solid var(--border-color)', borderRadius: '8px', zIndex: 100, 
+                            boxShadow: 'var(--shadow-md)', minWidth: '150px', padding: '5px 0', marginTop: '5px',
+                            display: 'flex', flexDirection: 'column'
+                        }}>
+                            {id !== 'completed' && id !== 'later' && (
+                                <div className="section-action-item" onClick={(e) => { e.stopPropagation(); handleCompleteSectionTasks(tasksFiltered, title); setOpenMenuSectionId(null); }}>Complete all</div>
+                            )}
+                            {id !== 'completed' && id !== 'later' && (
+                                <div className="section-action-item" onClick={(e) => { e.stopPropagation(); handleMoveForward(tasksFiltered, id); setOpenMenuSectionId(null); }}>Move forward</div>
+                            )}
+                            {id === 'later' && (
+                                <div className="section-action-item" onClick={(e) => { e.stopPropagation(); handleCompleteSectionTasks(tasksFiltered, title); setOpenMenuSectionId(null); }}>Complete all</div>
+                            )}
+                            <div className="section-action-item" onClick={(e) => { e.stopPropagation(); handleDeleteSectionTasks(tasksFiltered, title); setOpenMenuSectionId(null); }} style={{ color: 'var(--color-danger)' }}>Delete all</div>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     };
@@ -381,27 +425,9 @@ const ListOfSections = ({ sidebarView }) => {
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    <div className='section__field-header section-header section-header-no-padding' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <span className="section-title missed" style={{ color: 'rgb(241, 81, 81)' }}>Missed tasks</span>
-                                            <select className="section-action-select" value="" onChange={(e) => {
-                                                const val = e.target.value;
-                                                if (val === 'complete') handleCompleteSectionTasks(missedFiltered, 'Missed tasks');
-                                                if (val === 'move-forward') handleMoveForward(missedFiltered, 'missed');
-                                                if (val === 'delete') handleDeleteSectionTasks(missedFiltered, 'Missed tasks');
-                                            }} title="Section Actions">
-                                                <option value="" disabled hidden>▼</option>
-                                                <option value="complete">Complete all</option>
-                                                <option value="move-forward">Move forward</option>
-                                                <option value="delete">Delete all</option>
-                                            </select>
-                                        </div>
-                                        <span className="section-badge missed">{missedFiltered.length}</span>
-                                    </div>
-
-                                    {renderSectionItems(missedFiltered, 'missed')}
+                                    {renderSectionHeader('missed', 'Missed tasks', missedFiltered, 'missed', 'rgb(241, 81, 81)')}
+                                    {expandedSections['missed'] && renderSectionItems(missedFiltered, 'missed')}
                                     {provided.placeholder}
-                                    {renderExpandCollapseButton(missedFiltered, 'missed')}
                                 </ul>
                             )}
                         </Droppable>
@@ -413,27 +439,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">Today ({dayjs().format('dddd')})</span>
-                                        <select className="section-action-select" value="" onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'complete') handleCompleteSectionTasks(todayFiltered, 'Today');
-                                            if (val === 'move-forward') handleMoveForward(todayFiltered, 'today');
-                                            if (val === 'delete') handleDeleteSectionTasks(todayFiltered, 'Today');
-                                        }} title="Section Actions">
-                                            <option value="" disabled hidden>▼</option>
-                                            <option value="complete">Complete all</option>
-                                            <option value="move-forward">Move forward</option>
-                                            <option value="delete">Delete all</option>
-                                        </select>
-                                    </div>
-                                    <span className="section-badge today">{todayFiltered.length}</span>
-                                </div>
-
-                                {renderSectionItems(todayFiltered, 'today')}
+                                {renderSectionHeader('today', `Today (${dayjs().format('dddd')})`, todayFiltered, 'today')}
+                                {expandedSections['today'] && renderSectionItems(todayFiltered, 'today')}
                                 {provided.placeholder}
-                                {renderExpandCollapseButton(todayFiltered, 'today')}
                                 <AddTask date="today" />
                             </ul>
                         )}
@@ -445,27 +453,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">Tomorrow ({dayjs().add(1, 'day').format('dddd')})</span>
-                                        <select className="section-action-select" value="" onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'complete') handleCompleteSectionTasks(tomorrowFiltered, 'Tomorrow');
-                                            if (val === 'move-forward') handleMoveForward(tomorrowFiltered, 'tomorrow');
-                                            if (val === 'delete') handleDeleteSectionTasks(tomorrowFiltered, 'Tomorrow');
-                                        }} title="Section Actions">
-                                            <option value="" disabled hidden>▼</option>
-                                            <option value="complete">Complete all</option>
-                                            <option value="move-forward">Move forward</option>
-                                            <option value="delete">Delete all</option>
-                                        </select>
-                                    </div>
-                                    <span className="section-badge today">{tomorrowFiltered.length}</span>
-                                </div>
-
-                                {renderSectionItems(tomorrowFiltered, 'tomorrow')}
+                                {renderSectionHeader('tomorrow', `Tomorrow (${dayjs().add(1, 'day').format('dddd')})`, tomorrowFiltered, 'today')}
+                                {expandedSections['tomorrow'] && renderSectionItems(tomorrowFiltered, 'tomorrow')}
                                 {provided.placeholder}
-                                {renderExpandCollapseButton(tomorrowFiltered, 'tomorrow')}
                                 <AddTask
                                     date="tomorrow"
                                 />
@@ -479,27 +469,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">This week</span>
-                                        <select className="section-action-select" value="" onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'complete') handleCompleteSectionTasks(onThisWeekFiltered, 'On this week');
-                                            if (val === 'move-forward') handleMoveForward(onThisWeekFiltered, 'on-this-week');
-                                            if (val === 'delete') handleDeleteSectionTasks(onThisWeekFiltered, 'On this week');
-                                        }} title="Section Actions">
-                                            <option value="" disabled hidden>▼</option>
-                                            <option value="complete">Complete all</option>
-                                            <option value="move-forward">Move forward</option>
-                                            <option value="delete">Delete all</option>
-                                        </select>
-                                    </div>
-                                    <span className="section-badge today">{onThisWeekFiltered.length}</span>
-                                </div>
-
-                                {renderSectionItems(onThisWeekFiltered, 'on-this-week')}
+                                {renderSectionHeader('on-this-week', 'This week', onThisWeekFiltered, 'today')}
+                                {expandedSections['on-this-week'] && renderSectionItems(onThisWeekFiltered, 'on-this-week')}
                                 {provided.placeholder}
-                                {renderExpandCollapseButton(onThisWeekFiltered, 'on-this-week')}
                                 <AddTask
                                     date="on-this-week"
                                 />
@@ -513,27 +485,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">Next week</span>
-                                        <select className="section-action-select" value="" onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'complete') handleCompleteSectionTasks(onNextWeekFiltered, 'On next week');
-                                            if (val === 'move-forward') handleMoveForward(onNextWeekFiltered, 'on-next-week');
-                                            if (val === 'delete') handleDeleteSectionTasks(onNextWeekFiltered, 'On next week');
-                                        }} title="Section Actions">
-                                            <option value="" disabled hidden>▼</option>
-                                            <option value="complete">Complete all</option>
-                                            <option value="move-forward">Move forward</option>
-                                            <option value="delete">Delete all</option>
-                                        </select>
-                                    </div>
-                                    <span className="section-badge today">{onNextWeekFiltered.length}</span>
-                                </div>
-
-                                {renderSectionItems(onNextWeekFiltered, 'on-next-week')}
+                                {renderSectionHeader('on-next-week', 'Next week', onNextWeekFiltered, 'today')}
+                                {expandedSections['on-next-week'] && renderSectionItems(onNextWeekFiltered, 'on-next-week')}
                                 {provided.placeholder}
-                                {renderExpandCollapseButton(onNextWeekFiltered, 'on-next-week')}
                                 <AddTask
                                     date="on-next-week"
                                 />
@@ -547,25 +501,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span className="section-title today">Later</span>
-                                        <select className="section-action-select" value="" onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'complete') handleCompleteSectionTasks(laterFiltered, 'Later');
-                                            if (val === 'delete') handleDeleteSectionTasks(laterFiltered, 'Later');
-                                        }} title="Section Actions">
-                                            <option value="" disabled hidden>▼</option>
-                                            <option value="complete">Complete all</option>
-                                            <option value="delete">Delete all</option>
-                                        </select>
-                                    </div>
-                                    <span className="section-badge today">{laterFiltered.length}</span>
-                                </div>
-
-                                {renderSectionItems(laterFiltered, 'later')}
+                                {renderSectionHeader('later', 'Later', laterFiltered, 'today')}
+                                {expandedSections['later'] && renderSectionItems(laterFiltered, 'later')}
                                 {provided.placeholder}
-                                {renderExpandCollapseButton(laterFiltered, 'later')}
                                 <AddTask
                                     date="later"
                                 />
@@ -579,30 +517,9 @@ const ListOfSections = ({ sidebarView }) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                <div className="completed-section-header">
-                                    <div className="section-header section-header-no-padding" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <span className="section-title today">Completed</span>
-                                            {completedFiltered.length > 0 && (
-                                                <select className="section-action-select" value="" onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    if (val === 'delete') {
-                                                        if(window.confirm('Are you sure you want to delete all completed tasks?')) {
-                                                            completedFiltered.forEach(task => dispatch(deleteTask({ taskId: task.id })));
-                                                        }
-                                                    }
-                                                }} title="Section Actions">
-                                                    <option value="" disabled hidden>▼</option>
-                                                    <option value="delete">Delete all</option>
-                                                </select>
-                                            )}
-                                        </div>
-                                        <span className="section-badge today">{completedFiltered.length}</span>
-                                    </div>
-                                </div>
-                                {renderSectionItems(completedFiltered, 'completed')}
+                                {renderSectionHeader('completed', 'Completed', completedFiltered, 'today')}
+                                {expandedSections['completed'] && renderSectionItems(completedFiltered, 'completed')}
                                 {provided.placeholder}
-                                {renderExpandCollapseButton(completedFiltered, 'completed')}
                             </ul>
                         )}
                     </Droppable>

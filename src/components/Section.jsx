@@ -1,5 +1,5 @@
 import React from 'react'
-import { MdMoreVert } from "react-icons/md";
+
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -255,14 +255,6 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
             )}
           </div>
 
-          {isMobile && (
-            <div 
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)' }}
-              onClick={() => setSelectedTaskId(task.id)}
-            >
-              <MdMoreVert size={20} />
-            </div>
-          )}
         </>
     </li>
   );

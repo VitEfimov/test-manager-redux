@@ -31,7 +31,6 @@ const initialState = {
     dueDate: 15,
     priority: 10
   },
-  defaultTaskLimit: loaded?.defaultTaskLimit !== undefined ? loaded.defaultTaskLimit : 10,
   isSettingsOpen: false,
   dateFormat: loaded?.dateFormat || 'short',
   taskNameWrap: loaded?.taskNameWrap || 'wrap',
@@ -93,15 +92,10 @@ const themeSlice = createSlice({
         dueDate: 15,
         priority: 10
       };
-      state.defaultTaskLimit = 10;
       state.dateFormat = 'short';
       state.taskNameWrap = 'wrap';
       state.timeFormat = '12h';
       localStorage.removeItem('customTheme');
-    },
-    setDefaultTaskLimit: (state, action) => {
-      state.defaultTaskLimit = Math.max(1, Number(action.payload) || 1);
-      localStorage.setItem('customTheme', JSON.stringify(state));
     },
     setDateFormat: (state, action) => {
       state.dateFormat = action.payload;
@@ -134,5 +128,5 @@ const themeSlice = createSlice({
   }
 });
 
-export const { setThemeColor, setSourceColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
+export const { setThemeColor, setSourceColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
 export default themeSlice.reducer;

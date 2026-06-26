@@ -34,12 +34,27 @@ const PomodoroSettingsModal = () => {
   const [workSoundType, setWorkSoundType] = useState(predefinedSounds.includes(workSound) ? workSound : 'custom');
   const [breakSoundType, setBreakSoundType] = useState(predefinedSounds.includes(breakSound) ? breakSound : 'custom');
 
-  const handleSetWorkMin = (e) => setNewWorkMin(parseInt(e.target.value) || 0);
-  const handleSetWorkSec = (e) => setNewWorkSec(parseInt(e.target.value) || 0);
-  const handleSetBreakMin = (e) => setNewBreakMin(parseInt(e.target.value) || 0);
-  const handleSetBreakSec = (e) => setNewBreakSec(parseInt(e.target.value) || 0);
+  const prevValues = useRef({});
+
+  const handleFocus = (key, value, setter) => {
+    prevValues.current[key] = value;
+    setter('');
+  };
+
+  const handleBlur = (key, value, setter, defaultValue) => {
+    if (value === '' || isNaN(value)) {
+      setter(prevValues.current[key] !== undefined ? prevValues.current[key] : defaultValue);
+    }
+  };
+
+  const handleSetWorkMin = (e) => setNewWorkMin(e.target.value === '' ? '' : parseInt(e.target.value));
+  const handleSetWorkSec = (e) => setNewWorkSec(e.target.value === '' ? '' : parseInt(e.target.value));
+  const handleSetBreakMin = (e) => setNewBreakMin(e.target.value === '' ? '' : parseInt(e.target.value));
+  const handleSetBreakSec = (e) => setNewBreakSec(e.target.value === '' ? '' : parseInt(e.target.value));
   const handleSetIntervalCount = (e) => {
-    if (parseInt(e.target.value)>10) {
+    if (e.target.value === '') {
+      setNewIntervalCount('');
+    } else if (parseInt(e.target.value)>10) {
       alert("10 intervals maximum")
     } else {
       setNewIntervalCount(parseInt(e.target.value));
@@ -47,11 +62,17 @@ const PomodoroSettingsModal = () => {
   };
 
   const handleSave = () => {
-    const totalWorkSeconds = newWorkMin * 60 + newWorkSec;
-    const totalBreakSeconds = newBreakMin * 60 + newBreakSec;
+    const wMin = (newWorkMin === '' || isNaN(newWorkMin)) ? (prevValues.current['workMin'] !== undefined ? prevValues.current['workMin'] : 25) : newWorkMin;
+    const wSec = (newWorkSec === '' || isNaN(newWorkSec)) ? (prevValues.current['workSec'] !== undefined ? prevValues.current['workSec'] : 0) : newWorkSec;
+    const bMin = (newBreakMin === '' || isNaN(newBreakMin)) ? (prevValues.current['breakMin'] !== undefined ? prevValues.current['breakMin'] : 5) : newBreakMin;
+    const bSec = (newBreakSec === '' || isNaN(newBreakSec)) ? (prevValues.current['breakSec'] !== undefined ? prevValues.current['breakSec'] : 0) : newBreakSec;
+    const iCount = (newIntervalCount === '' || isNaN(newIntervalCount)) ? (prevValues.current['intervalCount'] !== undefined ? prevValues.current['intervalCount'] : 5) : newIntervalCount;
+
+    const totalWorkSeconds = wMin * 60 + wSec;
+    const totalBreakSeconds = bMin * 60 + bSec;
     dispatch(setTime(totalWorkSeconds));
     dispatch(setBreakInterval(totalBreakSeconds));
-    dispatch(setIntervalCount(newIntervalCount));
+    dispatch(setIntervalCount(iCount));
     dispatch(setWorkSound(newWorkSound));
     dispatch(setBreakSound(newBreakSound));
     dispatch(togglePomodoroSettings(false));
@@ -113,23 +134,23 @@ const PomodoroSettingsModal = () => {
           <div className="theme-color-row">
             <label>Work duration</label>
             <div className="color-control flex-inputs sleek-inputs" style={{display: 'flex', gap: '5px', alignItems: 'center'}}>
-              <input type="number" min="0" max="120" value={newWorkMin} onChange={handleSetWorkMin} className="num-input" style={{width: '50px'}}/> <span>min</span>
-              <input type="number" min="0" max="59" value={newWorkSec} onChange={handleSetWorkSec} className="num-input" style={{width: '50px'}}/> <span>sec</span>
+              <input type="number" min="0" max="120" value={newWorkMin} onChange={handleSetWorkMin} onFocus={() => handleFocus('workMin', newWorkMin, setNewWorkMin)} onBlur={() => handleBlur('workMin', newWorkMin, setNewWorkMin, 25)} className="num-input" style={{width: '50px'}}/> <span>min</span>
+              <input type="number" min="0" max="59" value={newWorkSec} onChange={handleSetWorkSec} onFocus={() => handleFocus('workSec', newWorkSec, setNewWorkSec)} onBlur={() => handleBlur('workSec', newWorkSec, setNewWorkSec, 0)} className="num-input" style={{width: '50px'}}/> <span>sec</span>
             </div>
           </div>
           
           <div className="theme-color-row">
             <label>Break duration</label>
             <div className="color-control flex-inputs sleek-inputs" style={{display: 'flex', gap: '5px', alignItems: 'center'}}>
-              <input type="number" min="0" max="120" value={newBreakMin} onChange={handleSetBreakMin} className="num-input" style={{width: '50px'}}/> <span>min</span>
-              <input type="number" min="0" max="59" value={newBreakSec} onChange={handleSetBreakSec} className="num-input" style={{width: '50px'}}/> <span>sec</span>
+              <input type="number" min="0" max="120" value={newBreakMin} onChange={handleSetBreakMin} onFocus={() => handleFocus('breakMin', newBreakMin, setNewBreakMin)} onBlur={() => handleBlur('breakMin', newBreakMin, setNewBreakMin, 5)} className="num-input" style={{width: '50px'}}/> <span>min</span>
+              <input type="number" min="0" max="59" value={newBreakSec} onChange={handleSetBreakSec} onFocus={() => handleFocus('breakSec', newBreakSec, setNewBreakSec)} onBlur={() => handleBlur('breakSec', newBreakSec, setNewBreakSec, 0)} className="num-input" style={{width: '50px'}}/> <span>sec</span>
             </div>
           </div>
           
           <div className="theme-color-row">
             <label>Sessions</label>
             <div className="color-control">
-               <input type="number" min="1" max="10" value={newIntervalCount} onChange={handleSetIntervalCount} className="num-input-large" style={{width: '60px'}}/>
+               <input type="number" min="1" max="10" value={newIntervalCount} onChange={handleSetIntervalCount} onFocus={() => handleFocus('intervalCount', newIntervalCount, setNewIntervalCount)} onBlur={() => handleBlur('intervalCount', newIntervalCount, setNewIntervalCount, 5)} className="num-input-large" style={{width: '60px'}}/>
             </div>
           </div>
 

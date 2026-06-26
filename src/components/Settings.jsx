@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTasks } from '../features/taskSlice';
 import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
-import { setFontSize, setDefaultTaskLimit, setDateFormat, setTaskNameWrap, setTimeFormat, toggleSettingsOpen } from '../features/themeSlice';
+import { setFontSize, setDateFormat, setTaskNameWrap, setTimeFormat, toggleSettingsOpen } from '../features/themeSlice';
 import '../styles/Settings.css';
 const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
@@ -19,9 +19,6 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const [newUserTheme] = useState(userTheme);
   const [newDateFormat, setNewDateFormat] = useState(dateFormat);
   const [newTaskNameWrap, setNewTaskNameWrap] = useState(taskNameWrap);
-  const [newTaskLimit, setNewTaskLimit] = useState(theme.defaultTaskLimit !== undefined ? theme.defaultTaskLimit : 10);
-
-
 
   const handleDeleteAllData = () => {
     if (window.confirm("Are you sure you want to clear all your data? This action cannot be undone.")) {
@@ -40,7 +37,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
     dispatch(setFontSize(newFontSize));
     dispatch(updateUserTheme(newUserTheme));
     dispatch(updateThemeAsync(newUserTheme));
-    dispatch(setDefaultTaskLimit(newTaskLimit));
+    
     setCurrentPage('Board');
   };
 
@@ -206,14 +203,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                 </select>
               </div>
             </div> */}
-            <div className="setting-row setting-row-no-border">
-              <div className="setting-label">
-                <span>List limit</span>
-              </div>
-              <div className="setting-control">
-                <input type="number" min="5" max="50" className="num-input-large" value={newTaskLimit} onChange={(e) => setNewTaskLimit(e.target.value)} />
-              </div>
-            </div>
+            {/* Removed List limit */}
             
             <div className="settings-theme-wrapper">
               <button className="btn-customize-theme" onClick={() => dispatch(toggleSettingsOpen(true))}>🎨 Customize theme</button>

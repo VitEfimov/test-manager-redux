@@ -1,4 +1,4 @@
-
+﻿
 * {
   padding: 0;
   margin: 0;
@@ -2545,7 +2545,8 @@ select.input-field {
 }
 
 .section-badge {
-  margin-right: 15px;
+  margin-right: 5px;
+  /* position: absolute; */
 }
 
 .v2-description-modal {
@@ -2997,6 +2998,50 @@ select option {
 /* Mobile browser bottom spacing */
 @media screen and (max-width: 768px) {
   .content {
-    padding-bottom: 80px;
+    padding-bottom: 3px;
   }
+}
+
+/* Section Action Menu Styles */
+.section-action-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.section-action-dots {
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.section-action-dots:hover {
+  color: var(--text-primary);
+}
+
+.section-action-menu {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  padding: 5px 0;
+  min-width: 100px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-action-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: var(--text-primary);
+  transition: background 0.2s;
+}
+
+.section-action-item:hover {
+  background: var(--bg-hover);
+}
+
+.section-title {
+  user-select: none;
 }
