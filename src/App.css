@@ -1,4 +1,4 @@
-* {
+﻿* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -3023,7 +3023,7 @@ select option {
 }
 
 @keyframes flashHighlight {
-  0% { background-color: var(--color-primary-light); }
+  0% { background-color: var(--color-primary); }
   100% { background-color: transparent; }
 }
 
