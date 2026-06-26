@@ -112,6 +112,8 @@ function App() {
       
       setOrReset('--color-primary', hexFromArgb(scheme.primary));
       setOrReset('--color-primary-container', hexFromArgb(scheme.primaryContainer));
+      // Added lighter variants
+      setOrReset('--color-primary-light', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 70%)`);
       
       if (userTheme === 'contrast') {
         setOrReset('--bg-main', '#000000');
@@ -126,6 +128,7 @@ function App() {
         setOrReset('--color-danger', '#ff3333');
       } else {
         setOrReset('--bg-main', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 94%)`);
+        setOrReset('--bg-main-light', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 97%)`); // Even lighter background
         setOrReset('--bg-sidebar', hexFromArgb(scheme.surfaceVariant)); 
         setOrReset('--bg-card', hexFromArgb(scheme.surface));
         setOrReset('--bg-header', hexFromArgb(scheme.primaryContainer));
@@ -154,8 +157,8 @@ function App() {
     let fontCalc = 'calc(10px + 1vmin)';
     if (theme.fontSize === 'small') fontCalc = 'calc(9px + 1vmin)';
     if (theme.fontSize === 'big') fontCalc = 'calc(16px + 1vmin)';
-    if (theme.fontSize === 'device') fontCalc = 'calc(1rem + 0.5vmin)';
-    root.style.setProperty('font-size', fontCalc);
+    if (theme.fontSize === 'device') fontCalc = 'calc(1rem + 0.3vmin)';
+    // root.style.setProperty('font-size', fontCalc);
 
     // Columns
     root.style.setProperty('--col-task-width', `${theme.columnWidths.taskName}dvw`);

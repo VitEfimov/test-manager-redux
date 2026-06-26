@@ -1420,13 +1420,13 @@ nav {
 .add__task-btn {
   font-size: 0.929rem;
   color: light-dark(var(--text-secondary), #bbb);
-  background: none;
+  background: var(--bg-main-light);
   border: none;
   padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
   transition: color 0.2s, background-color 0.2s;
-  border-radius: 8px;
+  border-radius: 0px;
   width: 100%;
   text-align: left;
   margin-top: 5px;

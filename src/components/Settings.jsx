@@ -185,7 +185,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
                   <option value="small">Small</option>
                   <option value="normal">Normal</option>
                   <option value="big">Big</option>
-                  <option value="device">Default</option>
+                  {/* <option value="device">Default</option> */}
                 </select>
               </div>
             </div>

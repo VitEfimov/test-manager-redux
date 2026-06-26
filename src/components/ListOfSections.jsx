@@ -508,7 +508,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 {renderSectionHeader('today', `Today (${dayjs().format('dddd')})`, todayFiltered, 'today')}
                                 {expandedSections['today'] && renderSectionItems(todayFiltered, 'today')}
                                 {provided.placeholder}
-                                <AddTask date="today" />
+                                {expandedSections['today'] && <AddTask date="today" />}
                             </ul>
                         )}
                     </Droppable>
@@ -522,9 +522,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 {renderSectionHeader('tomorrow', `Tomorrow (${dayjs().add(1, 'day').format('dddd')})`, tomorrowFiltered, 'today')}
                                 {expandedSections['tomorrow'] && renderSectionItems(tomorrowFiltered, 'tomorrow')}
                                 {provided.placeholder}
-                                <AddTask
-                                    date="tomorrow"
-                                />
+                                {expandedSections['tomorrow'] && <AddTask date="tomorrow" />}
                             </ul>
                         )}
                     </Droppable>
@@ -538,9 +536,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 {renderSectionHeader('on-this-week', 'This week', onThisWeekFiltered, 'today')}
                                 {expandedSections['on-this-week'] && renderSectionItems(onThisWeekFiltered, 'on-this-week')}
                                 {provided.placeholder}
-                                <AddTask
-                                    date="on-this-week"
-                                />
+                                {expandedSections['on-this-week'] && <AddTask date="on-this-week" />}
                             </ul>
                         )}
                     </Droppable>
@@ -554,9 +550,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 {renderSectionHeader('on-next-week', 'Next week', onNextWeekFiltered, 'today')}
                                 {expandedSections['on-next-week'] && renderSectionItems(onNextWeekFiltered, 'on-next-week')}
                                 {provided.placeholder}
-                                <AddTask
-                                    date="on-next-week"
-                                />
+                                {expandedSections['on-next-week'] && <AddTask date="on-next-week" />}
                             </ul>
                         )}
                     </Droppable>
@@ -570,9 +564,7 @@ const ListOfSections = ({ sidebarView }) => {
                                 {renderSectionHeader('later', 'Later', laterFiltered, 'today')}
                                 {expandedSections['later'] && renderSectionItems(laterFiltered, 'later')}
                                 {provided.placeholder}
-                                <AddTask
-                                    date="later"
-                                />
+                                {expandedSections['later'] && <AddTask date="later" />}
                             </ul>
                         )}
                     </Droppable>
