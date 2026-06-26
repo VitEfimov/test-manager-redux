@@ -158,7 +158,7 @@ function App() {
     if (theme.fontSize === 'small') fontCalc = 'calc(9px + 1vmin)';
     if (theme.fontSize === 'big') fontCalc = 'calc(16px + 1vmin)';
     if (theme.fontSize === 'device') fontCalc = 'calc(1rem + 0.3vmin)';
-    // root.style.setProperty('font-size', fontCalc);
+    root.style.setProperty('font-size', fontCalc);
 
     // Columns
     root.style.setProperty('--col-task-width', `${theme.columnWidths.taskName}dvw`);

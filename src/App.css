@@ -1041,6 +1041,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-left: 5px solid transparent;
 }
 
 
@@ -1048,7 +1049,7 @@ nav {
 .section-title {
   font-weight: 600;
   font-size: 1rem;
-  padding-left: 5dvw;
+  padding-left: 14px;
   color: var(--text-primary);
 }
 
@@ -1430,6 +1431,7 @@ nav {
   width: 100%;
   text-align: left;
   margin-top: 5px;
+  border-left: 5px solid transparent;
 
 }
 
@@ -2975,6 +2977,10 @@ select option {
 @media screen and (max-width: 768px) {
   .content {
     padding-bottom: 3px;
+  }
+
+  .task-delete-btn{
+    padding-left: 5px;
   }
 }
 

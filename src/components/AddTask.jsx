@@ -106,17 +106,15 @@ const AddTask = ({ date }) => {
                 <div className='task-row add-task-row'>
                     <span className='task-drag-handle col-drag add-task-drag-hidden'></span>
                     
-                    <button className="task-check" disabled>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <circle cx="12" cy="12" r="10" />
-                        </svg>
+                    <button className="task-check" onClick={handleDeleteTask} title="Cancel" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <MdDelete size={18} style={{ color: 'var(--text-secondary)' }} />
                     </button>
 
                     <div className='task-title col-task add-task-title-container'>
                         <div className="task-title-auto-resize-wrapper">
                             <div className="task-title-ghost">{(taskName || "Enter task name...") + ' '}</div>
                             <textarea
-                                className='add-task-title-input'
+                                className='section__task-input task-title-input add-task-title-input'
                                 id="section__task-name"
                                 placeholder="Enter task name..."
                                 value={taskName}
@@ -167,9 +165,6 @@ const AddTask = ({ date }) => {
                     </div>
 
                     <div className='task-delete col-delete add-task-actions'>
-                        <button className='task-delete-btn' onClick={handleDeleteTask}>
-                            <MdDelete size={18} />
-                        </button>
                         <button className='task-add-submit-btn' onClick={handleAddTask}>
                             Add
                         </button>
