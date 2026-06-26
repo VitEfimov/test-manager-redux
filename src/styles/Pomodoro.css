@@ -331,7 +331,7 @@
   color: var(--text-secondary);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .pomodoro-section {
     padding: 10px;
   }

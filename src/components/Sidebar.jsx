@@ -21,10 +21,10 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
     const totalToday = todayTasks.length;
     const progressPercent = totalToday === 0 ? 0 : Math.round((completedToday / totalToday) * 100);
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        const handleResize = () => setIsMobile(window.innerWidth <= 1200);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);

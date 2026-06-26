@@ -1,4 +1,4 @@
-﻿* {
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -493,7 +493,7 @@ body {
 }
 
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
   .dashboard-v2 {
     overflow-y: auto;
     padding: 20px;
@@ -664,7 +664,7 @@ body {
 
 
 
-@media (min-width: 769px) {
+@media (min-width: 1200px) {
   .description__modal {
     width: 60%;
   }
@@ -1126,7 +1126,7 @@ nav {
   transition: opacity 0.12s;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .task-row::after {
     left: 3vw;
   }
@@ -1296,7 +1296,6 @@ nav {
   background: var(--bg-sidebar);
   color: var(--text-primary);
 }
-
 
 
 /* ── DETAIL PANEL ────────────────────────────────── */
@@ -2482,7 +2481,7 @@ select.input-field {
   color: var(--text-primary);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
   .app-container {
     flex-direction: column;
   }
@@ -2492,7 +2491,7 @@ select.input-field {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .dashboard-v2 {
     overflow-y: auto;
     padding: 10px;
@@ -2500,7 +2499,7 @@ select.input-field {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
 
   .col-headers,
   .task-row {
@@ -2898,7 +2897,7 @@ select.input-field {
   grid-template-columns: 28px 28px 1fr 130px 80px 30px !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .task-row.add-task-row {
     grid-template-columns: 28px 1fr 130px !important;
   }
@@ -2974,7 +2973,7 @@ select option {
 }
 
 /* Mobile browser bottom spacing */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
   .content {
     padding-bottom: 3px;
   }

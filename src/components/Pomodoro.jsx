@@ -302,6 +302,56 @@ const Pomodoro = () => {
   const targetEndTimeRef = useRef(null);
   const workAudioRef = useRef(null);
   const breakAudioRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const wakeLockRef = useRef(null);
+
+  // 🔊 Unlock Audio Context on first interaction
+  useEffect(() => {
+    const unlockAudio = () => {
+      if (!audioContextRef.current) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+        ctx.resume();
+        audioContextRef.current = ctx;
+      }
+    };
+
+    document.body.addEventListener("touchstart", unlockAudio, { once: true });
+    document.body.addEventListener("click", unlockAudio, { once: true });
+  }, []);
+
+  // 💤 Prevent screen sleep
+  useEffect(() => {
+    const requestWakeLock = async () => {
+      try {
+        if ("wakeLock" in navigator) {
+          wakeLockRef.current = await navigator.wakeLock.request("screen");
+        }
+      } catch (err) {
+        console.warn("Wake lock failed:", err);
+      }
+    };
+
+    const releaseWakeLock = () => {
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release();
+        wakeLockRef.current = null;
+      }
+    };
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") requestWakeLock();
+      else releaseWakeLock();
+    });
+
+    requestWakeLock();
+    return () => releaseWakeLock();
+  }, []);
 
   useEffect(() => {
     if (staticIntervalCountRef.current === null) {

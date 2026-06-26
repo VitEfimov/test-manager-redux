@@ -302,7 +302,7 @@ input:checked + .slider:before {
   margin-top: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .settings-section {
     padding: 10px;
   }
