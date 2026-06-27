@@ -1422,7 +1422,7 @@ nav {
   color: light-dark(var(--color-primary), var(--color-primary));
   background: var(--bg-main-light);
   border: none;
-  padding: 10px 10px 10px 82px;
+  padding: 10px 10px 10px 88px;
   text-align: left;
   cursor: pointer;
   font-weight: 600;
