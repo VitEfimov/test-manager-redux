@@ -113,7 +113,7 @@ function App() {
       setOrReset('--color-primary', hexFromArgb(scheme.primary));
       setOrReset('--color-primary-container', hexFromArgb(scheme.primaryContainer));
       // Added lighter variants
-      setOrReset('--color-primary-light', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 70%)`);
+      setOrReset('--color-primary-light', `color-mix(in srgb, ${hexFromArgb(scheme.primary)}, transparent 60%)`);
       
       if (userTheme === 'contrast') {
         setOrReset('--bg-main', '#000000');

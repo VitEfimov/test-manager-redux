@@ -1108,7 +1108,8 @@ nav {
 .task-row.has-description {
   /* border-left: 3px solid; */
   /* border-right: 3px solid; */
-  border-right-color: rgb(75, 122, 75);
+  /* border-right-color: rgb(75, 122, 75); */
+  border-right-color: var(--color-primary-light);
   /* border-right-color: rgb(74, 122, 74); */
 
 
@@ -2516,7 +2517,7 @@ select.input-field {
 
   .col-headers,
   .task-row {
-    grid-template-columns: 28px 28px 1fr 110px !important;
+    grid-template-columns: 28px 28px 1fr 90px !important;
     align-items: center !important;
     min-width: 100% !important;
     stroke: currentColor
@@ -2537,7 +2538,7 @@ select.input-field {
 @media (max-width: 768px) {
   .col-headers,
   .task-row {
-    grid-template-columns: 28px 1fr 110px !important;
+    grid-template-columns: 28px 1fr 90px !important;
   }
 }
 

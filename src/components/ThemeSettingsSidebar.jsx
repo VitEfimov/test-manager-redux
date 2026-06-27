@@ -148,8 +148,14 @@ const ThemeSettingsSidebar = () => {
                 className="hex-color-input"
                 value={localHex.toUpperCase()}
                 onChange={(e) => {
-                  const val = e.target.value;
+                  let val = e.target.value;
+                  // If the user deleted the hash but is typing hex characters, add it back
+                  if (!val.startsWith('#') && val.length > 0) {
+                    val = '#' + val;
+                  }
                   setLocalHex(val);
+                  
+                  // Only dispatch if it's a valid 6-character hex code
                   if (/^#[0-9A-Fa-f]{6}$/i.test(val)) {
                     dispatch(setSourceColor(val));
                     dispatch(setPresetTheme('default'));
