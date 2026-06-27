@@ -145,24 +145,7 @@ const AddTask = ({ date }) => {
                         </div>
                     </div>
 
-                    <div className='task-priority col-priority'>
-                        {taskPrioritySelect ? (
-                            <div className='section__task-priority-select task-priority-dropdown'>
-                                {['Low', 'Medium', 'High'].map((option) => (
-                                    <button
-                                        key={option}
-                                        className={`section__task-priority-btn ${option.toLowerCase()}`}
-                                        onClick={() => handleTaskPriorityChange(option)}>
-                                        {option}
-                                    </button>
-                                ))}
-                            </div>
-                        ) : (
-                            <span className={`section-badge priority-text-${taskPriority?.toLowerCase() || 'none'} task-priority-btn`} onClick={handlePriorityChange}>
-                                {taskPriority || 'Priority'}
-                            </span>
-                        )}
-                    </div>
+
 
                     <div className='task-delete col-delete add-task-actions'>
                         <button className='task-add-submit-btn' onClick={handleAddTask}>

@@ -115,12 +115,13 @@
 }
 
 .task-priority-btn {
+  display: none;
   cursor: pointer;
   background-color: transparent;
   padding: 0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .col-drag,
   .col-priority,
   .col-more {

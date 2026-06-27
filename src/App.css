@@ -1011,7 +1011,7 @@ nav {
 
 .col-headers {
   display: grid;
-  grid-template-columns: 28px 28px minmax(150px, 50vw) 110px 80px 1fr;
+  grid-template-columns: 28px 28px 1fr 110px;
   gap: 8px;
   padding: 10px 10px 10px 10px;
   border-left: 3px solid transparent;
@@ -1094,7 +1094,7 @@ nav {
 
 .task-row {
   display: grid;
-  grid-template-columns: 28px 28px minmax(150px, 50vw) 110px 80px 1fr;
+  grid-template-columns: 28px 28px 1fr 110px;
   align-items: center;
   gap: 8px;
   padding: 3.5px 10px 5px 10px;
@@ -1301,12 +1301,18 @@ nav {
 /* ── DETAIL PANEL ────────────────────────────────── */
 .detail-panel {
   width: 15dvw;
-  min-width: max(340px, 24rem);
+  min-width: max(340px, 17rem);
   background: var(--bg-main);
   border-left: 1.5px solid var(--bg-sidebar);
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+@media (max-width: 1200px) {
+  .detail-panel {
+    min-width: 405px;
+  }
 }
 
 
@@ -2510,7 +2516,7 @@ select.input-field {
 
   .col-headers,
   .task-row {
-    grid-template-columns: 28px 1fr max-content 15px !important;
+    grid-template-columns: 28px 28px 1fr 110px !important;
     align-items: center !important;
     min-width: 100% !important;
     stroke: currentColor
@@ -2525,6 +2531,13 @@ select.input-field {
 
   .section {
     padding-bottom: 1dvh;
+  }
+}
+
+@media (max-width: 768px) {
+  .col-headers,
+  .task-row {
+    grid-template-columns: 28px 1fr 110px !important;
   }
 }
 
@@ -2901,12 +2914,18 @@ select.input-field {
 }
 
 .task-row.add-task-row {
-  grid-template-columns: 28px 28px 1fr 130px 80px 30px !important;
+  grid-template-columns: 28px 28px 1fr 130px max-content !important;
 }
 
 @media (max-width: 1200px) {
   .task-row.add-task-row {
-    grid-template-columns: 28px 1fr 130px !important;
+    grid-template-columns: 28px 28px 1fr 130px max-content !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .task-row.add-task-row {
+    grid-template-columns: 28px 1fr 130px max-content !important;
   }
 }
 

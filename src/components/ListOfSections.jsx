@@ -477,10 +477,7 @@ const ListOfSections = ({ sidebarView }) => {
                             Due date
                             <ColumnResizer columnKey="dueDate" currentWidthDvw={theme.columnWidths.dueDate} minWidth={8} />
                         </div>
-                        <div className='col-header col-priority col-header-relative'>
-                            Priority
-                            <ColumnResizer columnKey="priority" currentWidthDvw={theme.columnWidths.priority} minWidth={5} />
-                        </div>
+
                     </div>
                     {/* <section className='section'> */}
                     {missedFiltered && missedFiltered.length > 0 && (

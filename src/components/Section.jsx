@@ -242,19 +242,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
             {/* Description indicator moved to left border via .has-description class */}
           </div>
 
-          <div className='section__task-priority col-priority' ref={priorityRef}>
-            {taskPrioritySelect && !task.completed ? (
-              <div className='section__task-priority-select task-priority-dropdown'>
-                {['Low', 'Medium', 'High'].map((option) => (
-                  <button key={option} className={`section__task-priority-btn ${option.toLowerCase()}`} onClick={() => handleTaskPriorityChange({ value: option })}>{option}</button>
-                ))}
-              </div>
-            ) : (
-              <span className={`section-badge priority-text-${taskPriority?.toLowerCase() || 'none'} task-priority-btn`} onClick={handlePriorityChange}>
-                {taskPriority || 'Priority'}
-              </span>
-            )}
-          </div>
+
 
         </>
     </li>
