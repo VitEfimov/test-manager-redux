@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTasks } from '../features/taskSlice';
 import { updateUserTheme, updateThemeAsync } from '../features/userSlice';
-import { setFontSize, setDateFormat, setTaskNameWrap, setTimeFormat, toggleSettingsOpen } from '../features/themeSlice';
+import { setFontSize, setDateFormat, setTaskNameWrap, setTimeFormat, toggleSettingsOpen, toggleAboutOpen } from '../features/themeSlice';
 import '../styles/Settings.css';
 const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
   const dispatch = useDispatch();
@@ -154,7 +154,7 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
         <div className="settings-group">
           <h4 className="settings-group-title">Customization</h4>
           <div className="settings-card">
-            <div className="setting-row setting-row-no-border">
+            <div className="setting-row setting-row-no-border hide-on-mobile">
               <div className="setting-label">
                 <span>Date format</span>
               </div>
@@ -207,6 +207,9 @@ const Settings = ({ setCurrentPage, showWeather, setShowWeather }) => {
             
             <div className="settings-theme-wrapper">
               <button className="btn-customize-theme" onClick={() => dispatch(toggleSettingsOpen(true))}>🎨 Customize theme</button>
+            </div>
+            <div className="settings-theme-wrapper" style={{ marginTop: '10px' }}>
+              <button className="btn-customize-theme" onClick={() => dispatch(toggleAboutOpen(true))}>ℹ️ About TaskFlow</button>
             </div>
           </div>
         </div>

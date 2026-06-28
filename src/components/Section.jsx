@@ -18,7 +18,7 @@ import '../styles/Section.css';
 
 
 dayjs.extend(isoWeek);
-const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, setSelectedTaskId, isHighlighted }) => {
+const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, setSelectedTaskId, isHighlighted, hideDate = false, calendarMode = false }) => {
 
   const dispatch = useDispatch();
   const [taskName, setTaskName] = useState(task.taskname);
@@ -143,7 +143,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
   const renderContent = (provided) => (
     <li
       id={`task-${task.id}`}
-      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''} ${task.description?.text ? 'has-description' : ''} ${isHighlighted ? 'task-highlight' : ''}`}
+      className={`task-row section__task ${task.completed ? 'completed-task' : ''} ${selectedTaskId === task.id ? 'selected' : ''} ${task.description?.text ? 'has-description' : ''} ${isHighlighted ? 'task-highlight' : ''} ${hideDate ? 'hide-date-row' : ''} ${!isDraggable ? 'no-drag-row' : ''} ${calendarMode ? `calendar-priority-${taskPriority?.toLowerCase() || 'none'}` : ''}`}
       onClick={(e) => {
         if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.closest('button') === null && e.target.closest('.section__task-priority-select') === null) {
           if (!isMobile) {
@@ -156,9 +156,11 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
     >
         {/* DESKTOP V2 STRUCTURE (now used everywhere) */}
         <>
-          <span className='section__task-icon task-drag-handle col-drag' {...provided?.dragHandleProps}>
-            <GrDrag className='section__task-icon__grdrag' />
-          </span>
+          {isDraggable && (
+            <span className='section__task-icon task-drag-handle col-drag' {...provided?.dragHandleProps}>
+              <GrDrag className='section__task-icon__grdrag' />
+            </span>
+          )}
           
           <button className="task-check" onClick={handleCheckbox}>
             {task.completed ? (
@@ -195,10 +197,14 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
               </div>
             ) : (
               <label 
-                className={`section__task-label task-title-label priority-name-${taskPriority?.toLowerCase() || 'none'}`} 
+                className={`section__task-label task-title-label ${!calendarMode ? `priority-name-${taskPriority?.toLowerCase() || 'none'}` : ''}`} 
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleTaskNameChange();
+                  if (calendarMode) {
+                    if (setSelectedTaskId) setSelectedTaskId(task.id);
+                  } else {
+                    handleTaskNameChange();
+                  }
                 }}
               >
                 {task.name || taskName}
@@ -206,6 +212,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
             )}
           </div>
 
+          {!hideDate && (
           <div className="task-due col-due task-due-btn" onClick={(e) => {
             e.stopPropagation();
             if (setSelectedTaskId) setSelectedTaskId(task.id);
@@ -241,6 +248,7 @@ const Section = ({ task, index, checked, isDraggable = true, selectedTaskId, set
             )}
             {/* Description indicator moved to left border via .has-description class */}
           </div>
+          )}
 
 
 

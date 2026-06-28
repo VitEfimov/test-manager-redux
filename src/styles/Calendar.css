@@ -1,0 +1,93 @@
+.calendar-view {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.calendar-top {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-main);
+}
+
+.calendar-bottom {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px;
+  background: var(--bg-sidebar);
+}
+
+.calendar-date-header {
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.calendar-no-tasks {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.calendar-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calendar-task-item {
+  background: var(--bg-main);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.task-description-wrapper {
+  padding: 0 10px 10px;
+}
+
+.rdp {
+  --rdp-cell-size: 2.2rem;
+  --rdp-accent-color: var(--color-primary);
+  --rdp-background-color: var(--color-primary-container);
+  --rdp-accent-color-dark: var(--color-primary);
+  --rdp-background-color-dark: var(--color-primary-container);
+  --rdp-outline: 2px solid var(--color-primary);
+  --rdp-outline-selected: 3px solid var(--color-primary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+.rdp-day.rdp-day_selected {
+  font-weight: bold;
+  color: var(--text-inverse) !important;
+}
+
+.rdp-day.rdp-day_today:not(.rdp-day_selected) {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.task-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.calendar-day-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

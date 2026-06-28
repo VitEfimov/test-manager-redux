@@ -32,6 +32,7 @@ const initialState = {
     priority: 10
   },
   isSettingsOpen: false,
+  isAboutOpen: false,
   dateFormat: loaded?.dateFormat || 'short',
   taskNameWrap: loaded?.taskNameWrap || 'wrap',
   timeFormat: loaded?.timeFormat || '12h',
@@ -68,6 +69,13 @@ const themeSlice = createSlice({
         state.isSettingsOpen = action.payload;
       } else {
         state.isSettingsOpen = !state.isSettingsOpen;
+      }
+    },
+    toggleAboutOpen: (state, action) => {
+      if (action.payload !== undefined) {
+        state.isAboutOpen = action.payload;
+      } else {
+        state.isAboutOpen = !state.isAboutOpen;
       }
     },
     setNotificationsEnabled: (state, action) => {
@@ -128,5 +136,5 @@ const themeSlice = createSlice({
   }
 });
 
-export const { setThemeColor, setSourceColor, setFontSize, setColumnWidth, toggleSettingsOpen, setNotificationsEnabled, resetTheme, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
+export const { setThemeColor, setSourceColor, setFontSize, setColumnWidth, toggleSettingsOpen, toggleAboutOpen, setNotificationsEnabled, resetTheme, setDateFormat, setTaskNameWrap, setTimeFormat, setUserPicture, setHeaderBackgroundFit, setThemeMode, setPresetTheme } = themeSlice.actions;
 export default themeSlice.reducer;

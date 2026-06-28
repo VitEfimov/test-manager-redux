@@ -81,11 +81,11 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
                     <button className="nav-button board" onClick={() => handleNavigation('Board')} aria-label="Board">
                         <i className='nav-button-icon'><FaTasks /></i><span className='nav-button-name'>Board</span>
                     </button>
+                    <button className="nav-button calendar" onClick={() => handleNavigation('Calendar')} aria-label="Calendar">
+                        <i className='nav-button-icon'><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></i><span className='nav-button-name'>Calendar</span>
+                    </button>
                     <button className="nav-button pomodoro" onClick={() => handleNavigation('Pomodoro')} aria-label="Pomodoro">
                         <i className='nav-button-icon'><IoTimerOutline /></i><span className='nav-button-name'>Pomodoro</span>
-                    </button>
-                    <button className="nav-button about" onClick={() => handleNavigation('About')} aria-label="About">
-                        <i className='nav-button-icon'><IoInformationCircle /></i><span className='nav-button-name'>About</span>
                     </button>
                     <button className="nav-button settings" onClick={() => handleNavigation('Settings')} aria-label="Settings">
                         <i className='nav-button-icon'><IoMdSettings /></i><span className='nav-button-name'>Settings</span>
@@ -108,20 +108,18 @@ const Sidebar = ({ setCurrentPage, setTitle, sidebarView, setSidebarView }) => {
                         </svg>
                         Board
                     </button>
+                    <button className={`nav-item ${currentPage === 'Calendar' ? 'active' : ''}`} onClick={() => handleNavigation('Calendar')} aria-label="Calendar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Calendar
+                    </button>
                     <button className={`nav-item ${currentPage === 'Pomodoro' ? 'active' : ''}`} onClick={() => handleNavigation('Pomodoro')} aria-label="Pomodoro">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="10" />
                             <polyline points="12 6 12 12 16 14" />
                         </svg>
                         Pomodoro
-                    </button>
-                    <button className={`nav-item ${currentPage === 'About' ? 'active' : ''}`} onClick={() => handleNavigation('About')} aria-label="About">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 16v-4" />
-                            <path d="M12 8h.01" />
-                        </svg>
-                        About
                     </button>
                     <button className={`nav-item ${currentPage === 'Settings' ? 'active' : ''}`} onClick={() => handleNavigation('Settings')} aria-label="Settings">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

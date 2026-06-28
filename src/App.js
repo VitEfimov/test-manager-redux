@@ -19,6 +19,7 @@ const Settings = lazy(() => import('./components/Settings'));
 const About = lazy(() => import('./components/About'));
 const ThemeSettingsSidebar = lazy(() => import('./components/ThemeSettingsSidebar'));
 const PomodoroSettingsModal = lazy(() => import('./components/PomodoroSettingsModal'));
+const Calendar = lazy(() => import('./components/Calendar'));
 function App() {
 
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -30,12 +31,12 @@ function App() {
 
   const dispatch = useDispatch();
   // eslint-disable-next-line no-unused-vars
-  const { isAuthenticated, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer);
-  const theme = useSelector((state) => state.themeReducer);
+  const { isAuthenticated, theme: userTheme, showWeather, isGuest } = useSelector((state) => state.userReducer || {});
+  const theme = useSelector((state) => state.themeReducer || {});
   // eslint-disable-next-line no-unused-vars
-  const tasks = useSelector((state) => state.taskReducer.tasks);
+  const tasks = useSelector((state) => state.taskReducer?.tasks || []);
   // eslint-disable-next-line no-unused-vars
-  const boards = useSelector((state) => state.userReducer.boards);
+  const boards = useSelector((state) => state.userReducer?.boards || []);
 
 
   const [appReady, setAppReady] = useState(false);
@@ -155,9 +156,9 @@ function App() {
 
     // Font size
     let fontCalc = 'calc(10px + 1vmin)';
-    if (theme.fontSize === 'small') fontCalc = 'calc(9px + 1vmin)';
-    if (theme.fontSize === 'big') fontCalc = 'calc(16px + 1vmin)';
-    if (theme.fontSize === 'device') fontCalc = 'calc(1rem + 0.3vmin)';
+    if (theme.fontSize === 'small') fontCalc = 'calc(0.6rem + 1vmin)';
+    if (theme.fontSize === 'normal') fontCalc = 'calc(0.8rem + 1vmin)';
+    if (theme.fontSize === 'big') fontCalc = 'calc(1rem + 0.3vmin)';
     root.style.setProperty('font-size', fontCalc);
 
     // Columns
@@ -181,8 +182,8 @@ function App() {
 
       case 'Dashboard':
         return <Dashboard />;
-      case 'About':
-        return <About />;
+      case 'Calendar':
+        return <Calendar />;
       case 'Settings':
         return <Settings setCurrentPage={setCurrentPage} />;
       default:
@@ -245,6 +246,7 @@ function App() {
         </div>
       </div>
       <Suspense fallback={null}>
+        <About />
         <ThemeSettingsSidebar />
         <PomodoroSettingsModal />
       </Suspense>
